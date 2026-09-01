@@ -4,6 +4,7 @@ import {
   COMPETENCIAS_JAN_JUL_2026,
   type RecorteId,
 } from "@/lib/format";
+import { SALDO_INICIAL_CENTS } from "@/lib/money";
 
 export type LancamentoComRel = Lancamento & {
   categoria: Categoria;
@@ -135,7 +136,7 @@ export function montarVisaoGeral(params: {
   let despesa = oficial2026.despesaCents;
   let resultado = oficial2026.resultadoCents;
   let saldo = oficial2026.saldoFinalCents;
-  let saldoInicial = oficial2026.saldoInicialCents;
+  let saldoInicial = SALDO_INICIAL_CENTS;
   let rotulo = oficial2026.rotulo;
   let inicio = oficial2026.periodoInicio;
   let fim = oficial2026.periodoFim;
@@ -154,7 +155,6 @@ export function montarVisaoGeral(params: {
     despesa = oficial2025.despesaCents;
     resultado = oficial2025.resultadoCents;
     saldo = oficial2025.saldoFinalCents;
-    saldoInicial = oficial2025.saldoInicialCents;
     rotulo = oficial2025.rotulo;
     inicio = oficial2025.periodoInicio;
     fim = oficial2025.periodoFim;
@@ -172,9 +172,7 @@ export function montarVisaoGeral(params: {
     const periodos26 = periodos.filter(
       (p) => p.origem === "PLANILHA_2026" && janJul26.has(p.competencia),
     );
-    const primeiro = periodos26.find((p) => p.competencia === "2026-01");
     const ultimo = periodos26.find((p) => p.competencia === "2026-07");
-    saldoInicial = primeiro?.saldoAnteriorCents ?? 0;
     saldo = ultimo?.saldoFinalCents ?? resultado;
     rotulo = "Jan/2026 até Jul/2026";
     inicio = "2026-01";

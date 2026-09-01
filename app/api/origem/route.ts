@@ -4,6 +4,7 @@ export const dynamic = "force-dynamic";
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { condominioAtivo, jsonError } from "@/lib/tenant";
+import { SALDO_INICIAL_CENTS } from "@/lib/money";
 import {
   COMPETENCIAS_JAN_JUL_2026,
   isKpiId,
@@ -128,7 +129,7 @@ export async function GET(request: NextRequest) {
         metadadoPeriodo:
           kpi === "saldo"
             ? {
-                saldoInicialCents: oficial.saldoInicialCents,
+                saldoInicialCents: SALDO_INICIAL_CENTS,
                 saldoFinalCents: oficial.saldoFinalCents,
                 rotulo: "Saldo gerencial do demonstrativo",
               }

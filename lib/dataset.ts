@@ -5,6 +5,7 @@ import {
   type RecorteId,
 } from "@/lib/format";
 import type { LancamentoComRel } from "@/lib/kpis";
+import { SALDO_INICIAL_CENTS } from "@/lib/money";
 
 export function noRecorte(l: LancamentoComRel, recorte: RecorteId): boolean {
   if (recorte === "oficial-2025") return l.origem === "PLANILHA_2025";
@@ -124,7 +125,7 @@ export function totaisRecorte(
       receita: oficial2025.receitaCents,
       despesa: oficial2025.despesaCents,
       resultado: oficial2025.resultadoCents,
-      saldoInicial: oficial2025.saldoInicialCents,
+      saldoInicial: SALDO_INICIAL_CENTS,
       saldoFinal: oficial2025.saldoFinalCents,
       rotulo: oficial2025.rotulo,
       criterio: "COLUNA_B" as const,
@@ -135,13 +136,12 @@ export function totaisRecorte(
   if (recorte === "equivalente-jan-jul") {
     const rec = somaTipo(filtrados, "RECEITA");
     const des = somaTipo(filtrados, "DESPESA");
-    const primeiro = periodos.find((p) => p.competencia === "2026-01");
     const ultimo = periodos.find((p) => p.competencia === "2026-07");
     return {
       receita: rec,
       despesa: des,
       resultado: rec - des,
-      saldoInicial: primeiro?.saldoAnteriorCents ?? 0,
+      saldoInicial: SALDO_INICIAL_CENTS,
       saldoFinal: ultimo?.saldoFinalCents ?? rec - des,
       rotulo: "Jan/2026 até Jul/2026",
       criterio: "SOMA_MESES_EQUIVALENTES" as const,
@@ -153,7 +153,7 @@ export function totaisRecorte(
     receita: oficial2026.receitaCents,
     despesa: oficial2026.despesaCents,
     resultado: oficial2026.resultadoCents,
-    saldoInicial: oficial2026.saldoInicialCents,
+    saldoInicial: SALDO_INICIAL_CENTS,
     saldoFinal: oficial2026.saldoFinalCents,
     rotulo: oficial2026.rotulo,
     criterio: "COLUNA_B" as const,

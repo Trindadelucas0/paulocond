@@ -3,7 +3,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { prisma } from "../lib/prisma";
 import { nomeCanonico, slugify, naturezaDoGrupo, grupoCanonico } from "../lib/normalizar";
-import { parseBrToCents, withinTolerance, sumCents } from "../lib/money";
+import { parseBrToCents, withinTolerance, sumCents, SALDO_INICIAL_CENTS } from "../lib/money";
 
 const ROOT = process.cwd();
 const ORIGINAIS = path.join(ROOT, "dados", "originais");
@@ -17,14 +17,14 @@ const TOTAIS_ESPERADOS: Record<
     despesa: 131_777_836,
     resultado: 14_602_735,
     saldoFinal: 35_123_901,
-    saldoInicial: 20_521_166,
+    saldoInicial: SALDO_INICIAL_CENTS,
   },
   PLANILHA_2025: {
     receita: 80_831_568,
     despesa: 78_409_981,
     resultado: 2_421_587,
     saldoFinal: 19_669_303,
-    saldoInicial: 17_247_716,
+    saldoInicial: SALDO_INICIAL_CENTS,
   },
 };
 
@@ -170,7 +170,7 @@ function parseSheet(ws: ExcelJS.Worksheet, residualCompetencia: string): Parsed 
 
     if (label === "Saldo anterior") {
       for (let c = 2; c <= maxCol; c++) saldoAnteriorPorCol[c] = cellCents(ws, r, c);
-      saldoInicialOficial = saldoAnteriorPorCol[2] ?? 0;
+      saldoInicialOficial = SALDO_INICIAL_CENTS;
       continue;
     }
     if (label === "Saldo Final") {

@@ -1,7 +1,7 @@
 import { after, test } from "node:test";
 import assert from "node:assert/strict";
 import { prisma } from "../lib/prisma";
-import { withinTolerance } from "../lib/money";
+import { withinTolerance, SALDO_INICIAL_CENTS } from "../lib/money";
 
 after(async () => {
   await prisma.$disconnect();
@@ -13,14 +13,14 @@ const ESPERADO = {
     despesa: 131_777_836,
     resultado: 14_602_735,
     saldoFinal: 35_123_901,
-    saldoInicial: 20_521_166,
+    saldoInicial: SALDO_INICIAL_CENTS,
   },
   PLANILHA_2025: {
     receita: 80_831_568,
     despesa: 78_409_981,
     resultado: 2_421_587,
     saldoFinal: 19_669_303,
-    saldoInicial: 17_247_716,
+    saldoInicial: SALDO_INICIAL_CENTS,
   },
 };
 

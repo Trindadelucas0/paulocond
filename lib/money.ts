@@ -3,6 +3,9 @@
  * Confirmado: planilhas usam texto brasileiro `1.463.805,71`.
  */
 
+/** Saldo inicial do sistema: sempre R$ 0,00. A linha "Saldo anterior" da planilha não alimenta KPI, waterfall nem relatório. */
+export const SALDO_INICIAL_CENTS = 0;
+
 const BR_MONEY = /^-?\d{1,3}(\.\d{3})*,\d{2}$/;
 const BR_MONEY_SHORT = /^-?\d+,\d{2}$/;
 

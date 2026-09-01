@@ -9,7 +9,9 @@ export function WaterfallChart({ passos }: { passos: WaterfallStep[] }) {
   return (
     <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
       <h2 className="text-lg font-bold">Composição do saldo gerencial</h2>
-      <p className="mb-4 text-sm text-muted">Saldo inicial + receitas − despesas registradas = saldo final</p>
+      <p className="mb-4 text-sm text-muted">
+        Saldo inicial fixado em R$ 0,00. Receitas − despesas registradas. Saldo gerencial final permanece o da planilha.
+      </p>
       <ul className="space-y-4">
         {passos.map((passo) => {
           const largura = Math.max((Math.abs(passo.valorCents) / max) * 100, 4);

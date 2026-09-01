@@ -372,6 +372,7 @@ export function montarModulo(params: {
     p.serieRotulo = "Receita, despesa e saldo gerencial por mês";
     p.avisos = [
       ...p.avisos,
+      "Saldo inicial é R$ 0,00 (não usa a linha Saldo anterior da planilha).",
       "Saldo gerencial do demonstrativo — não é saldo bancário segregado.",
     ];
     return p;

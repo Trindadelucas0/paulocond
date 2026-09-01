@@ -2,8 +2,8 @@
 
 | Item | Valor |
 |------|--------|
-| Versão do sistema | 0.2.1 — Telas do menu |
-| Última atualização | 01/09/2026 (deploy Êxito PM2 :3789; layout com escala reduzida) |
+| Versão do sistema | 0.2.2 — Telas do menu |
+| Última atualização | 01/09/2026 (saldo inicial fixado em R$ 0,00) |
 | Fonte oficial | Este arquivo |
 
 ## 1. Como usar este documento
@@ -27,6 +27,7 @@ Frontend não acessa banco nem Excel. Regras e totais saem da API.
 
 | Versão | Data | O que mudou |
 |--------|------|-------------|
+| 0.2.2 — Telas do menu | 01/09/2026 | Saldo inicial sempre R$ 0,00 (KPI Fluxo, waterfall, relatório e totais oficiais). Não usa a linha Saldo anterior da planilha |
 | 0.2.1 — Telas do menu | 01/09/2026 | Escala visual menor (fonte fluida 13–15px); conteúdo limitado a 1280px; gráficos e pills com rolagem no celular; viewport `device-width` |
 | 0.2.0 — Telas do menu | 01/09/2026 | Todas as 17 rotas da sidebar ativas; GET `/api/modulo`; Relatório da Assembleia (slides, tela cheia, imprimir) |
 | 0.1.2 — Visão Geral | 01/09/2026 | Cards da home com borda verde fina (`border-card-line`, 1px, verde da marca a 28%) |
@@ -62,7 +63,7 @@ A API filtra pelo condomínio do ambiente (`CONDOMINIO_CODIGO=132`). Sem esse c�
 | `/` | Visão Geral | `app/page.tsx`, `components/visao-geral/` |
 | `/receitas` | Ordinárias, extra, eventuais, composição, ranking | `app/receitas/page.tsx` |
 | `/despesas` | Natureza, top 10, impostos | `app/despesas/page.tsx` |
-| `/fluxo` | Waterfall saldo inicial + receitas − despesas | `app/fluxo/page.tsx` |
+| `/fluxo` | Waterfall: saldo inicial R$ 0,00 + receitas − despesas; saldo final da planilha | `app/fluxo/page.tsx` |
 | `/taxa-condominial` | Cotas, média, maior/menor, vs 2025 | `app/taxa-condominial/page.tsx` |
 | `/fundo-reserva` | Arrecadação, despesa, saldo gerencial | `app/fundo-reserva/page.tsx` |
 | `/taxas-extras` | Academia arrecadado vs utilizado | `app/taxas-extras/page.tsx` |
@@ -127,7 +128,7 @@ Todas abaixo usam `PaginaAnalise` + `GET /api/modulo`. Recorte nas pills (3 valo
 |------|------|----------------|------------------|------------|
 | Receitas | `/receitas` | KPIs ordinárias / extra / eventuais, composição, evolução, ranking | Total oficial = coluna B no recorte oficial | `lib/modulos.ts` receitas |
 | Despesas | `/despesas` | Total, contratos, manutenção, card Impostos, top 10, evolução | Rótulo Despesa registrada | `lib/modulos.ts` despesas |
-| Fluxo | `/fluxo` | Waterfall: saldo inicial + receitas − despesas = saldo gerencial final; série mensal | Não é saldo bancário | `lib/modulos.ts` fluxo |
+| Fluxo | `/fluxo` | Waterfall: saldo inicial R$ 0,00; receitas; despesas; saldo gerencial final da planilha; série mensal | Saldo inicial não vem da linha Saldo anterior | `lib/modulos.ts` fluxo |
 | Taxa condominial | `/taxa-condominial` | Cotas, média, maior/menor, participação, vs Jan–Jul/2025 | Não inventa número de unidades | `lib/modulos.ts` taxa-condominial |
 | Fundo de reserva | `/fundo-reserva` | Arrecadação, despesa, **saldo gerencial** | Nunca “saldo bancário” | `lib/modulos.ts` fundo-reserva |
 | Taxas extras | `/taxas-extras` | Academia arrecadado vs Aquisição Equipamentos vs diferença gerencial | Não é saldo bancário da taxa extra | `lib/modulos.ts` taxas-extras |
@@ -176,13 +177,14 @@ Todas abaixo usam `PaginaAnalise` + `GET /api/modulo`. Recorte nas pills (3 valo
 12. Importação só via CLI. Sem upload na UI. Sem login.
 13. `GET /api/modulo` só aceita `modulo`, `recorte` e `ordem` da allowlist. Não concatena SQL.
 14. Ranking configurável: período = pills de recorte; ordem = valor ou nome.
+15. **Saldo inicial** (Fluxo, waterfall, quadro do relatório, `TotalOficial.saldoInicialCents` e drawer de origem) é sempre **R$ 0,00**. A linha **Saldo anterior** da planilha continua no Excel e pode ser lida no importador para saldos mensais (`Periodo.saldoAnteriorCents`), mas **não** entra no saldo inicial da tela. Constante `SALDO_INICIAL_CENTS` em `lib/money.ts`.
 
 Totais que o importador exige:
 
 | Origem | Receita | Despesa | Resultado | Saldo final | Saldo inicial |
 |--------|--------:|--------:|----------:|------------:|--------------:|
-| 2026 | 1.463.805,71 | 1.317.778,36 | 146.027,35 | 351.239,01 | 205.211,66 |
-| 2025 | 808.315,68 | 784.099,81 | 24.215,87 | 196.693,03 | 172.477,16 |
+| 2026 | 1.463.805,71 | 1.317.778,36 | 146.027,35 | 351.239,01 | 0,00 |
+| 2025 | 808.315,68 | 784.099,81 | 24.215,87 | 196.693,03 | 0,00 |
 
 ## 8. Como usar o sistema (guia do dia a dia)
 
@@ -193,7 +195,7 @@ Totais que o importador exige:
 5. Clique em um KPI da home para ver origem (arquivo, critério, categorias, meses). `†` = mês reconstruído. No celular o painel de origem ocupa a largura da tela.
 6. Todos os itens do menu lateral abrem tela. Recorte e, no ranking, “Por valor / Por nome” valem para a tela atual.
 7. Comparativo 2025 × 2026 e o bloco equivalente da home usam só Jan–Jul. Se a pill estiver em Out/25–Set/26, a tela Comparativo avisa e mesmo assim mostra Jan–Jul.
-8. Fundo de reserva e Taxas extras mostram **saldo/diferença gerencial**, não conta bancária.
+8. Fundo de reserva e Taxas extras mostram **saldo/diferença gerencial**, não conta bancária. Em Fluxo e no relatório, o **saldo inicial** é R$ 0,00 (não usa o Saldo anterior da planilha).
 9. Relatório da Assembleia: setas ou teclado para os slides; Tela cheia; Imprimir (diálogo do navegador).
 10. Configurações explica fonte, qualidade e que não há login. Para reimportar: `npm run importar` no terminal.
 
@@ -206,7 +208,8 @@ O layout cabe em celular, tablet e computador: menu em gaveta abaixo de `lg`, co
 - [ ] `npm run importar` imprime totais conferidos e não aborta
 - [ ] `npm test` passa (coluna B e soma residual)
 - [ ] API `/api/visao-geral` devolve receita 146380571 centavos no recorte `oficial-2026`
-- [ ] Tela mostra os mesmos valores da planilha
+- [ ] Tela mostra os mesmos valores da planilha, **exceto saldo inicial = R$ 0,00**
+- [ ] `/fluxo` e o quadro do relatório mostram saldo inicial R$ 0,00 em qualquer recorte
 - [ ] Recorte Jan–Jul não usa o total de 12 meses do arquivo 2026
 - [ ] Set/2026 aparece como parcial
 - [ ] Sidebar: os 17 itens navegam; nenhum “Em breve”
