@@ -1,5 +1,7 @@
 import type { Periodo, TotalOficial } from "@prisma/client";
 import { montarAlertas } from "@/lib/alertas";
+import { avisoComparativoJanJul, montarComparativoConsumo, totaisConsumoJanJul } from "@/lib/consumo";
+import { montarCoberturaCota, type CoberturaCotaPayload } from "@/lib/cobertura-cota";
 import {
   composicaoGrupo,
   janJul,
@@ -13,6 +15,7 @@ import {
   totaisRecorte,
 } from "@/lib/dataset";
 import { formatBRL, formatPct, mesLabel, type ModuloId, type OrdemId, type RecorteId } from "@/lib/format";
+import { SALDO_FUNDO_RESERVA_CENTS } from "@/lib/money";
 import type { Alerta, Fatia, LancamentoComRel } from "@/lib/kpis";
 
 export type RankingItem = {
@@ -52,6 +55,12 @@ export type ComparativoLinha = {
   cents2025: number;
   cents2026: number;
   variacaoPct: number | null;
+};
+
+export type ComparativoBloco = {
+  rotulo: string;
+  aviso: string | null;
+  linhas: ComparativoLinha[];
 };
 
 export type DetalheItem = {
@@ -105,7 +114,7 @@ export type ModuloPayload = {
   serieRotulo: string;
   waterfall: WaterfallStep[];
   destaques: DestaqueCard[];
-  comparativo: { rotulo: string; aviso: string | null; linhas: ComparativoLinha[] } | null;
+  comparativos: ComparativoBloco[];
   detalhamento: { competencias: string[]; grupos: DetalheGrupo[] };
   alertas: Alerta[];
   slides: Slide[];
@@ -113,6 +122,7 @@ export type ModuloPayload = {
   statusDespesa: "Despesa registrada";
   fonte: { arquivos: string[] };
   ordem: OrdemId;
+  coberturaCota: CoberturaCotaPayload | null;
 };
 
 function variacao(atual: number, anterior: number): number | null {
@@ -268,7 +278,7 @@ function emptyBase(
     serieRotulo: "Evolução mensal",
     waterfall: [],
     destaques: [],
-    comparativo: null,
+    comparativos: [],
     detalhamento: { competencias: [], grupos: [] },
     alertas: [],
     slides: [],
@@ -276,6 +286,7 @@ function emptyBase(
     statusDespesa: "Despesa registrada",
     fonte: { arquivos: ctx.fonte },
     ordem: ctx.ordem,
+    coberturaCota: null,
   };
 }
 
@@ -386,12 +397,23 @@ export function montarModulo(params: {
     const stats = statsMeses(serieCotas.map((s) => s.valorCents));
     const cotas25 = somaNome(jj25, "Cotas de Condomínio", "RECEITA");
     const cotas26 = somaNome(jj26, "Cotas de Condomínio", "RECEITA");
+    const cobertura = montarCoberturaCota({
+      lancamentos: filtrados,
+      receitaCents: totaisR.receita,
+      despesaCents: totaisR.despesa,
+    });
     p.kpis = [
       { id: "cotas", rotulo: "Cotas de condomínio", valorCents: cotas },
+      { id: "saiu", rotulo: "Saiu (despesas registradas)", valorCents: cobertura.despesaCents },
+      {
+        id: "sobrou",
+        rotulo: cobertura.sobrouCents >= 0 ? "Sobrou" : "Faltou",
+        valorCents: Math.abs(cobertura.sobrouCents),
+        extra: cobertura.cobriu ? "Cobriu as despesas" : "Não cobriu só com a cota",
+      },
       { id: "media", rotulo: "Média mensal (meses com valor)", valorCents: stats.media },
-      { id: "maior", rotulo: "Maior competência", valorCents: stats.maior },
-      { id: "menor", rotulo: "Menor competência (≠ 0)", valorCents: stats.menor },
     ];
+    p.coberturaCota = cobertura;
     p.destaques = [
       {
         id: "part",
@@ -403,21 +425,20 @@ export function montarModulo(params: {
     ];
     p.serie = serieCotas;
     p.serieRotulo = "Cotas por competência";
-    p.comparativo = {
-      rotulo: "Cotas Jan–Jul/2025 vs Jan–Jul/2026",
-      aviso:
-        recorte === "oficial-2026"
-          ? "Aviso: o período oficial 2026 tem 12 competências. O comparativo abaixo usa só Jan–Jul."
-          : null,
-      linhas: [
-        {
-          rotulo: "Cotas de Condomínio",
-          cents2025: cotas25,
-          cents2026: cotas26,
-          variacaoPct: variacao(cotas26, cotas25),
-        },
-      ],
-    };
+    p.comparativos = [
+      {
+        rotulo: "Cotas Jan–Jul/2025 vs Jan–Jul/2026",
+        aviso: avisoComparativoJanJul(recorte),
+        linhas: [
+          {
+            rotulo: "Cotas de Condomínio",
+            cents2025: cotas25,
+            cents2026: cotas26,
+            variacaoPct: variacao(cotas26, cotas25),
+          },
+        ],
+      },
+    ];
     return p;
   }
 
@@ -427,15 +448,19 @@ export function montarModulo(params: {
     const utilizado = des
       .filter((l) => grupoMatch(l.categoria.grupo, "fundo de reserva"))
       .reduce((a, l) => a + l.valorCents, 0);
-    const saldoGerencial = arrecadado - utilizado;
     p.kpis = [
       { id: "arrecadado", rotulo: "Arrecadação", valorCents: arrecadado },
       { id: "despesa", rotulo: "Despesa registrada do fundo", valorCents: utilizado },
-      { id: "saldo", rotulo: "Saldo gerencial", valorCents: saldoGerencial, extra: "Arrecadação − despesa do fundo neste recorte" },
+      {
+        id: "saldo",
+        rotulo: "Saldo do fundo",
+        valorCents: SALDO_FUNDO_RESERVA_CENTS,
+        extra: "Valor informado. Movimento do recorte (arrecadação − despesa) permanece visível nos outros cards.",
+      },
     ];
     p.avisos = [
       ...p.avisos,
-      "Saldo gerencial do fundo = arrecadação menos despesa lançada no grupo Fundo de reserva. Não é saldo bancário segregado.",
+      "Saldo do fundo = valor informado (R$ 191.599,35), constante do sistema. Não é saldo bancário segregado.",
     ];
     p.ranking = rankingComDestaque(
       des.filter((l) => grupoMatch(l.categoria.grupo, "fundo de reserva")),
@@ -558,6 +583,14 @@ export function montarModulo(params: {
       "DESPESA",
     );
     p.serieRotulo = "Utilidades por mês";
+    const consumo = totaisConsumoJanJul(jj25, jj26);
+    p.comparativos = [
+      montarComparativoConsumo(jj25, jj26, { avisoRecorte: avisoComparativoJanJul(recorte) }),
+    ];
+    const gasDestaque = p.destaques.find((d) => d.id === "Gás");
+    if (gasDestaque) {
+      gasDestaque.nota = `Despesa registrada no grupo Tarifas públicas. Média Jan–Jul/2026: ${formatBRL(consumo.gasMedio26)} por unidade (÷ 124).`;
+    }
     return p;
   }
 
@@ -577,14 +610,13 @@ export function montarModulo(params: {
     p.mostrarOrdem = true;
     p.serie = serieMensalTipo(manut, periodosR, "DESPESA");
     p.serieRotulo = "Evolução da manutenção";
-    p.comparativo = {
-      rotulo: "Manutenção Jan–Jul/2025 vs Jan–Jul/2026",
-      aviso:
-        recorte === "oficial-2026"
-          ? "Aviso: o período oficial 2026 tem 12 competências. O comparativo abaixo usa só Jan–Jul."
-          : null,
-      linhas: [{ rotulo: "Manutenção", cents2025: m25, cents2026: m26, variacaoPct: variacao(m26, m25) }],
-    };
+    p.comparativos = [
+      {
+        rotulo: "Manutenção Jan–Jul/2025 vs Jan–Jul/2026",
+        aviso: avisoComparativoJanJul(recorte),
+        linhas: [{ rotulo: "Manutenção", cents2025: m25, cents2026: m26, variacaoPct: variacao(m26, m25) }],
+      },
+    ];
     return p;
   }
 
@@ -608,52 +640,79 @@ export function montarModulo(params: {
     const des25 = somaTipo(jj25, "DESPESA");
     const rec26 = somaTipo(jj26, "RECEITA");
     const des26 = somaTipo(jj26, "DESPESA");
+    const consumo = totaisConsumoJanJul(jj25, jj26);
     p.kpis = [
       { id: "rec26", rotulo: "Receitas Jan–Jul/2026", valorCents: rec26 },
       { id: "rec25", rotulo: "Receitas Jan–Jul/2025", valorCents: rec25, extra: formatPct(variacao(rec26, rec25) ?? 0) },
       { id: "des26", rotulo: "Despesas Jan–Jul/2026", valorCents: des26 },
       { id: "des25", rotulo: "Despesas Jan–Jul/2025", valorCents: des25, extra: formatPct(variacao(des26, des25) ?? 0) },
     ];
-    p.comparativo = {
-      rotulo: "Somente períodos equivalentes: Jan–Jul/2025 vs Jan–Jul/2026",
-      aviso:
-        recorte === "oficial-2026"
-          ? "Aviso: o recorte selecionado na barra é Out/2025–Set/2026 (12 competências). Esta tela não compara 12 meses contra 7. Os números abaixo são só Jan–Jul."
-          : recorte === "oficial-2025"
-            ? "Aviso: o recorte 2025 oficial já é Jan–Jul. O lado 2026 desta tela também usa Jan–Jul, não o período cheio Out/25–Set/26."
-            : null,
-      linhas: [
-        { rotulo: "Receitas", cents2025: rec25, cents2026: rec26, variacaoPct: variacao(rec26, rec25) },
-        { rotulo: "Despesas registradas", cents2025: des25, cents2026: des26, variacaoPct: variacao(des26, des25) },
-        {
-          rotulo: "Resultado",
-          cents2025: rec25 - des25,
-          cents2026: rec26 - des26,
-          variacaoPct: variacao(rec26 - des26, rec25 - des25),
-        },
-        {
-          rotulo: "Cotas de Condomínio",
-          cents2025: somaNome(jj25, "Cotas de Condomínio", "RECEITA"),
-          cents2026: somaNome(jj26, "Cotas de Condomínio", "RECEITA"),
-          variacaoPct: variacao(somaNome(jj26, "Cotas de Condomínio", "RECEITA"), somaNome(jj25, "Cotas de Condomínio", "RECEITA")),
-        },
-        {
-          rotulo: "Empresa Terceirizada",
-          cents2025: somaNome(jj25, "Empresa Terceirizada", "DESPESA"),
-          cents2026: somaNome(jj26, "Empresa Terceirizada", "DESPESA"),
-          variacaoPct: variacao(somaNome(jj26, "Empresa Terceirizada", "DESPESA"), somaNome(jj25, "Empresa Terceirizada", "DESPESA")),
-        },
-        {
-          rotulo: "Manutenção",
-          cents2025: jj25.filter((l) => l.tipo === "DESPESA" && grupoMatch(l.categoria.grupo, "manutencao")).reduce((a, l) => a + l.valorCents, 0),
-          cents2026: jj26.filter((l) => l.tipo === "DESPESA" && grupoMatch(l.categoria.grupo, "manutencao")).reduce((a, l) => a + l.valorCents, 0),
-          variacaoPct: variacao(
-            jj26.filter((l) => l.tipo === "DESPESA" && grupoMatch(l.categoria.grupo, "manutencao")).reduce((a, l) => a + l.valorCents, 0),
-            jj25.filter((l) => l.tipo === "DESPESA" && grupoMatch(l.categoria.grupo, "manutencao")).reduce((a, l) => a + l.valorCents, 0),
-          ),
-        },
-      ],
-    };
+    p.destaques = [
+      {
+        id: "agua",
+        rotulo: "Água e Esgoto Jan–Jul/2026",
+        valorCents: consumo.agua26,
+        extra: formatPct(variacao(consumo.agua26, consumo.agua25) ?? 0),
+        nota: "Despesa registrada no grupo Tarifas públicas.",
+      },
+      {
+        id: "gas",
+        rotulo: "Gás Jan–Jul/2026",
+        valorCents: consumo.gas26,
+        extra: formatPct(variacao(consumo.gas26, consumo.gas25) ?? 0),
+        nota: `Média por unidade: ${formatBRL(consumo.gasMedio26)} (÷ 124). Copa/Salão fora da base.`,
+      },
+      {
+        id: "solar",
+        rotulo: "Energia Solar Jan–Jul/2026",
+        valorCents: consumo.solar26,
+        extra: formatPct(variacao(consumo.solar26, consumo.solar25) ?? 0),
+        nota: "Despesa registrada no grupo Tarifas públicas.",
+      },
+    ];
+    p.comparativos = [
+      {
+        rotulo: "Somente períodos equivalentes: Jan–Jul/2025 vs Jan–Jul/2026",
+        aviso:
+          recorte === "oficial-2026"
+            ? "Aviso: o recorte selecionado na barra é Out/2025–Set/2026 (12 competências). Esta tela não compara 12 meses contra 7. Os números abaixo são só Jan–Jul."
+            : recorte === "oficial-2025"
+              ? "Aviso: o recorte 2025 oficial já é Jan–Jul. O lado 2026 desta tela também usa Jan–Jul, não o período cheio Out/25–Set/26."
+              : null,
+        linhas: [
+          { rotulo: "Receitas", cents2025: rec25, cents2026: rec26, variacaoPct: variacao(rec26, rec25) },
+          { rotulo: "Despesas registradas", cents2025: des25, cents2026: des26, variacaoPct: variacao(des26, des25) },
+          {
+            rotulo: "Resultado",
+            cents2025: rec25 - des25,
+            cents2026: rec26 - des26,
+            variacaoPct: variacao(rec26 - des26, rec25 - des25),
+          },
+          {
+            rotulo: "Cotas de Condomínio",
+            cents2025: somaNome(jj25, "Cotas de Condomínio", "RECEITA"),
+            cents2026: somaNome(jj26, "Cotas de Condomínio", "RECEITA"),
+            variacaoPct: variacao(somaNome(jj26, "Cotas de Condomínio", "RECEITA"), somaNome(jj25, "Cotas de Condomínio", "RECEITA")),
+          },
+          {
+            rotulo: "Empresa Terceirizada",
+            cents2025: somaNome(jj25, "Empresa Terceirizada", "DESPESA"),
+            cents2026: somaNome(jj26, "Empresa Terceirizada", "DESPESA"),
+            variacaoPct: variacao(somaNome(jj26, "Empresa Terceirizada", "DESPESA"), somaNome(jj25, "Empresa Terceirizada", "DESPESA")),
+          },
+          {
+            rotulo: "Manutenção",
+            cents2025: jj25.filter((l) => l.tipo === "DESPESA" && grupoMatch(l.categoria.grupo, "manutencao")).reduce((a, l) => a + l.valorCents, 0),
+            cents2026: jj26.filter((l) => l.tipo === "DESPESA" && grupoMatch(l.categoria.grupo, "manutencao")).reduce((a, l) => a + l.valorCents, 0),
+            variacaoPct: variacao(
+              jj26.filter((l) => l.tipo === "DESPESA" && grupoMatch(l.categoria.grupo, "manutencao")).reduce((a, l) => a + l.valorCents, 0),
+              jj25.filter((l) => l.tipo === "DESPESA" && grupoMatch(l.categoria.grupo, "manutencao")).reduce((a, l) => a + l.valorCents, 0),
+            ),
+          },
+        ],
+      },
+      montarComparativoConsumo(jj25, jj26, { incluirConferencia: true }),
+    ];
     p.avisos = [
       "Comparativo travado em Jan–Jul versus Jan–Jul. Nunca 7 meses contra 12.",
       ...avisoPeriodos(recorte),
@@ -730,6 +789,11 @@ export function montarModulo(params: {
     const des26 = somaTipo(jj26, "DESPESA");
     const topDesp = rankingItens(filtrados, "DESPESA", "valor").slice(0, 5);
     const topRec = rankingItens(filtrados, "RECEITA", "valor").slice(0, 5);
+    const cobertura = montarCoberturaCota({
+      lancamentos: filtrados,
+      receitaCents: totaisR.receita,
+      despesaCents: totaisR.despesa,
+    });
     p.slides = [
       {
         id: "capa",
@@ -781,15 +845,35 @@ export function montarModulo(params: {
         ],
       },
       {
+        id: "cobertura-cota",
+        kicker: "Cobertura",
+        titulo: "A cota cobriu as despesas?",
+        linhas: [
+          { rotulo: "Entrou de cota", valor: formatBRL(cobertura.cotasCents) },
+          { rotulo: "Saldo de entrada", valor: formatBRL(cobertura.saldoEntradaCents) },
+          { rotulo: "Disponível (cota + saldo)", valor: formatBRL(cobertura.disponivelCents) },
+          { rotulo: "Saiu (despesas registradas)", valor: formatBRL(cobertura.despesaCents) },
+          {
+            rotulo: cobertura.sobrouCents >= 0 ? "Sobrou" : "Faltou",
+            valor: formatBRL(Math.abs(cobertura.sobrouCents)),
+          },
+          { rotulo: "Outras receitas do recorte", valor: formatBRL(cobertura.outrasReceitasCents) },
+          { rotulo: "Resultado geral (todas as receitas − despesas)", valor: formatBRL(cobertura.resultadoGeralCents) },
+        ],
+        nota: cobertura.cobriu
+          ? "A cota e o saldo de entrada cobriram as despesas registradas do recorte."
+          : "A cota sozinha não cobriu todas as despesas. Outras receitas (aluguéis, fundo, taxas extras, eventuais) entram no resultado geral.",
+      },
+      {
         id: "fundo",
         kicker: "Fundo de reserva",
-        titulo: "Arrecadação, despesa e saldo gerencial",
+        titulo: "Arrecadação, despesa e saldo do fundo",
         linhas: [
           { rotulo: "Arrecadação", valor: formatBRL(fundoRec) },
           { rotulo: "Despesa registrada", valor: formatBRL(fundoDes) },
-          { rotulo: "Saldo gerencial", valor: formatBRL(fundoRec - fundoDes) },
+          { rotulo: "Saldo do fundo", valor: formatBRL(SALDO_FUNDO_RESERVA_CENTS) },
         ],
-        nota: "Não é saldo bancário do fundo.",
+        nota: "Saldo informado (R$ 191.599,35). Não é saldo bancário do fundo.",
       },
       {
         id: "academia",

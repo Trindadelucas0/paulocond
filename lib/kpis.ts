@@ -1,10 +1,11 @@
 import type { Categoria, Lancamento, Periodo, TotalOficial } from "@prisma/client";
+import { montarCoberturaCota, type CoberturaCotaPayload } from "@/lib/cobertura-cota";
 import {
   COMPETENCIAS_JAN_JUL_2025,
   COMPETENCIAS_JAN_JUL_2026,
   type RecorteId,
 } from "@/lib/format";
-import { SALDO_INICIAL_CENTS } from "@/lib/money";
+import { SALDO_GERENCIAL_HOME_CENTS, SALDO_INICIAL_CENTS } from "@/lib/money";
 
 export type LancamentoComRel = Lancamento & {
   categoria: Categoria;
@@ -50,6 +51,7 @@ export type VisaoGeralPayload = {
   qualidade: { codigo: string; nivel: "ok" | "aviso" | "atencao"; texto: string }[];
   statusDespesa: "Despesa registrada";
   fonte: { arquivos: string[]; atualizadoEm: string };
+  coberturaCota: CoberturaCotaPayload;
 };
 
 type KpiCard = {
@@ -220,12 +222,19 @@ export function montarVisaoGeral(params: {
     qualidade: p.qualidade,
   }));
 
+  const saldoExibido =
+    recorte === "oficial-2026" ? SALDO_GERENCIAL_HOME_CENTS : saldo;
+  if (recorte === "oficial-2026") {
+    variacaoSaldo = null;
+    variacaoBaseSaldo = "valor definido na home";
+  }
+
   const mesesCompletos = serieMensal.filter((m) => m.qualidade === "COMPLETO");
   const mediaDespesa =
     mesesCompletos.length === 0
       ? 0
       : Math.round(mesesCompletos.reduce((a, m) => a + m.despesaCents, 0) / mesesCompletos.length);
-  const coberturaMeses = mediaDespesa === 0 ? null : saldo / mediaDespesa;
+  const coberturaMeses = mediaDespesa === 0 ? null : saldoExibido / mediaDespesa;
   const margem = receita === 0 ? null : resultado / receita;
 
   const qualidadeItens: VisaoGeralPayload["qualidade"] = [
@@ -251,6 +260,14 @@ export function montarVisaoGeral(params: {
     });
   }
 
+  const lancamentosRecorte = lancamentos.filter((l) => {
+    if (recorte === "oficial-2025") return l.origem === "PLANILHA_2025";
+    if (recorte === "equivalente-jan-jul") {
+      return l.origem === "PLANILHA_2026" && janJul26.has(l.periodo.competencia);
+    }
+    return l.origem === "PLANILHA_2026";
+  });
+
   return {
     condominio,
     recorte,
@@ -259,7 +276,7 @@ export function montarVisaoGeral(params: {
       saldo: {
         id: "saldo",
         rotulo: "Saldo gerencial",
-        valorCents: saldo,
+        valorCents: saldoExibido,
         variacaoPct: variacaoSaldo,
         variacaoBase: variacaoBaseSaldo,
         extra:
@@ -291,7 +308,10 @@ export function montarVisaoGeral(params: {
     },
     margem,
     coberturaMeses,
-    saldoGerencialLabel: "Saldo gerencial do demonstrativo — não é saldo bancário segregado de fundo ou taxa extra.",
+    saldoGerencialLabel:
+      recorte === "oficial-2026"
+        ? "Valor definido na home (R$ 71.204,98). Saldo final da planilha: R$ 351.239,01 — não é saldo bancário segregado de fundo ou taxa extra."
+        : "Saldo gerencial do demonstrativo — não é saldo bancário segregado de fundo ou taxa extra.",
     serieSaldo,
     serieMensal,
     composicaoReceitas: composicao(
@@ -316,5 +336,10 @@ export function montarVisaoGeral(params: {
       arquivos: totais.map((t) => t.arquivo),
       atualizadoEm: new Date().toISOString(),
     },
+    coberturaCota: montarCoberturaCota({
+      lancamentos: lancamentosRecorte,
+      receitaCents: receita,
+      despesaCents: despesa,
+    }),
   };
 }

@@ -7,6 +7,7 @@ import { gsap, registerMotion, SplitText, useGSAP } from "@/lib/motion";
 import { AreaChartSaldo } from "./AreaChartSaldo";
 import { BarrasMensais } from "./BarrasMensais";
 import { Composicao } from "./Composicao";
+import { CoberturaCota } from "./CoberturaCota";
 import { OrigemDrawer, type OrigemData } from "./OrigemDrawer";
 
 export function VisaoGeral() {
@@ -235,6 +236,8 @@ export function VisaoGeral() {
         ))}
       </section>
       <p className="text-xs text-muted">{data.saldoGerencialLabel}</p>
+
+      <CoberturaCota dados={data.coberturaCota} />
 
       <section className="grid min-w-0 gap-3 xl:grid-cols-[1.4fr_1fr]">
         <article className="js-panel min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">

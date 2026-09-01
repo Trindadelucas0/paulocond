@@ -6,6 +6,15 @@
 /** Saldo inicial do sistema: sempre R$ 0,00. A linha "Saldo anterior" da planilha não alimenta KPI, waterfall nem relatório. */
 export const SALDO_INICIAL_CENTS = 0;
 
+/**
+ * Valor exibido no card Saldo gerencial da Visão Geral (recorte Out/25–Set/26).
+ * Não é coluna B da planilha; o saldo final oficial (R$ 351.239,01) permanece no importador e no gráfico.
+ */
+export const SALDO_GERENCIAL_HOME_CENTS = 7_120_498;
+
+/** Saldo do fundo de reserva informado (R$ 191.599,35). Não é calculado por arrecadação − despesa do recorte. */
+export const SALDO_FUNDO_RESERVA_CENTS = 19_159_935;
+
 const BR_MONEY = /^-?\d{1,3}(\.\d{3})*,\d{2}$/;
 const BR_MONEY_SHORT = /^-?\d+,\d{2}$/;
 

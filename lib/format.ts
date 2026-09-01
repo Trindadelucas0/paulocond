@@ -75,6 +75,23 @@ export const COMPETENCIAS_JAN_JUL_2026 = [
   "2026-07",
 ] as const;
 
+/** Unidades do condomínio para rateio igualitário de gás (informado pelo operador). */
+export const UNIDADES_CONDOMINIO = 124;
+
+export function mediaPorUnidade(cents: number, unidades = UNIDADES_CONDOMINIO): number {
+  if (unidades <= 0) return 0;
+  return Math.round(cents / unidades);
+}
+
+export function mediaMensalPorUnidade(
+  cents: number,
+  nMeses: number,
+  unidades = UNIDADES_CONDOMINIO,
+): number {
+  if (nMeses <= 0 || unidades <= 0) return 0;
+  return Math.round(cents / nMeses / unidades);
+}
+
 export function mesLabel(competencia: string): string {
   const [ano, mes] = competencia.split("-");
   const nomes = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];

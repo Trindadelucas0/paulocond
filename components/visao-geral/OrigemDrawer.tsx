@@ -77,13 +77,21 @@ export function OrigemDrawer({
               <span className="text-muted">Arquivo:</span> {data.arquivo}
             </p>
             <p>
-              <span className="text-muted">Critério:</span> {data.criterio === "COLUNA_B" ? "Total oficial da coluna B" : "Soma dos meses equivalentes"}
+              <span className="text-muted">Critério:</span>{" "}
+              {data.criterio === "COLUNA_B"
+                ? "Total oficial da coluna B"
+                : data.criterio === "VALOR_DEFINIDO_HOME"
+                  ? "Valor definido na home"
+                  : "Soma dos meses equivalentes"}
             </p>
             {data.valorCents !== null ? (
               <p className="kpi-valor">{formatBRL(data.valorCents)}</p>
             ) : null}
             {data.metadadoPeriodo ? (
-              <p className="rounded-2xl bg-page p-3 text-muted">{data.metadadoPeriodo.rotulo}</p>
+              <div className="rounded-2xl bg-page p-3 text-sm">
+                <p className="text-muted">{data.metadadoPeriodo.rotulo}</p>
+                <p className="mt-1 font-bold">{formatBRL(data.metadadoPeriodo.saldoFinalCents)}</p>
+              </div>
             ) : null}
             <p className="text-muted">{data.statusDespesa}</p>
             <ul className="space-y-3">

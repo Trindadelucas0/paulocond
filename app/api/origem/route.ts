@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic";
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { condominioAtivo, jsonError } from "@/lib/tenant";
-import { SALDO_INICIAL_CENTS } from "@/lib/money";
+import { SALDO_GERENCIAL_HOME_CENTS, SALDO_INICIAL_CENTS } from "@/lib/money";
 import {
   COMPETENCIAS_JAN_JUL_2026,
   isKpiId,
@@ -101,7 +101,9 @@ export async function GET(request: NextRequest) {
       kpi === "saldo"
         ? recorte === "equivalente-jan-jul"
           ? null
-          : oficial.saldoFinalCents
+          : recorte === "oficial-2026"
+            ? SALDO_GERENCIAL_HOME_CENTS
+            : oficial.saldoFinalCents
         : kpi === "receitas"
           ? recorte === "equivalente-jan-jul"
             ? categorias.reduce((a, c) => a + c.valorCents, 0)
@@ -114,6 +116,13 @@ export async function GET(request: NextRequest) {
               ? null
               : oficial.resultadoCents;
 
+    const criterio =
+      kpi === "saldo" && recorte === "oficial-2026"
+        ? "VALOR_DEFINIDO_HOME"
+        : recorte === "equivalente-jan-jul"
+          ? "SOMA_MESES_EQUIVALENTES"
+          : "COLUNA_B";
+
     return Response.json({
       success: true,
       data: {
@@ -123,7 +132,7 @@ export async function GET(request: NextRequest) {
         arquivo: oficial.arquivo,
         origem,
         valorCents: valorOficial,
-        criterio: recorte === "equivalente-jan-jul" ? "SOMA_MESES_EQUIVALENTES" : "COLUNA_B",
+        criterio,
         statusDespesa: "Despesa registrada",
         categorias: kpi === "saldo" ? [] : categorias,
         metadadoPeriodo:
@@ -131,7 +140,10 @@ export async function GET(request: NextRequest) {
             ? {
                 saldoInicialCents: SALDO_INICIAL_CENTS,
                 saldoFinalCents: oficial.saldoFinalCents,
-                rotulo: "Saldo gerencial do demonstrativo",
+                rotulo:
+                  recorte === "oficial-2026"
+                    ? "Saldo final da planilha (coluna B)"
+                    : "Saldo gerencial do demonstrativo",
               }
             : undefined,
       },

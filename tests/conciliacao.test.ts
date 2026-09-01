@@ -1,7 +1,9 @@
 import { after, test } from "node:test";
 import assert from "node:assert/strict";
 import { prisma } from "../lib/prisma";
-import { withinTolerance, SALDO_INICIAL_CENTS } from "../lib/money";
+import { montarAlertas } from "../lib/alertas";
+import { montarVisaoGeral } from "../lib/kpis";
+import { SALDO_GERENCIAL_HOME_CENTS, withinTolerance, SALDO_INICIAL_CENTS } from "../lib/money";
 
 after(async () => {
   await prisma.$disconnect();
@@ -84,4 +86,34 @@ test("mês residual existe e Out/2025 ou Jan/2025 está marcado", async () => {
     _sum: { valorCents: true },
   });
   assert.equal(withinTolerance(residual2026._sum.valorCents ?? 0, 12_509_332), true);
+});
+
+test("visão geral recorte 2026: card saldo usa valor definido na home", async () => {
+  const condominio = await prisma.condominio.findFirst({ where: { codigo: "132" } });
+  assert.ok(condominio, "condomínio 132 ausente — rode npm run importar");
+
+  const [totais, periodos, lancamentos] = await Promise.all([
+    prisma.totalOficial.findMany({ where: { condominioId: condominio.id } }),
+    prisma.periodo.findMany({
+      where: { condominioId: condominio.id },
+      orderBy: { competencia: "asc" },
+    }),
+    prisma.lancamento.findMany({
+      where: { condominioId: condominio.id },
+      include: { categoria: true, periodo: true },
+    }),
+  ]);
+
+  const payload = montarVisaoGeral({
+    condominio: { nome: condominio.nome, codigo: condominio.codigo },
+    recorte: "oficial-2026",
+    totais,
+    periodos,
+    lancamentos,
+    alertas: montarAlertas(lancamentos),
+  });
+
+  assert.equal(payload.kpis.saldo.valorCents, SALDO_GERENCIAL_HOME_CENTS);
+  assert.equal(payload.kpis.saldo.variacaoPct, null);
+  assert.equal(payload.serieSaldo.at(-1)?.saldoCents, 35_123_901);
 });

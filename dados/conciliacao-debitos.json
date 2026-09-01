@@ -1,0 +1,221 @@
+{
+  "geradoEm": "2026-09-01T22:07:03.672Z",
+  "tipoExtrato": "debitos_fiscais_multiempresa",
+  "competenciaExtrato": "2026-07",
+  "arquivos": [
+    {
+      "path": "d:/Downloads migrado/debitos_detalhe_2026-09-01.xlsx",
+      "aba": "Detalhe",
+      "linhas": 1204
+    },
+    {
+      "path": "d:/Downloads migrado/debitos_detalhe_2026-09-01 - Copia.xlsx",
+      "aba": "Detalhe",
+      "linhas": 1204
+    }
+  ],
+  "diffArquivos": {
+    "iguais": true,
+    "soNoOriginal": 0,
+    "soNaCopia": 0
+  },
+  "totaisExtrato": {
+    "linhas": 1204,
+    "valorOriginal": 988874638,
+    "saldoDevedor": 932757955,
+    "multa": 17351405,
+    "juros": 7951539,
+    "consolidado": 958060899,
+    "devedor": 230516016,
+    "aVencer": 727517929
+  },
+  "totaisExtratoBrl": {
+    "valorOriginal": "R$ 9.888.746,38",
+    "consolidado": "R$ 9.580.608,99",
+    "devedor": "R$ 2.305.160,16",
+    "aVencer": "R$ 7.275.179,29"
+  },
+  "empresasNoExtrato": 93,
+  "topEmpresas": [
+    {
+      "codigo": "711",
+      "nome": "JPG - PRODUTOS FUNCIONAIS E NUTRICIONAIS LTDA",
+      "linhas": 55,
+      "consolidado": 140438087,
+      "consolidadoBrl": "R$ 1.404.380,87"
+    },
+    {
+      "codigo": "52",
+      "nome": "DAUTO TINTAS LTDA EPP",
+      "linhas": 116,
+      "consolidado": 85697103,
+      "consolidadoBrl": "R$ 856.971,03"
+    },
+    {
+      "codigo": "712",
+      "nome": "JPG - PRODUTOS FUNCIONAIS E NUTRICIONAIS LTDA",
+      "linhas": 26,
+      "consolidado": 70242348,
+      "consolidadoBrl": "R$ 702.423,48"
+    },
+    {
+      "codigo": "713",
+      "nome": "JPG - PRODUTOS FUNCIONAIS E NUTRICIONAIS LTDA",
+      "linhas": 26,
+      "consolidado": 70242348,
+      "consolidadoBrl": "R$ 702.423,48"
+    },
+    {
+      "codigo": "81",
+      "nome": "JPG - PRODUTOS FUNCIONAIS E NUTRICIONAIS LTDA",
+      "linhas": 26,
+      "consolidado": 70242348,
+      "consolidadoBrl": "R$ 702.423,48"
+    },
+    {
+      "codigo": "82",
+      "nome": "JPG - PRODUTOS FUNCIONAIS E NUTRICIONAIS LTDA",
+      "linhas": 26,
+      "consolidado": 70242348,
+      "consolidadoBrl": "R$ 702.423,48"
+    },
+    {
+      "codigo": "90",
+      "nome": "JPG - PRODUTOS FUNCIONAIS E NUTRICIONAIS LTDA",
+      "linhas": 26,
+      "consolidado": 70242348,
+      "consolidadoBrl": "R$ 702.423,48"
+    },
+    {
+      "codigo": "98",
+      "nome": "JPG - PRODUTOS FUNCIONAIS E NUTRICIONAIS LTDA",
+      "linhas": 26,
+      "consolidado": 70242348,
+      "consolidadoBrl": "R$ 702.423,48"
+    },
+    {
+      "codigo": "97",
+      "nome": "CUSTOMS IMPORTACAO EXPORTACAO CONSULTORIA E ASSESSORIA LTDA",
+      "linhas": 31,
+      "consolidado": 42621860,
+      "consolidadoBrl": "R$ 426.218,60"
+    },
+    {
+      "codigo": "37",
+      "nome": "EGAPLAST - ARTEFATOS E COMERCIO DE PLASTICOS LTDA",
+      "linhas": 37,
+      "consolidado": 40974023,
+      "consolidadoBrl": "R$ 409.740,23"
+    }
+  ],
+  "porEsfera": {
+    "Estadual": {
+      "cents": 108572995,
+      "brl": "R$ 1.085.729,95"
+    },
+    "Federal": {
+      "cents": 848927916,
+      "brl": "R$ 8.489.279,16"
+    },
+    "Municipal": {
+      "cents": 559988,
+      "brl": "R$ 5.599,88"
+    }
+  },
+  "porSituacao": {
+    "DEVEDOR": 694,
+    "A ANALISAR-A VENCER": 474,
+    "A VENCER": 33,
+    "INC": 3
+  },
+  "condominioNoExtrato": 0,
+  "codigo132NoExtrato": {
+    "empresa": "ART FORT COMERCIO E IMPORTACAO LTDA",
+    "linhas": 6,
+    "consolidado": 3464045,
+    "consolidadoBrl": "R$ 34.640,45",
+    "amostra": [
+      {
+        "receita": "5123-01 - IPI",
+        "situacao": "A ANALISAR-A VENCER",
+        "consolidadoBrl": "R$ 973,96"
+      },
+      {
+        "receita": "8109-02 - PIS",
+        "situacao": "A ANALISAR-A VENCER",
+        "consolidadoBrl": "R$ 1.551,86"
+      },
+      {
+        "receita": "2172-01 - COFINS",
+        "situacao": "A ANALISAR-A VENCER",
+        "consolidadoBrl": "R$ 7.162,45"
+      },
+      {
+        "receita": "1097-16 - IPI",
+        "situacao": "A ANALISAR-A VENCER",
+        "consolidadoBrl": "R$ 8.885,44"
+      },
+      {
+        "receita": "2089-01 - IRPJ",
+        "situacao": "A ANALISAR-A VENCER",
+        "consolidadoBrl": "R$ 8.456,18"
+      }
+    ]
+  },
+  "dashboard": {
+    "condominio": {
+      "nome": "Canto do Sabiá",
+      "codigo": "132"
+    },
+    "oficial": {
+      "receitaCents": 146380571,
+      "despesaCents": 131777836,
+      "saldoFinalCents": 35123901,
+      "receitaBrl": "R$ 1.463.805,71",
+      "despesaBrl": "R$ 1.317.778,36",
+      "saldoFinalBrl": "R$ 351.239,01"
+    },
+    "impostosTotalCents": 8632545,
+    "impostosTotalBrl": "R$ 86.325,45",
+    "impostosPorCategoria": {
+      "ISS Agrupado": {
+        "cents": 3161991,
+        "brl": "R$ 31.619,91"
+      },
+      "Impostos Taxas e Contribuições": {
+        "cents": 282958,
+        "brl": "R$ 2.829,58"
+      },
+      "DARF Previdenciário": {
+        "cents": 5187596,
+        "brl": "R$ 51.875,96"
+      }
+    },
+    "cotasTotalBrl": "R$ 844.066,00"
+  },
+  "divergencias": [
+    {
+      "tipo": "FONTE_INCOMPATIVEL",
+      "descricao": "Nenhuma linha do extrato menciona \"Canto do Sabiá\" ou condomínio. O arquivo é de débitos fiscais de 93 empresas clientes de escritório contábil — não de unidades do condomínio."
+    },
+    {
+      "tipo": "CODIGO_HOMONIMO",
+      "descricao": "O código \"132\" no extrato pertence a \"ART FORT COMERCIO E IMPORTACAO LTDA\" (6 linhas, R$ 34.640,45). No dashboard, 132 é o código do condomínio Canto do Sabiá. São cadastros diferentes.",
+      "extrato": "ART FORT COMERCIO E IMPORTACAO LTDA",
+      "dashboard": "Canto do Sabiá"
+    },
+    {
+      "tipo": "TOTAL_IMPOSTOS_INCOMPARAVEL",
+      "descricao": "Extrato consolidado (R$ 9.580.608,99, 93 empresas) ≠ Impostos do demonstrativo (R$ 86.325,45, só Canto do Sabiá). Conceitos diferentes: saldo devedor fiscal multiempresa vs despesa registrada do condomínio.",
+      "extrato": "R$ 9.580.608,99",
+      "dashboard": "R$ 86.325,45"
+    },
+    {
+      "tipo": "TOTAL_GERAL_INCOMPARAVEL",
+      "descricao": "Extrato consolidado (R$ 9.580.608,99) ≠ Despesa oficial do dashboard (R$ 1.317.778,36). Esperado: são bases distintas.",
+      "extrato": "R$ 9.580.608,99",
+      "dashboard": "R$ 1.317.778,36"
+    }
+  ],
+  "conclusao": "Os arquivos debitos_detalhe NÃO são do condomínio Canto do Sabiá. São extrato fiscal de 93 empresas (competência do extrato: 07/2026). Os números não batem com o dashboard porque a fonte é outra — não é bug de importação do 015A."
+}

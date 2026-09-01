@@ -2,8 +2,8 @@
 
 | Item | Valor |
 |------|--------|
-| Versão do sistema | 0.2.2 — Telas do menu |
-| Última atualização | 01/09/2026 (saldo inicial fixado em R$ 0,00) |
+| Versão do sistema | 0.3.1 — Contas de consumo |
+| Última atualização | 01/09/2026 (Comparativo e Utilidades: água, gás e solar Jan–Jul; gás ÷ 124 unidades) |
 | Fonte oficial | Este arquivo |
 
 ## 1. Como usar este documento
@@ -27,6 +27,11 @@ Frontend não acessa banco nem Excel. Regras e totais saem da API.
 
 | Versão | Data | O que mudou |
 |--------|------|-------------|
+| 0.3.1 — Contas de consumo | 01/09/2026 | Comparativo e Utilidades: bloco **Contas de consumo** Jan–Jul (água, gás, energia solar); gás médio por **124 unidades**; conferência rateio gás; `lib/consumo.ts`, `lib/format.ts` (`UNIDADES_CONDOMINIO`) |
+| 0.3.0 — Cobertura da cota | 01/09/2026 | Bloco **A cota cobriu as despesas?** na Visão Geral e em Taxa condominial: cota + saldo de entrada (R$ 0,00) − despesas registradas; selo Cobriu/Não cobriu; outras receitas e resultado geral; slide no Relatório da Assembleia; `lib/cobertura-cota.ts` |
+| 0.2.5 — Visão Geral | 01/09/2026 | Card **Saldo gerencial** na home (recorte Out/25–Set/26) = **R$ 71.204,98** (`SALDO_GERENCIAL_HOME_CENTS`); gráfico e importador mantêm saldo final da planilha R$ 351.239,01; drawer mostra os dois valores |
+| 0.2.4 — Telas do menu | 01/09/2026 | Fundo de reserva: card **Saldo do fundo** = R$ 191.599,35 (constante `SALDO_FUNDO_RESERVA_CENTS`); arrecadação e despesa do recorte inalteradas; slide do relatório alinhado |
+| 0.2.3 — Telas do menu | 01/09/2026 | Detalhamento: tabela planilha com uma coluna por competência (Out/25…Set/26 ou Jan–Jul) e Total no fim; categorias expansíveis; itens na mesma linha |
 | 0.2.2 — Telas do menu | 01/09/2026 | Saldo inicial sempre R$ 0,00 (KPI Fluxo, waterfall, relatório e totais oficiais). Não usa a linha Saldo anterior da planilha |
 | 0.2.1 — Telas do menu | 01/09/2026 | Escala visual menor (fonte fluida 13–15px); conteúdo limitado a 1280px; gráficos e pills com rolagem no celular; viewport `device-width` |
 | 0.2.0 — Telas do menu | 01/09/2026 | Todas as 17 rotas da sidebar ativas; GET `/api/modulo`; Relatório da Assembleia (slides, tela cheia, imprimir) |
@@ -64,8 +69,8 @@ A API filtra pelo condomínio do ambiente (`CONDOMINIO_CODIGO=132`). Sem esse c�
 | `/receitas` | Ordinárias, extra, eventuais, composição, ranking | `app/receitas/page.tsx` |
 | `/despesas` | Natureza, top 10, impostos | `app/despesas/page.tsx` |
 | `/fluxo` | Waterfall: saldo inicial R$ 0,00 + receitas − despesas; saldo final da planilha | `app/fluxo/page.tsx` |
-| `/taxa-condominial` | Cotas, média, maior/menor, vs 2025 | `app/taxa-condominial/page.tsx` |
-| `/fundo-reserva` | Arrecadação, despesa, saldo gerencial | `app/fundo-reserva/page.tsx` |
+| `/taxa-condominial` | Cotas, cobertura da cota, saiu/sobrou, média, vs 2025 | `app/taxa-condominial/page.tsx` |
+| `/fundo-reserva` | Arrecadação, despesa, saldo do fundo (informado) | `app/fundo-reserva/page.tsx` |
 | `/taxas-extras` | Academia arrecadado vs utilizado | `app/taxas-extras/page.tsx` |
 | `/contratos` | Ranking + Empresa Terceirizada | `app/contratos/page.tsx` |
 | `/utilidades` | Água, gás, energia, solar, telefone | `app/utilidades/page.tsx` |
@@ -73,7 +78,7 @@ A API filtra pelo condomínio do ambiente (`CONDOMINIO_CODIGO=132`). Sem esse c�
 | `/patrimonio` | Bens patrimoniais | `app/patrimonio/page.tsx` |
 | `/comparativo` | Só Jan–Jul vs Jan–Jul | `app/comparativo/page.tsx` |
 | `/analise-mensal` | Receita/despesa/resultado/saldo por mês | `app/analise-mensal/page.tsx` |
-| `/detalhamento` | Drill-down categoria → item → meses | `app/detalhamento/page.tsx` |
+| `/detalhamento` | Planilha categoria/item × meses + Total | `app/detalhamento/page.tsx`, `components/paginas/DetalhamentoTabela.tsx` |
 | `/alertas` | Motor objetivo | `app/alertas/page.tsx` |
 | `/relatorio` | Slides da assembleia, tela cheia, imprimir | `app/relatorio/page.tsx` |
 | `/configuracoes` | Condomínio, fonte, qualidade, sem login | `app/configuracoes/page.tsx` |
@@ -83,7 +88,8 @@ A API filtra pelo condomínio do ambiente (`CONDOMINIO_CODIGO=132`). Sem esse c�
 | `GET /api/modulo?modulo=&recorte=&ordem=` | Payload das 16 telas | `app/api/modulo/route.ts`, `lib/modulos.ts` |
 | Chrome compartilhado | Recorte, loading, GSAP | `components/paginas/PaginaAnalise.tsx` |
 | `npm run importar` | Lê Excel, valida totais, grava SQLite | `scripts/importar-demonstrativo.ts` |
-| `npm test` | Conciliação coluna B | `tests/conciliacao.test.ts` |
+| `npm test` | Conciliação coluna B + cobertura da cota | `tests/conciliacao.test.ts`, `tests/cobertura-cota.test.ts` |
+| `npx tsx scripts/conciliar-debitos.ts` | Cruza extrato fiscal `debitos_detalhe` com SQLite (somente leitura) | `scripts/conciliar-debitos.ts`, `dados/conciliacao-debitos.json` |
 | Schema | Tabelas de negócio com `condominioId` | `prisma/schema.prisma` |
 
 Recortes aceitos: `oficial-2026` (padrão), `oficial-2025`, `equivalente-jan-jul`.
@@ -104,18 +110,19 @@ KPIs de origem (home): `saldo`, `receitas`, `despesas`, `resultado`.
 | Header | Título | Visão geral | Sim | Sistema | Fixo | — | SplitText na entrada; tamanho fluido (não `text-4xl`) | — | `components/visao-geral/VisaoGeral.tsx`, `app/globals.css` (`.page-title`) |
 | Header | Recorte | Pill de período | Sim | Usuário | Competências importadas | Recarrega API | Troca `recorte`; rolagem horizontal no celular | Só os 3 valores da allowlist | `lib/format.ts`, `app/globals.css` (`.recorte-pills`) |
 | Header | Selo | REALIZADO | Sim | Sistema | API `periodo.selo` | — | Não mistura projetado | Não há projetado neste ciclo | `lib/kpis.ts` |
-| KPI | Saldo gerencial | Saldo final do recorte | Sim | Cálculo servidor | Coluna B (oficial) ou saldo do mês (Jan–Jul) | Origem | Clique abre drawer; card com borda verde 1px | Não é saldo bancário de fundo/taxa extra | `lib/kpis.ts`, `app/globals.css` (`--color-card-line`) |
+| KPI | Saldo gerencial | Valor do card na home | Sim | Constante (recorte 2026) ou coluna B | `SALDO_GERENCIAL_HOME_CENTS` (Out/25–Set/26) ou saldo do mês (Jan–Jul) | Origem | Clique abre drawer com valor da home + saldo final da planilha; sem % no recorte 2026 | Não é saldo bancário de fundo/taxa extra | `lib/kpis.ts`, `lib/money.ts`, `app/globals.css` (`--color-card-line`) |
 | KPI | Receitas | Total de receitas | Sim | Cálculo servidor | Coluna B no recorte oficial | Origem | Count-up GSAP | KPI oficial nunca é soma dos meses na tela | `lib/kpis.ts` |
 | KPI | Despesas registradas | Total de despesas | Sim | Cálculo servidor | Coluna B | Origem | Rótulo “Despesa registrada” | Sem status Pago | `lib/kpis.ts` |
 | KPI | Resultado | Receitas − despesas | Sim | Cálculo servidor | Mov. líquido oficial | Origem | — | — | `lib/kpis.ts` |
 | KPI saldo | Margem / cobertura | Resultado/receita e saldo/média de despesa dos meses COMPLETO | Não | Cálculo servidor | Série mensal | — | Set/2026 fora da média | — | `lib/kpis.ts` |
+| Bloco | Cobertura da cota | A cota cobriu as despesas? | Sim | Cálculo servidor | Cotas + saldo 0 − despesa do recorte | — | Selo Cobriu/Não cobriu; barra %; outras receitas e resultado geral | Saldo de entrada sempre R$ 0,00; não usa Saldo anterior da planilha | `lib/cobertura-cota.ts`, `components/visao-geral/CoberturaCota.tsx` |
 | Gráfico | Evolução do saldo | Área verde | Sim | API `serieSaldo` | `Periodo.saldoFinalCents` | Clique no ponto foca o mês | pathLength GSAP | — | `components/visao-geral/AreaChartSaldo.tsx` |
 | Composição | Despesas / receitas | Barra segmentada + lista | Sim | API | Soma de lançamentos por grupo (inclui residual) | — | — | — | `components/visao-geral/Composicao.tsx` |
 | Barras | Receita × despesa mês | Hachura; mês foco sólido | Sim | API `serieMensal` | Lançamentos | Foco do mês | `*` parcial `†` residual | — | `components/visao-geral/BarrasMensais.tsx` |
 | Comparativo | Jan–Jul 2025 vs 2026 | Único comparativo da home | Sim | Soma de competências | Lançamentos | — | Nunca 7 meses contra 12 | `lib/kpis.ts` |
 | Alertas | Pontos de atenção | Regras objetivas | Não | Servidor | Lançamentos | ScrollTrigger uma vez | Sem texto subjetivo | `lib/alertas.ts` |
 | Qualidade | Lista | Conciliado / avisos | Sim | Servidor | Totais + regras | — | — | `lib/kpis.ts` |
-| Drawer | Ver origem | Categorias, meses, arquivo | Não | API origem | Lançamentos + total oficial | Fecha no overlay | — | `components/visao-geral/OrigemDrawer.tsx` |
+| Drawer | Ver origem | Valor da home + saldo planilha (saldo 2026) | Não | API origem | `VALOR_DEFINIDO_HOME` + coluna B | Fecha no overlay | Critério `VALOR_DEFINIDO_HOME` no recorte 2026 | — | `components/visao-geral/OrigemDrawer.tsx`, `app/api/origem/route.ts` |
 | Sidebar | 17 itens PRD | Navegação | Sim | `lib/nav.ts` | PRD §5 | `next/link` + pathname | Sem “Em breve” | `components/shell/Sidebar.tsx` |
 
 Estados: loading (skeleton), erro com retry, vazio se ninguém rodou o importador.
@@ -129,16 +136,16 @@ Todas abaixo usam `PaginaAnalise` + `GET /api/modulo`. Recorte nas pills (3 valo
 | Receitas | `/receitas` | KPIs ordinárias / extra / eventuais, composição, evolução, ranking | Total oficial = coluna B no recorte oficial | `lib/modulos.ts` receitas |
 | Despesas | `/despesas` | Total, contratos, manutenção, card Impostos, top 10, evolução | Rótulo Despesa registrada | `lib/modulos.ts` despesas |
 | Fluxo | `/fluxo` | Waterfall: saldo inicial R$ 0,00; receitas; despesas; saldo gerencial final da planilha; série mensal | Saldo inicial não vem da linha Saldo anterior | `lib/modulos.ts` fluxo |
-| Taxa condominial | `/taxa-condominial` | Cotas, média, maior/menor, participação, vs Jan–Jul/2025 | Não inventa número de unidades | `lib/modulos.ts` taxa-condominial |
-| Fundo de reserva | `/fundo-reserva` | Arrecadação, despesa, **saldo gerencial** | Nunca “saldo bancário” | `lib/modulos.ts` fundo-reserva |
+| Taxa condominial | `/taxa-condominial` | Cotas, bloco cobertura, saiu/sobrou, média, participação, vs Jan–Jul/2025 | Saldo de entrada R$ 0,00 na cobertura | `lib/modulos.ts` taxa-condominial, `lib/cobertura-cota.ts` |
+| Fundo de reserva | `/fundo-reserva` | Arrecadação, despesa, **saldo do fundo** (R$ 191.599,35 informado) | Arrecadação/despesa = recorte; saldo = constante; nunca “saldo bancário” | `lib/modulos.ts` fundo-reserva, `lib/money.ts` |
 | Taxas extras | `/taxas-extras` | Academia arrecadado vs Aquisição Equipamentos vs diferença gerencial | Não é saldo bancário da taxa extra | `lib/modulos.ts` taxas-extras |
 | Contratos | `/contratos` | Ranking do grupo Contratos fixos; destaque Empresa Terceirizada e % da despesa | — | `lib/modulos.ts` contratos |
-| Utilidades | `/utilidades` | Água e Esgoto, Gás, Energia Elétrica, Energia Solar, Telefone - Internet | Só linhas do demonstrativo | `lib/modulos.ts` utilidades |
+| Utilidades | `/utilidades` | Água, gás, energia, solar, telefone + comparativo Jan–Jul e média de gás ÷ 124 | Só linhas do demonstrativo; copa/salão fora do rateio | `lib/modulos.ts` utilidades, `lib/consumo.ts` |
 | Manutenção | `/manutencao` | Ranking + evolução + Jan–Jul vs 2025 | Comparativo só equivalentes | `lib/modulos.ts` manutencao |
 | Patrimônio | `/patrimonio` | Bens do grupo Patrimônio | Sem inventário físico | `lib/modulos.ts` patrimonio |
-| Comparativo | `/comparativo` | Jan–Jul/2025 × Jan–Jul/2026 | Aviso se o recorte da barra for o período cheio Out/25–Set/26 | `lib/modulos.ts` comparativo |
+| Comparativo | `/comparativo` | Jan–Jul/2025 × Jan–Jul/2026 + **Contas de consumo** (água, gás, solar; gás ÷ 124) | Aviso se recorte Out/25–Set/26; gás médio igualitário, não medição individual | `lib/modulos.ts` comparativo, `lib/consumo.ts` |
 | Análise mensal | `/analise-mensal` | Tabela receita/despesa/resultado/saldo gerencial por competência | * parcial † residual | `lib/modulos.ts` analise-mensal |
-| Detalhamento | `/detalhamento` | Categoria → item → meses (tabela) | Soma dos meses ≠ coluna B se houver residual | `lib/modulos.ts` detalhamento |
+| Detalhamento | `/detalhamento` | Planilha: categoria (expansível) e itens com coluna por competência + Total | Soma dos meses ≠ coluna B se houver residual (†); rolagem horizontal; nome e Total fixos | `components/paginas/DetalhamentoTabela.tsx`, `lib/modulos.ts` detalhamento |
 | Alertas | `/alertas` | Motor objetivo | Sem texto subjetivo | `lib/alertas.ts` |
 
 ### 6.3 Relatório da Assembleia (`/relatorio`)
@@ -148,7 +155,7 @@ Todas abaixo usam `PaginaAnalise` + `GET /api/modulo`. Recorte nas pills (3 valo
 | Header | Recorte | Mesmas pills | Sim | Usuário | Allowlist | Recarrega API | Slides recálculo | — | `PaginaAnalise.tsx` |
 | Ações | Tela cheia | `requestFullscreen` no palco | Não | Usuário | Browser | — | Alterna fullscreen | — | `RelatorioAssembleia.tsx` |
 | Ações | Imprimir | `window.print()` | Não | Usuário | Browser | CSS print | Todos os slides | Sem PDF gerado no servidor | `RelatorioAssembleia.tsx` |
-| Palco | Slides | Quadro-resumo, receitas, despesas, cotas, fundo, academia, terceirizada, Jan–Jul, alertas, fonte | Sim | Servidor | `montarModulo` | Setas / teclado | Sem opinião | Só números do demonstrativo | `lib/modulos.ts` relatorio |
+| Palco | Slides | Quadro-resumo, receitas, despesas, cotas, cobertura da cota, fundo, academia, terceirizada, Jan–Jul, alertas, fonte | Sim | Servidor | `montarModulo` | Setas / teclado | Sem opinião | Só números do demonstrativo | `lib/modulos.ts` relatorio |
 
 ### 6.4 Configurações (`/configuracoes`)
 
@@ -172,12 +179,17 @@ Todas abaixo usam `PaginaAnalise` + `GET /api/modulo`. Recorte nas pills (3 valo
 7. Set/2026 é REALIZADO parcial (receita baixa, despesa 0). Não entra na média de cobertura.
 8. Comparativo **entre anos** (home, tela Comparativo, slides): somente Jan–Jul/2025 vs Jan–Jul/2026. Aviso se o recorte da barra for Out/2025–Set/2026 (12 competências) contra o arquivo 2025 (7 meses).
 9. Status de despesa neste ciclo: **Despesa registrada**. Não existe “Pago”.
-10. Fundo de reserva e taxa extra Academia: **saldo/diferença gerencial** = arrecadação − despesa lançada no recorte. Nunca rotulado como saldo bancário.
+10. **Fundo de reserva:** card **Saldo do fundo** = valor informado **R$ 191.599,35** (`SALDO_FUNDO_RESERVA_CENTS` em `lib/money.ts`), igual em todos os recortes. Arrecadação e despesa = lançamentos do recorte. Nunca rotulado como saldo bancário. **Taxa extra Academia:** diferença gerencial = arrecadação − despesa lançada no recorte. Nunca rotulado como saldo bancário.
 11. Toda tabela de negócio tem `condominioId`. Queries da API filtram por ele.
 12. Importação só via CLI. Sem upload na UI. Sem login.
 13. `GET /api/modulo` só aceita `modulo`, `recorte` e `ordem` da allowlist. Não concatena SQL.
 14. Ranking configurável: período = pills de recorte; ordem = valor ou nome.
-15. **Saldo inicial** (Fluxo, waterfall, quadro do relatório, `TotalOficial.saldoInicialCents` e drawer de origem) é sempre **R$ 0,00**. A linha **Saldo anterior** da planilha continua no Excel e pode ser lida no importador para saldos mensais (`Periodo.saldoAnteriorCents`), mas **não** entra no saldo inicial da tela. Constante `SALDO_INICIAL_CENTS` em `lib/money.ts`.
+15. Extrato `debitos_detalhe` (débitos fiscais multiempresa de escritório contábil) **não** é fonte do dashboard. Código 132 no extrato pode ser empresa cliente (ex.: ART FORT), não o condomínio Canto do Sabiá. Conciliação: `npx tsx scripts/conciliar-debitos.ts`.
+16. **Saldo inicial** (Fluxo, waterfall, quadro do relatório, `TotalOficial.saldoInicialCents` e drawer de origem) é sempre **R$ 0,00**. A linha **Saldo anterior** da planilha continua no Excel e pode ser lida no importador para saldos mensais (`Periodo.saldoAnteriorCents`), mas **não** entra no saldo inicial da tela. Constante `SALDO_INICIAL_CENTS` em `lib/money.ts`.
+17. **Saldo do fundo de reserva** na tela `/fundo-reserva` e no slide do relatório: **R$ 191.599,35** (`SALDO_FUNDO_RESERVA_CENTS`). Não é arrecadação − despesa do recorte.
+18. **Saldo gerencial na Visão Geral** (recorte `oficial-2026` / Out/25–Set/26): card exibe **R$ 71.204,98** (`SALDO_GERENCIAL_HOME_CENTS` em `lib/money.ts`). O saldo final da planilha (**R$ 351.239,01**) permanece no importador, no gráfico **Evolução do saldo**, em Fluxo, Análise mensal e Relatório. Drawer de origem mostra os dois valores (critério `VALOR_DEFINIDO_HOME`). Demais recortes usam saldo da planilha no card.
+19. **Cobertura da cota** (Visão Geral, Taxa condominial, slide do relatório): **disponível** = cotas de condomínio + saldo de entrada (sempre R$ 0,00); **saiu** = despesas registradas do recorte; **sobrou/faltou** = disponível − saiu. Selo **Cobriu** se sobrou ≥ 0. Mostra também outras receitas e resultado geral (todas as receitas − despesas). Função `montarCoberturaCota` em `lib/cobertura-cota.ts`.
+20. **Contas de consumo** (Comparativo e Utilidades): comparativo Jan–Jul de **Água e Esgoto**, **Gás** e **Energia Solar** (despesa registrada). **Gás médio por unidade** = despesa da linha `Gás` ÷ **124** (`UNIDADES_CONDOMINIO` em `lib/format.ts`); **média mensal** = total ÷ 7 competências ÷ 124. Não inclui **Gás para Copa - Salão de Festas**. Na tela Comparativo, linhas extras: **Rateio Gás (receita)** e **Gás não rateado** (despesa Gás − rateio). Não é medição individual por apartamento. `lib/consumo.ts`.
 
 Totais que o importador exige:
 
@@ -191,13 +203,14 @@ Totais que o importador exige:
 1. Na pasta do projeto: `npm install`, copiar `.env.example` para `.env` se ainda não existir.
 2. `npm run setup` (gera Prisma, cria SQLite, importa os dois Excel de `dados/originais/`).
 3. `npm run dev` e abrir `http://localhost:3789` (porta dedicada, fora das demais apps locais).
-4. A tela inicial é a Visão Geral. A logo oficial aparece no menu lateral (computador) e no topo (celular). Use as pills de período no canto superior. Em tela estreita, as pills e os gráficos de barras rolam na horizontal.
+4. A tela inicial é a Visão Geral. A logo oficial aparece no menu lateral (computador) e no topo (celular). Use as pills de período no canto superior. No recorte **Out/25–Set/26**, o card **Saldo gerencial** mostra **R$ 71.204,98** (valor definido na home); o gráfico abaixo continua com o saldo final da planilha mês a mês. Clique no card para ver os dois números no painel de origem. Logo abaixo dos KPIs, o bloco **A cota cobriu as despesas?** mostra se a cota + saldo de entrada (R$ 0,00) cobriu as despesas do recorte e o que sobrou ou faltou.
 5. Clique em um KPI da home para ver origem (arquivo, critério, categorias, meses). `†` = mês reconstruído. No celular o painel de origem ocupa a largura da tela.
 6. Todos os itens do menu lateral abrem tela. Recorte e, no ranking, “Por valor / Por nome” valem para a tela atual.
-7. Comparativo 2025 × 2026 e o bloco equivalente da home usam só Jan–Jul. Se a pill estiver em Out/25–Set/26, a tela Comparativo avisa e mesmo assim mostra Jan–Jul.
-8. Fundo de reserva e Taxas extras mostram **saldo/diferença gerencial**, não conta bancária. Em Fluxo e no relatório, o **saldo inicial** é R$ 0,00 (não usa o Saldo anterior da planilha).
-9. Relatório da Assembleia: setas ou teclado para os slides; Tela cheia; Imprimir (diálogo do navegador).
-10. Configurações explica fonte, qualidade e que não há login. Para reimportar: `npm run importar` no terminal.
+7. **Detalhamento** (menu Visão): tabela planilha com uma coluna por mês do recorte e **Total** no fim. Clique na categoria (▸/▾) para ver os itens; cada linha mostra receita ou despesa mês a mês. `†` = residual. Em celular, a tabela rola na horizontal; nome e Total ficam fixos.
+8. Comparativo 2025 × 2026 e o bloco equivalente da home usam só Jan–Jul. Se a pill estiver em Out/25–Set/26, a tela Comparativo avisa e mesmo assim mostra Jan–Jul. Role até **Contas de consumo** para ver água, gás e energia solar; o gás traz **média por 124 unidades** e, na mesma tela, conferência com o rateio cobrado. Em **Utilidades**, o comparativo Jan–Jul repete água, gás (com média ÷ 124) e solar.
+9. Fundo de reserva: **Saldo do fundo** = R$ 191.599,35 (valor informado, igual em todos os recortes); arrecadação e despesa mudam com o recorte. **Taxa condominial** repete o bloco de cobertura da cota e KPIs Saiu / Sobrou ou Faltou. Taxas extras mostram **diferença gerencial**, não conta bancária. Em Fluxo e no relatório, o **saldo inicial** é R$ 0,00 (não usa o Saldo anterior da planilha).
+10. Relatório da Assembleia: setas ou teclado para os slides; Tela cheia; Imprimir (diálogo do navegador).
+11. Configurações explica fonte, qualidade e que não há login. Para reimportar: `npm run importar` no terminal.
 
 Não há usuário de demo: não há login.
 
@@ -205,17 +218,22 @@ O layout cabe em celular, tablet e computador: menu em gaveta abaixo de `lg`, co
 
 ## 9. Checklist de validação
 
+- [ ] API `/api/visao-geral?recorte=oficial-2026` devolve `coberturaCota.cobriu` = false e `coberturaCota.saldoEntradaCents` = 0
+- [ ] Home e `/taxa-condominial` mostram bloco **A cota cobriu as despesas?** com selo Cobriu/Não cobriu
+- [ ] Relatório inclui slide **A cota cobriu as despesas?**
 - [ ] `npm run importar` imprime totais conferidos e não aborta
 - [ ] `npm test` passa (coluna B e soma residual)
-- [ ] API `/api/visao-geral` devolve receita 146380571 centavos no recorte `oficial-2026`
+- [ ] API `/api/visao-geral?recorte=oficial-2026` devolve `kpis.saldo.valorCents` = 7120498 (R$ 71.204,98)
+- [ ] Gráfico **Evolução do saldo** no recorte 2026 ainda termina em R$ 351.239,01
 - [ ] Tela mostra os mesmos valores da planilha, **exceto saldo inicial = R$ 0,00**
 - [ ] `/fluxo` e o quadro do relatório mostram saldo inicial R$ 0,00 em qualquer recorte
 - [ ] Recorte Jan–Jul não usa o total de 12 meses do arquivo 2026
 - [ ] Set/2026 aparece como parcial
 - [ ] Sidebar: os 17 itens navegam; nenhum “Em breve”
 - [ ] `GET /api/modulo?modulo=receitas` e `modulo=comparativo` respondem 200
-- [ ] Comparativo: aviso se recorte `oficial-2026`; números só Jan–Jul
-- [ ] Fundo e Academia: texto “gerencial”, nunca “bancário”
+- [ ] Comparativo: aviso se recorte `oficial-2026`; números só Jan–Jul; bloco **Contas de consumo** com gás médio ÷ 124
+- [ ] Utilidades: comparativo Jan–Jul de água, gás (média 124 un.) e solar
+- [ ] Fundo: card **Saldo do fundo** = R$ 191.599,35 em qualquer recorte; Academia: texto “gerencial”, nunca “bancário”
 - [ ] Relatório: slides factuais; botões Tela cheia e Imprimir
 - [ ] Configurações: sem login; atalho `npm run importar`
 - [ ] Logo oficial visível na sidebar (desktop) e no header (celular); clique volta para `/`
@@ -223,6 +241,7 @@ O layout cabe em celular, tablet e computador: menu em gaveta abaixo de `lg`, co
 - [ ] Sem `prefers-reduced-motion`, há timeline de entrada; com a preferência, duration 0
 - [ ] Em ~375px: sem barra de rolagem horizontal da página; pills e gráficos de barras podem rolar por conta própria
 - [ ] Em ~1280px+: conteúdo não estica além de 1280px; sidebar 240px visível
+- [ ] `/detalhamento`: colunas por competência do recorte + Total; categorias expansíveis; itens na mesma linha; rolagem horizontal no celular
 - [ ] Títulos e valores de KPI menores que na 0.2.0 (não ocupam a tela inteira)
 
 ## 10. Segurança (só o que existe)

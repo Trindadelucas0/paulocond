@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Composicao } from "@/components/visao-geral/Composicao";
+import { CoberturaCota } from "@/components/visao-geral/CoberturaCota";
 import { BarrasMensais } from "@/components/visao-geral/BarrasMensais";
 import { AreaChartSaldo } from "@/components/visao-geral/AreaChartSaldo";
 import { BarrasValor } from "@/components/paginas/BarrasValor";
@@ -166,6 +167,8 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
 
       <KpiGrid itens={data.kpis} />
 
+      {data.coberturaCota ? <CoberturaCota dados={data.coberturaCota} /> : null}
+
       {data.waterfall.length > 0 ? <WaterfallChart passos={data.waterfall} /> : null}
 
       {data.destaques.length > 0 ? (
@@ -243,50 +246,55 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
         </article>
       ) : null}
 
-      {data.comparativo ? (
-        <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
-          <h2 className="text-lg font-bold">{data.comparativo.rotulo}</h2>
-          {data.comparativo.aviso ? (
-            <p className="mt-2 rounded-2xl bg-warning-soft px-4 py-3 text-sm text-warning">{data.comparativo.aviso}</p>
-          ) : null}
-          <div className="mt-4 overflow-x-auto">
-            <table className="min-w-[36rem] w-full text-sm">
-              <thead>
-                <tr className="border-b border-line text-left text-xs uppercase tracking-wide text-muted">
-                  <th className="py-2 pr-3 font-semibold">Item</th>
-                  <th className="py-2 pr-3 text-right font-semibold">Jan–Jul/2025</th>
-                  <th className="py-2 pr-3 text-right font-semibold">Jan–Jul/2026</th>
-                  <th className="py-2 text-right font-semibold">Variação</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.comparativo.linhas.map((linha) => (
-                  <tr key={linha.rotulo} className="border-b border-line/70">
-                    <th scope="row" className="py-2.5 pr-3 font-medium">
-                      {linha.rotulo}
-                    </th>
-                    <td className="py-2.5 pr-3 text-right">{formatBRL(linha.cents2025)}</td>
-                    <td className="py-2.5 pr-3 text-right font-semibold">{formatBRL(linha.cents2026)}</td>
-                    <td className="py-2.5 text-right">
-                      {linha.variacaoPct === null ? (
-                        "—"
-                      ) : (
-                        <span
-                          className={`rounded-full px-2 py-0.5 text-xs font-bold ${
-                            linha.variacaoPct >= 0 ? "bg-forest-soft text-forest" : "bg-danger-soft text-danger"
-                          }`}
-                        >
-                          {formatPct(linha.variacaoPct)}
-                        </span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </article>
-      ) : null}
+      {data.comparativos.length > 0
+        ? data.comparativos.map((bloco) => (
+            <article
+              key={bloco.rotulo}
+              className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5"
+            >
+              <h2 className="text-lg font-bold">{bloco.rotulo}</h2>
+              {bloco.aviso ? (
+                <p className="mt-2 rounded-2xl bg-warning-soft px-4 py-3 text-sm text-warning">{bloco.aviso}</p>
+              ) : null}
+              <div className="mt-4 overflow-x-auto">
+                <table className="min-w-[36rem] w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-line text-left text-xs uppercase tracking-wide text-muted">
+                      <th className="py-2 pr-3 font-semibold">Item</th>
+                      <th className="py-2 pr-3 text-right font-semibold">Jan–Jul/2025</th>
+                      <th className="py-2 pr-3 text-right font-semibold">Jan–Jul/2026</th>
+                      <th className="py-2 text-right font-semibold">Variação</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {bloco.linhas.map((linha) => (
+                      <tr key={linha.rotulo} className="border-b border-line/70">
+                        <th scope="row" className="py-2.5 pr-3 font-medium">
+                          {linha.rotulo}
+                        </th>
+                        <td className="py-2.5 pr-3 text-right">{formatBRL(linha.cents2025)}</td>
+                        <td className="py-2.5 pr-3 text-right font-semibold">{formatBRL(linha.cents2026)}</td>
+                        <td className="py-2.5 text-right">
+                          {linha.variacaoPct === null ? (
+                            "—"
+                          ) : (
+                            <span
+                              className={`rounded-full px-2 py-0.5 text-xs font-bold ${
+                                linha.variacaoPct >= 0 ? "bg-forest-soft text-forest" : "bg-danger-soft text-danger"
+                              }`}
+                            >
+                              {formatPct(linha.variacaoPct)}
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </article>
+          ))
+        : null}
 
       {data.modulo === "analise-mensal" && data.detalhamento.grupos.length > 0 ? (
         <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
@@ -329,8 +337,10 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
 
       {data.modulo === "detalhamento" ? (
         <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
-          <h2 className="text-lg font-bold">Categoria → item → meses</h2>
-          <p className="mb-4 text-sm text-muted">Tabela tipo planilha. Totais oficiais continuam na coluna B, na Visão Geral.</p>
+          <h2 className="text-lg font-bold">Categoria e item mês a mês</h2>
+          <p className="mb-4 text-sm text-muted">
+            Uma coluna por competência do recorte e Total no fim. Expanda a categoria para ver cada item linha a linha.
+          </p>
           <DetalhamentoTabela competencias={data.detalhamento.competencias} grupos={data.detalhamento.grupos} />
         </article>
       ) : null}
