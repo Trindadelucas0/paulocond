@@ -55,7 +55,7 @@ export function OrigemDrawer({
       <button type="button" className="absolute inset-0 bg-ink/30" aria-label="Fechar origem" onClick={onClose} />
       <aside
         ref={panel}
-        className="relative h-full w-full max-w-md overflow-y-auto bg-surface p-6 shadow-[var(--shadow-card)]"
+        className="relative h-full w-full max-w-full overflow-y-auto bg-surface p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-[var(--shadow-card)] sm:max-w-md sm:p-6"
         role="dialog"
         aria-modal="true"
         aria-labelledby="origem-titulo"
@@ -80,7 +80,7 @@ export function OrigemDrawer({
               <span className="text-muted">Critério:</span> {data.criterio === "COLUNA_B" ? "Total oficial da coluna B" : "Soma dos meses equivalentes"}
             </p>
             {data.valorCents !== null ? (
-              <p className="text-2xl font-extrabold">{formatBRL(data.valorCents)}</p>
+              <p className="kpi-valor">{formatBRL(data.valorCents)}</p>
             ) : null}
             {data.metadadoPeriodo ? (
               <p className="rounded-2xl bg-page p-3 text-muted">{data.metadadoPeriodo.rotulo}</p>

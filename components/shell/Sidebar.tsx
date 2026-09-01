@@ -69,7 +69,7 @@ export function Sidebar({ aberto, onClose }: Props) {
       ) : null}
       <aside
         id="menu-lateral"
-        className={`fixed inset-y-0 left-0 z-40 flex w-[272px] flex-col border-r border-line bg-surface px-4 py-5 transition-transform print:hidden lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 flex w-[min(100%,var(--sidebar-w))] flex-col border-r border-line bg-surface px-3 py-4 transition-transform print:hidden lg:translate-x-0 ${
           aberto ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -90,7 +90,7 @@ export function Sidebar({ aberto, onClose }: Props) {
                       <Link
                         href={item.href}
                         onClick={onClose}
-                        className={`flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm ${
+                        className={`flex min-h-10 items-center gap-2.5 rounded-2xl px-2.5 py-2 text-sm ${
                           ativo ? "bg-forest font-semibold text-white" : "font-medium text-ink hover:bg-page"
                         }`}
                         aria-current={ativo ? "page" : undefined}

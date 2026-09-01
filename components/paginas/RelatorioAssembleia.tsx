@@ -91,12 +91,12 @@ export function RelatorioAssembleia({
 
       <section
         ref={palco}
-        className="rounded-3xl border border-card-line bg-surface p-6 shadow-[var(--shadow-card)] sm:p-10 print:shadow-none"
+        className="rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-8 print:shadow-none"
         aria-label={titulo}
       >
-        <p className="js-slide-el text-sm font-semibold uppercase tracking-[0.18em] text-forest">{slide.kicker}</p>
-        <h2 className="js-slide-el mt-2 text-2xl font-extrabold tracking-tight sm:text-4xl">{slide.titulo}</h2>
-        <dl className="mt-8 grid gap-3 sm:grid-cols-2">
+        <p className="js-slide-el text-xs font-semibold uppercase tracking-[0.16em] text-forest sm:text-sm">{slide.kicker}</p>
+        <h2 className="js-slide-el page-title">{slide.titulo}</h2>
+        <dl className="mt-6 grid grid-cols-1 gap-3 sm:mt-8 sm:grid-cols-2">
           {slide.linhas.map((linha) => (
             <div key={`${linha.rotulo}-${linha.valor}`} className="js-slide-el rounded-2xl bg-page p-4">
               <dt className="text-xs font-semibold uppercase tracking-wide text-muted">{linha.rotulo}</dt>

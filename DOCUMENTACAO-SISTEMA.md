@@ -2,8 +2,8 @@
 
 | Item | Valor |
 |------|--------|
-| Versão do sistema | 0.2.0 — Telas do menu |
-| Última atualização | 01/09/2026 (17 telas do menu ativas; GET `/api/modulo`) |
+| Versão do sistema | 0.2.1 — Telas do menu |
+| Última atualização | 01/09/2026 (layout com escala reduzida e telas adaptáveis) |
 | Fonte oficial | Este arquivo |
 
 ## 1. Como usar este documento
@@ -27,6 +27,7 @@ Frontend não acessa banco nem Excel. Regras e totais saem da API.
 
 | Versão | Data | O que mudou |
 |--------|------|-------------|
+| 0.2.1 — Telas do menu | 01/09/2026 | Escala visual menor (fonte fluida 13–15px); conteúdo limitado a 1280px; gráficos e pills com rolagem no celular; viewport `device-width` |
 | 0.2.0 — Telas do menu | 01/09/2026 | Todas as 17 rotas da sidebar ativas; GET `/api/modulo`; Relatório da Assembleia (slides, tela cheia, imprimir) |
 | 0.1.2 — Visão Geral | 01/09/2026 | Cards da home com borda verde fina (`border-card-line`, 1px, verde da marca a 28%) |
 | 0.1.1 — Visão Geral | 01/09/2026 | Logo oficial (`public/marca/logo-canto-do-sabia.png`) na sidebar, no header mobile e no ícone da aba |
@@ -75,7 +76,7 @@ A API filtra pelo condomínio do ambiente (`CONDOMINIO_CODIGO=132`). Sem esse c�
 | `/alertas` | Motor objetivo | `app/alertas/page.tsx` |
 | `/relatorio` | Slides da assembleia, tela cheia, imprimir | `app/relatorio/page.tsx` |
 | `/configuracoes` | Condomínio, fonte, qualidade, sem login | `app/configuracoes/page.tsx` |
-| Shell | Menu + marca; item ativo por pathname | `components/shell/` |
+| Shell | Menu + marca; item ativo por pathname; escala fluida | `components/shell/`, `app/globals.css` |
 | `GET /api/visao-geral?recorte=` | KPIs da home | `app/api/visao-geral/route.ts`, `lib/kpis.ts` |
 | `GET /api/origem?kpi=&recorte=` | Drill-down do KPI da home | `app/api/origem/route.ts` |
 | `GET /api/modulo?modulo=&recorte=&ordem=` | Payload das 16 telas | `app/api/modulo/route.ts`, `lib/modulos.ts` |
@@ -97,9 +98,10 @@ KPIs de origem (home): `saldo`, `receitas`, `despesas`, `resultado`.
 | Aba / seção | Campo | O que é | Obrigatório | Quem preenche | De onde vem | Para onde conecta | Como funciona | Regra / bloqueio | Onde olhar no código |
 |-------------|-------|---------|-------------|---------------|-------------|-------------------|---------------|------------------|----------------------|
 | Sidebar | Logo | Marca Residencial Canto do Sabiá | Sim | Sistema | Arquivo estático | `/` | Substitui o selo “CS”; “Código 132” abaixo | — | `components/shell/BrandLogo.tsx`, `public/marca/logo-canto-do-sabia.png` |
-| Header mobile | Logo | Mesma marca, compacta | Sim | Sistema | Arquivo estático | `/` | Só abaixo de `lg` | — | `components/shell/AppShell.tsx` |
-| Header | Título | Visão geral | Sim | Sistema | Fixo | — | SplitText na entrada | — | `components/visao-geral/VisaoGeral.tsx` |
-| Header | Recorte | Pill de período | Sim | Usuário | Competências importadas | Recarrega API | Troca `recorte` | Só os 3 valores da allowlist | `lib/format.ts` |
+| Header mobile | Logo | Mesma marca, compacta | Sim | Sistema | Arquivo estático | `/` | Só abaixo de `lg`; botão Menu | — | `components/shell/AppShell.tsx` |
+| Canvas | Conteúdo | Área útil da página | Sim | Sistema | CSS | — | Largura máxima 1280px; fonte raiz 13–15px | Sem zoom de página forçado | `app/globals.css`, `app/layout.tsx` (`viewport`) |
+| Header | Título | Visão geral | Sim | Sistema | Fixo | — | SplitText na entrada; tamanho fluido (não `text-4xl`) | — | `components/visao-geral/VisaoGeral.tsx`, `app/globals.css` (`.page-title`) |
+| Header | Recorte | Pill de período | Sim | Usuário | Competências importadas | Recarrega API | Troca `recorte`; rolagem horizontal no celular | Só os 3 valores da allowlist | `lib/format.ts`, `app/globals.css` (`.recorte-pills`) |
 | Header | Selo | REALIZADO | Sim | Sistema | API `periodo.selo` | — | Não mistura projetado | Não há projetado neste ciclo | `lib/kpis.ts` |
 | KPI | Saldo gerencial | Saldo final do recorte | Sim | Cálculo servidor | Coluna B (oficial) ou saldo do mês (Jan–Jul) | Origem | Clique abre drawer; card com borda verde 1px | Não é saldo bancário de fundo/taxa extra | `lib/kpis.ts`, `app/globals.css` (`--color-card-line`) |
 | KPI | Receitas | Total de receitas | Sim | Cálculo servidor | Coluna B no recorte oficial | Origem | Count-up GSAP | KPI oficial nunca é soma dos meses na tela | `lib/kpis.ts` |
@@ -187,8 +189,8 @@ Totais que o importador exige:
 1. Na pasta do projeto: `npm install`, copiar `.env.example` para `.env` se ainda não existir.
 2. `npm run setup` (gera Prisma, cria SQLite, importa os dois Excel de `dados/originais/`).
 3. `npm run dev` e abrir `http://localhost:3789` (porta dedicada, fora das demais apps locais).
-4. A tela inicial é a Visão Geral. A logo oficial aparece no menu lateral (desktop) e no topo (celular). Use as pills de período no canto superior.
-5. Clique em um KPI da home para ver origem (arquivo, critério, categorias, meses). `†` = mês reconstruído.
+4. A tela inicial é a Visão Geral. A logo oficial aparece no menu lateral (computador) e no topo (celular). Use as pills de período no canto superior. Em tela estreita, as pills e os gráficos de barras rolam na horizontal.
+5. Clique em um KPI da home para ver origem (arquivo, critério, categorias, meses). `†` = mês reconstruído. No celular o painel de origem ocupa a largura da tela.
 6. Todos os itens do menu lateral abrem tela. Recorte e, no ranking, “Por valor / Por nome” valem para a tela atual.
 7. Comparativo 2025 × 2026 e o bloco equivalente da home usam só Jan–Jul. Se a pill estiver em Out/25–Set/26, a tela Comparativo avisa e mesmo assim mostra Jan–Jul.
 8. Fundo de reserva e Taxas extras mostram **saldo/diferença gerencial**, não conta bancária.
@@ -197,7 +199,7 @@ Totais que o importador exige:
 
 Não há usuário de demo: não há login.
 
-Não há usuário de demo: não há login.
+O layout cabe em celular, tablet e computador: menu em gaveta abaixo de `lg`, conteúdo com largura máxima 1280px, números dos KPIs em tamanho fluido.
 
 ## 9. Checklist de validação
 
@@ -216,6 +218,9 @@ Não há usuário de demo: não há login.
 - [ ] Logo oficial visível na sidebar (desktop) e no header (celular); clique volta para `/`
 - [ ] Cards com borda verde 1px (não cinza)
 - [ ] Sem `prefers-reduced-motion`, há timeline de entrada; com a preferência, duration 0
+- [ ] Em ~375px: sem barra de rolagem horizontal da página; pills e gráficos de barras podem rolar por conta própria
+- [ ] Em ~1280px+: conteúdo não estica além de 1280px; sidebar 240px visível
+- [ ] Títulos e valores de KPI menores que na 0.2.0 (não ocupam a tela inteira)
 
 ## 10. Segurança (só o que existe)
 

@@ -43,18 +43,18 @@ export function BarrasValor({
   const max = serie.length === 0 ? 1 : Math.max(...serie.map((s) => Math.abs(s.valorCents)), 1);
 
   return (
-    <div ref={root} className="overflow-x-auto">
+    <div ref={root} className="chart-scroll">
       {serie.length === 0 ? (
         <p className="text-sm text-muted">Sem série mensal.</p>
       ) : (
-        <div className="flex min-w-[640px] items-end gap-3 pt-2">
+        <div className="chart-track">
           {serie.map((m) => {
-            const h = Math.max((Math.abs(m.valorCents) / max) * 160, 4);
+            const h = Math.max((Math.abs(m.valorCents) / max) * 132, 4);
             return (
-              <div key={m.competencia} className="js-month flex flex-1 flex-col items-center gap-2">
-                <div className="flex h-44 w-full items-end justify-center">
+              <div key={m.competencia} className="js-month flex min-w-8 flex-1 flex-col items-center gap-1.5 sm:min-w-10">
+                <div className="flex h-32 w-full items-end justify-center sm:h-40">
                   <span
-                    className="js-bar bar-fill w-4 rounded-t-lg hatch sm:w-5"
+                    className="js-bar bar-fill w-3 rounded-t-lg hatch sm:w-4"
                     style={{ height: h, transformOrigin: "bottom" }}
                     title={`${rotulo} ${formatBRL(m.valorCents)}`}
                   />

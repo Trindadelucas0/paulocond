@@ -13,7 +13,7 @@ export function BrandLogo({ variant = "sidebar" }: Props) {
           alt="Residencial Canto do Sabiá"
           width={413}
           height={263}
-          className="h-11 w-auto max-w-[200px] object-contain object-center"
+          className="h-9 w-auto max-w-[9.5rem] object-contain object-center"
           priority
         />
       </a>
@@ -21,13 +21,13 @@ export function BrandLogo({ variant = "sidebar" }: Props) {
   }
 
   return (
-    <a href="/" className="mb-6 flex flex-col items-center gap-2 px-1">
+    <a href="/" className="mb-4 flex flex-col items-center gap-1.5 px-1">
       <Image
         src="/marca/logo-canto-do-sabia.png"
         alt="Residencial Canto do Sabiá"
         width={413}
         height={263}
-        className="h-auto w-full max-w-[220px] object-contain"
+        className="h-auto w-full max-w-[10.5rem] object-contain"
         priority
       />
       <p className="text-xs text-muted">Código 132</p>

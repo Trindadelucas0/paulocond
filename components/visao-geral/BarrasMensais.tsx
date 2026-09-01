@@ -50,31 +50,31 @@ export function BarrasMensais({
   const max = serie.length === 0 ? 1 : Math.max(...serie.flatMap((s) => [s.receitaCents, s.despesaCents]), 1);
 
   return (
-    <div ref={root} className="overflow-x-auto">
+    <div ref={root} className="chart-scroll">
       {serie.length === 0 ? (
         <p className="text-sm text-muted">Sem série mensal.</p>
       ) : (
-      <div className="flex min-w-[640px] items-end gap-3 pt-2">
+      <div className="chart-track">
         {serie.map((m) => {
           const ativo = m.competencia === foco;
-          const hRec = Math.max((m.receitaCents / max) * 160, 4);
-          const hDes = Math.max((m.despesaCents / max) * 160, 4);
+          const hRec = Math.max((m.receitaCents / max) * 132, 4);
+          const hDes = Math.max((m.despesaCents / max) * 132, 4);
           return (
             <button
               key={m.competencia}
               type="button"
               onClick={() => onFoco(m.competencia)}
-              className="js-month flex flex-1 flex-col items-center gap-2"
+              className="js-month flex min-w-8 flex-1 flex-col items-center gap-1.5 sm:min-w-10"
               aria-pressed={ativo}
             >
-              <div className="flex h-44 w-full items-end justify-center gap-1">
+              <div className="flex h-32 w-full items-end justify-center gap-0.5 sm:h-40 sm:gap-1">
                 <span
-                  className={`js-bar bar-fill w-3 rounded-t-lg sm:w-4 ${ativo ? "bg-forest" : "hatch"}`}
+                  className={`js-bar bar-fill w-2.5 rounded-t-lg sm:w-3.5 ${ativo ? "bg-forest" : "hatch"}`}
                   style={{ height: hRec }}
                   title={`Receita ${formatBRL(m.receitaCents)}`}
                 />
                 <span
-                  className={`js-bar bar-fill w-3 rounded-t-lg sm:w-4 ${ativo ? "bg-forest-dark" : "bg-forest-soft"}`}
+                  className={`js-bar bar-fill w-2.5 rounded-t-lg sm:w-3.5 ${ativo ? "bg-forest-dark" : "bg-forest-soft"}`}
                   style={{ height: hDes }}
                   title={`Despesa registrada ${formatBRL(m.despesaCents)}`}
                 />

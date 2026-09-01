@@ -17,7 +17,19 @@
   --color-danger-soft: #fee4e2;
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --shadow-card: 0 8px 24px rgba(22, 24, 29, 0.06);
-  --radius-card: 1.5rem;
+  --radius-card: 1.25rem;
+}
+
+:root {
+  --sidebar-w: 240px;
+  --page-max: 1280px;
+}
+
+html {
+  font-size: clamp(13px, 12.15px + 0.18vw, 15px);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overflow-x: clip;
 }
 
 html,
@@ -28,11 +40,72 @@ body {
 
 body {
   font-family: var(--font-sans);
+  overflow-x: clip;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 *:focus-visible {
   outline: 2px solid var(--color-forest);
   outline-offset: 2px;
+}
+
+.page-canvas {
+  width: min(100%, var(--page-max));
+  margin-inline: auto;
+}
+
+.page-title {
+  margin-top: 0.25rem;
+  font-size: clamp(1.25rem, 1.05rem + 1vw, 1.65rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.kpi-valor {
+  margin-top: 0.4rem;
+  font-size: clamp(1.05rem, 0.82rem + 1.15vw, 1.4rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.recorte-pills {
+  display: flex;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.recorte-pills > button {
+  flex-shrink: 0;
+}
+
+.chart-scroll {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chart-track {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: flex-end;
+  gap: 0.35rem;
+  padding-top: 0.35rem;
+}
+
+@media (max-width: 639px) {
+  .chart-track {
+    width: max-content;
+    min-width: 30rem;
+  }
 }
 
 .hatch {
@@ -45,6 +118,12 @@ body {
 
 .bar-fill {
   transform-origin: left center;
+}
+
+@media (pointer: coarse) {
+  .recorte-pills > button {
+    min-height: 2.75rem;
+  }
 }
 
 @media print {

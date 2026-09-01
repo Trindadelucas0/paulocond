@@ -131,9 +131,9 @@ export function VisaoGeral() {
 
   if (carregando && !data) {
     return (
-      <div className="space-y-6" aria-busy="true" aria-live="polite">
-        <div className="h-16 animate-pulse rounded-3xl border border-card-line bg-surface shadow-[var(--shadow-card)]" />
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="space-y-4 sm:space-y-5" aria-busy="true" aria-live="polite">
+        <div className="h-14 animate-pulse rounded-3xl border border-card-line bg-surface shadow-[var(--shadow-card)]" />
+        <div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 xl:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="h-36 animate-pulse rounded-3xl border border-card-line bg-surface shadow-[var(--shadow-card)]" />
           ))}
@@ -146,7 +146,7 @@ export function VisaoGeral() {
   if (erro) {
     return (
       <div className="rounded-3xl border border-card-line bg-surface p-8 shadow-[var(--shadow-card)]">
-        <h1 className="text-2xl font-extrabold">Não foi possível carregar</h1>
+        <h1 className="page-title">Não foi possível carregar</h1>
         <p className="mt-2 text-muted">{erro}</p>
         <button
           type="button"
@@ -162,7 +162,7 @@ export function VisaoGeral() {
   if (!data) {
     return (
       <div className="rounded-3xl border border-card-line bg-surface p-8 shadow-[var(--shadow-card)]">
-        <h1 className="text-2xl font-extrabold">Sem dados importados</h1>
+        <h1 className="page-title">Sem dados importados</h1>
         <p className="mt-2 text-muted">Rode `npm run importar` e recarregue esta página.</p>
       </div>
     );
@@ -172,17 +172,17 @@ export function VisaoGeral() {
   const foco = data.serieMensal.find((m) => m.competencia === mesFoco) ?? data.serieMensal.at(-1);
 
   return (
-    <div ref={root} className="space-y-6">
-      <header className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p className="js-kicker text-sm font-semibold uppercase tracking-[0.18em] text-forest">
+    <div ref={root} className="space-y-4 sm:space-y-5">
+      <header className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+        <div className="min-w-0">
+          <p className="js-kicker text-xs font-semibold uppercase tracking-[0.16em] text-forest sm:text-sm">
             {data.condominio.nome}
           </p>
-          <h1 className="js-title mt-1 text-3xl font-extrabold tracking-tight sm:text-4xl">Visão geral</h1>
+          <h1 className="js-title page-title">Visão geral</h1>
           <p className="mt-1 text-sm text-muted">Prestação de contas · {data.periodo.rotulo}</p>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="flex rounded-full border border-line bg-surface p-1 shadow-[var(--shadow-card)]">
+        <div className="flex min-w-0 flex-wrap items-center gap-2">
+          <div className="recorte-pills rounded-full border border-line bg-surface p-1 shadow-[var(--shadow-card)]">
             {RECORTE_OPCOES.map((op) => (
               <button
                 key={op.id}
@@ -203,19 +203,19 @@ export function VisaoGeral() {
         </div>
       </header>
 
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Indicadores">
+      <section className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 xl:grid-cols-4" aria-label="Indicadores">
         {kpis.map((kpi) => (
           <button
             key={kpi.id}
             type="button"
-            className="js-kpi rounded-3xl border border-card-line bg-surface p-5 text-left shadow-[var(--shadow-card)] transition-transform hover:-translate-y-0.5"
+            className="js-kpi min-w-0 rounded-3xl border border-card-line bg-surface p-4 text-left shadow-[var(--shadow-card)] transition-transform hover:-translate-y-0.5 sm:p-5"
             onClick={() => {
               void abrirOrigem(kpi.id);
             }}
             data-kpi={kpi.id}
           >
             <p className="text-sm text-muted">{kpi.rotulo}</p>
-            <p className="mt-2 text-2xl font-extrabold tracking-tight sm:text-3xl" data-cents={kpi.valorCents}>
+            <p className="kpi-valor" data-cents={kpi.valorCents}>
               {formatBRL(kpi.valorCents)}
             </p>
             <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -236,9 +236,9 @@ export function VisaoGeral() {
       </section>
       <p className="text-xs text-muted">{data.saldoGerencialLabel}</p>
 
-      <section className="grid gap-4 xl:grid-cols-[1.4fr_1fr]">
-        <article className="js-panel rounded-3xl border border-card-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-6">
-          <div className="mb-4 flex items-start justify-between gap-3">
+      <section className="grid min-w-0 gap-3 xl:grid-cols-[1.4fr_1fr]">
+        <article className="js-panel min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+          <div className="mb-3 flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-start sm:gap-3">
             <div>
               <h2 className="text-lg font-bold">Evolução do saldo</h2>
               <p className="text-sm text-muted">Saldo gerencial ao fim de cada competência</p>
@@ -251,28 +251,28 @@ export function VisaoGeral() {
           </div>
           <AreaChartSaldo serie={data.serieSaldo} foco={mesFoco} onFoco={setMesFoco} />
         </article>
-        <article className="js-panel rounded-3xl border border-card-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-6">
+        <article className="js-panel min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
           <h2 className="text-lg font-bold">Composição das despesas</h2>
           <p className="mb-4 text-sm text-muted">Participação no total do recorte</p>
           <Composicao fatias={data.composicaoDespesas} />
         </article>
       </section>
 
-      <section className="js-panel rounded-3xl border border-card-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-6">
+      <section className="js-panel min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
         <h2 className="text-lg font-bold">Receitas e despesas por mês</h2>
         <p className="mb-4 text-sm text-muted">Barras hachuradas; o mês em foco fica verde sólido. Set/2026 incompleto não entra em média.</p>
         <BarrasMensais serie={data.serieMensal} foco={mesFoco} onFoco={setMesFoco} />
       </section>
 
-      <section className="grid gap-4 lg:grid-cols-2">
-        <article className="js-panel rounded-3xl border border-card-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-6">
+      <section className="grid min-w-0 gap-3 lg:grid-cols-2">
+        <article className="js-panel min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
           <h2 className="text-lg font-bold">Composição das receitas</h2>
           <Composicao fatias={data.composicaoReceitas} />
         </article>
-        <article className="js-panel rounded-3xl border border-card-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-6">
+        <article className="js-panel min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
           <h2 className="text-lg font-bold">{data.comparativoJanJul.rotulo}</h2>
           <p className="mb-4 text-sm text-muted">Único comparativo da home: meses equivalentes, não 7 contra 12.</p>
-          <dl className="grid grid-cols-2 gap-3 text-sm">
+          <dl className="grid grid-cols-1 gap-3 text-sm min-[420px]:grid-cols-2">
             <div className="rounded-2xl bg-page p-4">
               <dt className="text-muted">2025</dt>
               <dd className="mt-2 font-bold">{formatBRL(data.comparativoJanJul.ano2025.receitaCents)}</dd>
@@ -287,8 +287,8 @@ export function VisaoGeral() {
         </article>
       </section>
 
-      <section className="js-alerts grid gap-4 lg:grid-cols-2">
-        <article className="rounded-3xl border border-card-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-6">
+      <section className="js-alerts grid min-w-0 gap-3 lg:grid-cols-2">
+        <article className="min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
           <h2 className="text-lg font-bold">Pontos de atenção</h2>
           <ul className="mt-4 space-y-3">
             {data.alertas.map((alerta) => (
@@ -303,7 +303,7 @@ export function VisaoGeral() {
             ))}
           </ul>
         </article>
-        <article className="rounded-3xl border border-card-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-6">
+        <article className="min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
           <h2 className="text-lg font-bold">Qualidade dos dados</h2>
           <ul className="mt-4 space-y-2 text-sm">
             {data.qualidade.map((q) => (

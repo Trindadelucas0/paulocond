@@ -84,9 +84,9 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
 
   if (carregando && !data) {
     return (
-      <div className="space-y-6" aria-busy="true" aria-live="polite">
-        <div className="h-16 animate-pulse rounded-3xl bg-surface shadow-[var(--shadow-card)]" />
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="space-y-4 sm:space-y-5" aria-busy="true" aria-live="polite">
+        <div className="h-14 animate-pulse rounded-3xl bg-surface shadow-[var(--shadow-card)]" />
+        <div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 xl:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="h-32 animate-pulse rounded-3xl bg-surface shadow-[var(--shadow-card)]" />
           ))}
@@ -99,7 +99,7 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
   if (erro) {
     return (
       <div className="rounded-3xl bg-surface p-8 shadow-[var(--shadow-card)]">
-        <h1 className="text-2xl font-extrabold">Não foi possível carregar</h1>
+        <h1 className="page-title">Não foi possível carregar</h1>
         <p className="mt-2 text-muted">{erro}</p>
         <button
           type="button"
@@ -115,7 +115,7 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
   if (!data) {
     return (
       <div className="rounded-3xl bg-surface p-8 shadow-[var(--shadow-card)]">
-        <h1 className="text-2xl font-extrabold">Sem dados importados</h1>
+        <h1 className="page-title">Sem dados importados</h1>
         <p className="mt-2 text-muted">Rode `npm run importar` e recarregue esta página.</p>
       </div>
     );
@@ -125,15 +125,15 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
   const serieUnica = data.modulo === "taxa-condominial" || data.modulo === "taxas-extras";
 
   return (
-    <div ref={root} className="space-y-6">
-      <header className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p className="js-kicker text-sm font-semibold uppercase tracking-[0.18em] text-forest">{data.kicker}</p>
-          <h1 className="js-title mt-1 text-3xl font-extrabold tracking-tight sm:text-4xl">{data.titulo}</h1>
+    <div ref={root} className="space-y-4 sm:space-y-5">
+      <header className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+        <div className="min-w-0">
+          <p className="js-kicker text-xs font-semibold uppercase tracking-[0.16em] text-forest sm:text-sm">{data.kicker}</p>
+          <h1 className="js-title page-title">{data.titulo}</h1>
           <p className="mt-1 text-sm text-muted">Prestação de contas · {data.periodo.rotulo}</p>
         </div>
-        <div className="no-print flex flex-wrap items-center gap-2">
-          <div className="flex rounded-full border border-line bg-surface p-1 shadow-[var(--shadow-card)]">
+        <div className="no-print flex min-w-0 flex-wrap items-center gap-2">
+          <div className="recorte-pills rounded-full border border-line bg-surface p-1 shadow-[var(--shadow-card)]">
             {RECORTE_OPCOES.map((op) => (
               <button
                 key={op.id}
@@ -169,11 +169,11 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
       {data.waterfall.length > 0 ? <WaterfallChart passos={data.waterfall} /> : null}
 
       {data.destaques.length > 0 ? (
-        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <section className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
           {data.destaques.map((d) => (
-            <article key={d.id} className="js-block rounded-3xl border border-card-line bg-surface p-5 shadow-[var(--shadow-card)]">
+            <article key={d.id} className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
               <p className="text-sm text-muted">{d.rotulo}</p>
-              <p className="mt-2 text-xl font-extrabold">{formatBRL(d.valorCents)}</p>
+              <p className="kpi-valor">{formatBRL(d.valorCents)}</p>
               {d.extra ? (
                 <p className="mt-2">
                   <span className="rounded-full bg-forest-soft px-2 py-0.5 text-xs font-bold text-forest">{d.extra}</span>
@@ -186,7 +186,7 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
       ) : null}
 
       {data.composicao.length > 0 ? (
-        <article className="js-block rounded-3xl border border-card-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-6">
+        <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
           <h2 className="text-lg font-bold">Composição</h2>
           <p className="mb-4 text-sm text-muted">Participação no total do recorte</p>
           <Composicao fatias={data.composicao} />
@@ -218,7 +218,7 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
       ) : null}
 
       {data.serie.length > 0 && seriePar ? (
-        <article className="js-block rounded-3xl border border-card-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-6">
+        <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
           <h2 className="text-lg font-bold">{data.serieRotulo}</h2>
           <p className="mb-4 text-sm text-muted">Barras hachuradas. * parcial · † residual.</p>
           <BarrasMensais serie={data.serie} foco={mesFoco} onFoco={setMesFoco} />
@@ -226,14 +226,14 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
       ) : null}
 
       {data.serie.length > 0 && serieUnica ? (
-        <article className="js-block rounded-3xl border border-card-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-6">
+        <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
           <h2 className="text-lg font-bold">{data.serieRotulo}</h2>
           <BarrasValor serie={data.serie} rotulo={data.serieRotulo} />
         </article>
       ) : null}
 
       {data.modulo === "fluxo" && data.serie.length > 0 ? (
-        <article className="js-block rounded-3xl border border-card-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-6">
+        <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
           <h2 className="text-lg font-bold">Saldo gerencial ao fim de cada competência</h2>
           <AreaChartSaldo
             serie={data.serie.map((s) => ({ competencia: s.competencia, saldoCents: s.saldoCents, qualidade: s.qualidade }))}
@@ -244,13 +244,13 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
       ) : null}
 
       {data.comparativo ? (
-        <article className="js-block rounded-3xl border border-card-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-6">
+        <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
           <h2 className="text-lg font-bold">{data.comparativo.rotulo}</h2>
           {data.comparativo.aviso ? (
             <p className="mt-2 rounded-2xl bg-warning-soft px-4 py-3 text-sm text-warning">{data.comparativo.aviso}</p>
           ) : null}
           <div className="mt-4 overflow-x-auto">
-            <table className="min-w-full text-sm">
+            <table className="min-w-[36rem] w-full text-sm">
               <thead>
                 <tr className="border-b border-line text-left text-xs uppercase tracking-wide text-muted">
                   <th className="py-2 pr-3 font-semibold">Item</th>
@@ -289,10 +289,10 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
       ) : null}
 
       {data.modulo === "analise-mensal" && data.detalhamento.grupos.length > 0 ? (
-        <article className="js-block rounded-3xl border border-card-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-6">
+        <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
           <h2 className="text-lg font-bold">Receita, despesa, resultado e saldo por mês</h2>
           <div className="mt-4 overflow-x-auto">
-            <table className="min-w-full text-sm">
+            <table className="min-w-[36rem] w-full text-sm">
               <thead>
                 <tr className="border-b border-line text-left text-xs uppercase tracking-wide text-muted">
                   <th className="py-2 pr-3 font-semibold">Mês</th>
@@ -328,7 +328,7 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
       ) : null}
 
       {data.modulo === "detalhamento" ? (
-        <article className="js-block rounded-3xl border border-card-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-6">
+        <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
           <h2 className="text-lg font-bold">Categoria → item → meses</h2>
           <p className="mb-4 text-sm text-muted">Tabela tipo planilha. Totais oficiais continuam na coluna B, na Visão Geral.</p>
           <DetalhamentoTabela competencias={data.detalhamento.competencias} grupos={data.detalhamento.grupos} />
@@ -336,7 +336,7 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
       ) : null}
 
       {data.modulo === "alertas" ? (
-        <article className="js-block rounded-3xl border border-card-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-6">
+        <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
           <h2 className="text-lg font-bold">Pontos de atenção</h2>
           {data.alertas.length === 0 ? (
             <p className="mt-3 text-sm text-muted">Nenhum alerta objetivo disparado neste conjunto de dados.</p>
@@ -360,8 +360,8 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
       {data.modulo === "relatorio" ? <RelatorioAssembleia slides={data.slides} titulo={data.titulo} /> : null}
 
       {data.config ? (
-        <div className="grid gap-4 lg:grid-cols-2">
-          <article className="js-block rounded-3xl border border-card-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-6">
+        <div className="grid gap-3 lg:grid-cols-2">
+          <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
             <h2 className="text-lg font-bold">Condomínio</h2>
             <dl className="mt-3 space-y-2 text-sm">
               <div className="flex justify-between gap-3">
@@ -375,7 +375,7 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
             </dl>
             <p className="mt-4 text-sm text-muted">{data.config.login}</p>
           </article>
-          <article className="js-block rounded-3xl border border-card-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-6">
+          <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
             <h2 className="text-lg font-bold">Fonte e período</h2>
             <ul className="mt-3 space-y-2 text-sm">
               {data.config.periodos.map((per) => (
@@ -387,7 +387,7 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
             </ul>
             <p className="mt-4 text-xs text-muted">{data.config.fonte.join(" · ")}</p>
           </article>
-          <article className="js-block rounded-3xl border border-card-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-6">
+          <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
             <h2 className="text-lg font-bold">Qualidade dos dados</h2>
             <ul className="mt-3 space-y-2 text-sm">
               {data.config.qualidade.map((q) => (
@@ -396,7 +396,7 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
             </ul>
             <p className="mt-4 rounded-2xl bg-warning-soft px-4 py-3 text-sm text-warning">{data.config.pagamento}</p>
           </article>
-          <article className="js-block rounded-3xl border border-card-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-6">
+          <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
             <h2 className="text-lg font-bold">Atualizar dados</h2>
             <p className="mt-3 text-sm text-muted">{data.config.importador}</p>
             <p className="mt-4 rounded-2xl bg-page px-4 py-3 font-mono text-sm">npm run importar</p>

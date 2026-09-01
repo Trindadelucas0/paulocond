@@ -7,7 +7,7 @@ export function WaterfallChart({ passos }: { passos: WaterfallStep[] }) {
   if (passos.length === 0) return null;
   const max = Math.max(...passos.map((p) => Math.abs(p.valorCents)), 1);
   return (
-    <article className="js-block rounded-3xl border border-card-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-6">
+    <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
       <h2 className="text-lg font-bold">Composição do saldo gerencial</h2>
       <p className="mb-4 text-sm text-muted">Saldo inicial + receitas − despesas registradas = saldo final</p>
       <ul className="space-y-4">
@@ -24,8 +24,8 @@ export function WaterfallChart({ passos }: { passos: WaterfallStep[] }) {
           return (
             <li key={passo.rotulo}>
               <div className="mb-1 flex justify-between gap-3 text-sm">
-                <span className="font-medium">{passo.rotulo}</span>
-                <span className="font-bold">
+                <span className="min-w-0 break-words font-medium">{passo.rotulo}</span>
+                <span className="shrink-0 font-bold tabular-nums">
                   {passo.tipo === "negativo" ? "− " : passo.tipo === "positivo" ? "+ " : ""}
                   {formatBRL(passo.valorCents)}
                 </span>

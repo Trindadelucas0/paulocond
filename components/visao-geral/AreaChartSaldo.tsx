@@ -31,7 +31,7 @@ export function AreaChartSaldo({
   const area = `${line} L ${coords.at(-1)?.x} ${h - pad} L ${coords[0].x} ${h - pad} Z`;
 
   return (
-    <svg viewBox={`0 0 ${w} ${h}`} className="h-56 w-full" role="img" aria-label="Gráfico de área do saldo gerencial">
+    <svg viewBox={`0 0 ${w} ${h}`} className="h-40 w-full sm:h-52" role="img" aria-label="Gráfico de área do saldo gerencial">
       <defs>
         <linearGradient id="saldoFill" x1="0" x2="0" y1="0" y2="1">
           <stop offset="0%" stopColor="#185a49" stopOpacity="0.28" />

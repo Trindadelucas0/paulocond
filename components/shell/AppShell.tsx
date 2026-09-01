@@ -16,11 +16,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         Ir para o conteúdo
       </a>
       <Sidebar aberto={aberto} onClose={() => setAberto(false)} />
-      <div className="lg:pl-[272px] print:pl-0">
-        <header className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-line/80 bg-page/90 px-4 py-2.5 backdrop-blur print:hidden lg:hidden">
+      <div className="print:pl-0 lg:pl-[var(--sidebar-w)]">
+        <header className="sticky top-0 z-20 flex items-center justify-between gap-2 border-b border-line/80 bg-page/90 px-3 py-2 backdrop-blur print:hidden sm:px-4 lg:hidden">
           <button
             type="button"
-            className="rounded-full border border-line bg-surface px-3 py-2 text-sm font-medium"
+            className="min-h-11 rounded-full border border-line bg-surface px-3 py-2 text-sm font-medium"
             onClick={() => setAberto(true)}
             aria-expanded={aberto}
             aria-controls="menu-lateral"
@@ -28,9 +28,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             Menu
           </button>
           <BrandLogo variant="header" />
-          <span className="w-[4.5rem]" aria-hidden />
+          <span className="w-14 shrink-0" aria-hidden />
         </header>
-        <main id="conteudo" className="px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+        <main id="conteudo" className="page-canvas min-w-0 px-3 py-4 sm:px-5 lg:px-6 lg:py-5">
           {children}
         </main>
       </div>

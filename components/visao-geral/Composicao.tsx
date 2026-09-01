@@ -23,12 +23,12 @@ export function Composicao({ fatias }: { fatias: Fatia[] }) {
       </div>
       <ul className="mt-4 space-y-2">
         {visiveis.map((f, i) => (
-          <li key={f.grupo} className="flex items-center justify-between gap-3 text-sm">
-            <span className="flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-full" style={{ background: CORES[i % CORES.length] }} aria-hidden />
-              {f.grupo}
+          <li key={f.grupo} className="flex items-start justify-between gap-3 text-sm">
+            <span className="flex min-w-0 items-center gap-2">
+              <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: CORES[i % CORES.length] }} aria-hidden />
+              <span className="min-w-0 break-words">{f.grupo}</span>
             </span>
-            <span className="font-semibold">
+            <span className="shrink-0 text-right font-semibold tabular-nums">
               {formatBRL(f.valorCents)}{" "}
               <span className="text-xs font-medium text-muted">{formatPct(f.participacao).replace("+", "")}</span>
             </span>
