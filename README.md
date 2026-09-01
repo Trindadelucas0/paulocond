@@ -10,4 +10,4 @@ npm run setup
 npm run dev
 ```
 
-App em `http://localhost:3002` (`npm run dev` usa a porta 3002 para não colidir com outros serviços na 3000). Testes de conciliação: `npm test`.
+App em `http://localhost:3789` (`npm run dev` usa a porta 3789 para não colidir com outros serviços locais). Testes de conciliação: `npm test`.

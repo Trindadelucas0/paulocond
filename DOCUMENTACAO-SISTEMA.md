@@ -186,7 +186,7 @@ Totais que o importador exige:
 
 1. Na pasta do projeto: `npm install`, copiar `.env.example` para `.env` se ainda não existir.
 2. `npm run setup` (gera Prisma, cria SQLite, importa os dois Excel de `dados/originais/`).
-3. `npm run dev` e abrir `http://localhost:3002` (a 3000 costuma estar ocupada neste ambiente).
+3. `npm run dev` e abrir `http://localhost:3789` (porta dedicada, fora das demais apps locais).
 4. A tela inicial é a Visão Geral. A logo oficial aparece no menu lateral (desktop) e no topo (celular). Use as pills de período no canto superior.
 5. Clique em um KPI da home para ver origem (arquivo, critério, categorias, meses). `†` = mês reconstruído.
 6. Todos os itens do menu lateral abrem tela. Recorte e, no ranking, “Por valor / Por nome” valem para a tela atual.
