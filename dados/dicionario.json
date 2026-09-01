@@ -1,0 +1,1643 @@
+{
+  "geradoEm": "2026-09-01T19:23:50.141Z",
+  "entradas": [
+    {
+      "nomeCru": "- Cotas de Condomínio",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Cotas de Condomínio",
+      "slug": "receita-cotas-de-condominio",
+      "tipo": "RECEITA",
+      "grupo": "Cotas ordinárias",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Rateio Água Caesb",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Rateio Água Caesb",
+      "slug": "receita-rateio-agua-caesb",
+      "tipo": "RECEITA",
+      "grupo": "Cotas ordinárias",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Rateio Seguro Residencial",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Rateio Seguro Residencial",
+      "slug": "receita-rateio-seguro-residencial",
+      "tipo": "RECEITA",
+      "grupo": "Cotas ordinárias",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Rateio Energia Elétrica",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Rateio Energia Elétrica",
+      "slug": "receita-rateio-energia-eletrica",
+      "tipo": "RECEITA",
+      "grupo": "Cotas ordinárias",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Rateio Gás",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Rateio Gás",
+      "slug": "receita-rateio-gas",
+      "tipo": "RECEITA",
+      "grupo": "Cotas ordinárias",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Fundo de Reserva",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Fundo de Reserva",
+      "slug": "receita-fundo-de-reserva",
+      "tipo": "RECEITA",
+      "grupo": "Fundo de reserva",
+      "natureza": "FUNDO_RESERVA"
+    },
+    {
+      "nomeCru": "Taxa Extra - Academia",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Taxa Extra - Academia",
+      "slug": "receita-taxa-extra-academia",
+      "tipo": "RECEITA",
+      "grupo": "Taxas extras",
+      "natureza": "TAXA_EXTRA"
+    },
+    {
+      "nomeCru": "Aluguel Salão de Festas",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Aluguel Salão de Festas",
+      "slug": "receita-aluguel-salao-de-festas",
+      "tipo": "RECEITA",
+      "grupo": "Aluguéis",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Aluguel Churrasqueira Gourmet",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Aluguel Churrasqueira Gourmet",
+      "slug": "receita-aluguel-churrasqueira-gourmet",
+      "tipo": "RECEITA",
+      "grupo": "Aluguéis",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Aluguel Churrasqueira Panoramica",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Aluguel Churrasqueira Panoramica",
+      "slug": "receita-aluguel-churrasqueira-panoramica",
+      "tipo": "RECEITA",
+      "grupo": "Aluguéis",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Rendimento de Aplicações Financeiras",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Rendimento de Aplicações Financeiras",
+      "slug": "receita-rendimento-de-aplicacoes-financeiras",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS FINANCEIRAS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Multa e Juros",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Multa e Juros",
+      "slug": "receita-multa-e-juros",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Taxa de Cobrança",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Taxa de Cobrança",
+      "slug": "receita-taxa-de-cobranca",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Recebimento a Maior",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Recebimento a Maior",
+      "slug": "receita-recebimento-a-maior",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Cotas de Acordo",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Cotas de Acordo",
+      "slug": "receita-cotas-de-acordo",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Ressarcimento de Despesa",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Ressarcimento de Despesa",
+      "slug": "receita-ressarcimento-de-despesa",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Reembolso ao Condomínio",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Reembolso ao Condomínio",
+      "slug": "receita-reembolso-ao-condominio",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Reembolso de Despesas",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Reembolso de Despesas",
+      "slug": "receita-reembolso-de-despesas",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Repasse Canaã Prime Market - LTDA  Mercadinho",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Repasse Canaã Prime Market - LTDA Mercadinho",
+      "slug": "receita-repasse-canaa-prime-market-ltda-mercadinho",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Reembolso Controle Remotos e TAGS",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Reembolso Controle Remotos e TAGS",
+      "slug": "receita-reembolso-controle-remotos-e-tags",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Água e Esgoto",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Água e Esgoto",
+      "slug": "despesa-agua-e-esgoto",
+      "tipo": "DESPESA",
+      "grupo": "Tarifas públicas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Gás",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Gás",
+      "slug": "despesa-gas",
+      "tipo": "DESPESA",
+      "grupo": "Tarifas públicas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Energia Elétrica",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Energia Elétrica",
+      "slug": "despesa-energia-eletrica",
+      "tipo": "DESPESA",
+      "grupo": "Tarifas públicas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Energia Solar",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Energia Solar",
+      "slug": "despesa-energia-solar",
+      "tipo": "DESPESA",
+      "grupo": "Tarifas públicas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Telefone - Internet",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Telefone - Internet",
+      "slug": "despesa-telefone-internet",
+      "tipo": "DESPESA",
+      "grupo": "Tarifas públicas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Pró Labore do Síndico",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Pró Labore do Síndico",
+      "slug": "despesa-pro-labore-do-sindico",
+      "tipo": "DESPESA",
+      "grupo": "Contratos fixos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Assessoria Jurídica",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Assessoria Jurídica",
+      "slug": "despesa-assessoria-juridica",
+      "tipo": "DESPESA",
+      "grupo": "Contratos fixos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Serviços Contábeis e Administrativos",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Serviços Contábeis e Administrativos",
+      "slug": "despesa-servicos-contabeis-e-administrativos",
+      "tipo": "DESPESA",
+      "grupo": "Contratos fixos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Empresa Terceirizada",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Empresa Terceirizada",
+      "slug": "despesa-empresa-terceirizada",
+      "tipo": "DESPESA",
+      "grupo": "Contratos fixos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Manutenção Mensal de Elevadores",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Manutenção Mensal de Elevadores",
+      "slug": "despesa-manutencao-mensal-de-elevadores",
+      "tipo": "DESPESA",
+      "grupo": "Contratos fixos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Sistema de Segurança e Interfones - Manutenção",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Sistema de Segurança e Interfones - Manutenção",
+      "slug": "despesa-sistema-de-seguranca-e-interfones-manutencao",
+      "tipo": "DESPESA",
+      "grupo": "Contratos fixos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Equipamentos Esportivos - Academia  Manutenção",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Equipamentos Esportivos - Academia Manutenção",
+      "slug": "despesa-equipamentos-esportivos-academia-manutencao",
+      "tipo": "DESPESA",
+      "grupo": "Contratos fixos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Manutenção Bombas Motores - Contrato",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Manutenção Bombas Motores - Contrato",
+      "slug": "despesa-manutencao-bombas-motores-contrato",
+      "tipo": "DESPESA",
+      "grupo": "Contratos fixos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Sistema de Leitura de Hidrômetros",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Sistema de Leitura de Hidrômetros",
+      "slug": "despesa-sistema-de-leitura-de-hidrometros",
+      "tipo": "DESPESA",
+      "grupo": "Contratos fixos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Sistema de controle de acesso e reservas",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Sistema de controle de acesso e reservas",
+      "slug": "despesa-sistema-de-controle-de-acesso-e-reservas",
+      "tipo": "DESPESA",
+      "grupo": "Contratos fixos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Piscina Contrato Manutenção",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Piscina Contrato Manutenção",
+      "slug": "despesa-piscina-contrato-manutencao",
+      "tipo": "DESPESA",
+      "grupo": "Contratos fixos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Cópias Digitalizações e Encadernações",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Cópias Digitalizações e Encadernações",
+      "slug": "despesa-copias-digitalizacoes-e-encadernacoes",
+      "tipo": "DESPESA",
+      "grupo": "Administrativas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Cartório",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Cartório",
+      "slug": "despesa-cartorio",
+      "tipo": "DESPESA",
+      "grupo": "Administrativas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Material de Escritório e Expediente",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Material de Escritório e Expediente",
+      "slug": "despesa-material-de-escritorio-e-expediente",
+      "tipo": "DESPESA",
+      "grupo": "Administrativas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Honorários Advocatícios",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Honorários Advocatícios",
+      "slug": "despesa-honorarios-advocaticios",
+      "tipo": "DESPESA",
+      "grupo": "Administrativas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Repasse Taxa de Cobrança",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Repasse Taxa de Cobrança",
+      "slug": "despesa-repasse-taxa-de-cobranca",
+      "tipo": "DESPESA",
+      "grupo": "Administrativas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Seguro Obrigatório",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Seguro Obrigatório",
+      "slug": "despesa-seguro-obrigatorio",
+      "tipo": "DESPESA",
+      "grupo": "Administrativas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Custas Judiciais- Processuais - Certidão de Ônus",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Custas Judiciais- Processuais - Certidão de Ônus",
+      "slug": "despesa-custas-judiciais-processuais-certidao-de-onus",
+      "tipo": "DESPESA",
+      "grupo": "Administrativas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Despesas com Assembleias e Reuniões",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Despesas com Assembleias e Reuniões",
+      "slug": "despesa-despesas-com-assembleias-e-reunioes",
+      "tipo": "DESPESA",
+      "grupo": "Administrativas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Confraternizações - Comemorações",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Confraternizações - Comemorações",
+      "slug": "despesa-confraternizacoes-comemoracoes",
+      "tipo": "DESPESA",
+      "grupo": "Administrativas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Assessoria em Assembleias",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Assessoria em Assembleias",
+      "slug": "despesa-assessoria-em-assembleias",
+      "tipo": "DESPESA",
+      "grupo": "Administrativas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Despesas c-Transporte",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Despesas c-Transporte",
+      "slug": "despesa-despesas-c-transporte",
+      "tipo": "DESPESA",
+      "grupo": "Administrativas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Material de Limpeza e Higienização",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Material de Limpeza e Higienização",
+      "slug": "despesa-material-de-limpeza-e-higienizacao",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Material Elétrico-Eletrônico-Serviços",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Material Elétrico-Eletrônico-Serviços",
+      "slug": "despesa-material-eletrico-eletronico-servicos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Manutenção Condominial e Bens - Material-Serviços",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Manutenção Condominial e Bens - Material-Serviços",
+      "slug": "despesa-manutencao-condominial-e-bens-material-servicos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Material de Pintura e Serviços",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Material de Pintura e Serviços",
+      "slug": "despesa-material-de-pintura-e-servicos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Jardinagem Serviços-Material",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Jardinagem Serviços-Material",
+      "slug": "despesa-jardinagem-servicos-material",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Material e Serviços de Chaveiro",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Material e Serviços de Chaveiro",
+      "slug": "despesa-material-e-servicos-de-chaveiro",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Elevadores Peças e Reparos",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Elevadores Peças e Reparos",
+      "slug": "despesa-elevadores-pecas-e-reparos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Desentupimentos",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Desentupimentos",
+      "slug": "despesa-desentupimentos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Sistema de Segurança-Peças e Reparos",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Sistema de Segurança-Peças e Reparos",
+      "slug": "despesa-sistema-de-seguranca-pecas-e-reparos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Gás para Copa - Salão de Festas",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Gás para Copa - Salão de Festas",
+      "slug": "despesa-gas-para-copa-salao-de-festas",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Bombas-Motores e Geradores Peças e Reparos",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Bombas-Motores e Geradores Peças e Reparos",
+      "slug": "despesa-bombas-motores-e-geradores-pecas-e-reparos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Equipamentos Esportivos Peças e Reparos",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Equipamentos Esportivos Peças e Reparos",
+      "slug": "despesa-equipamentos-esportivos-pecas-e-reparos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Manutenção Predial e Reformas",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Manutenção Predial e Reformas",
+      "slug": "despesa-manutencao-predial-e-reformas",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Manutenção em Portão portas e Portaria",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Manutenção em Portão portas e Portaria",
+      "slug": "despesa-manutencao-em-portao-portas-e-portaria",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Recuperação de Container-Lixeiras",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Recuperação de Container-Lixeiras",
+      "slug": "despesa-recuperacao-de-container-lixeiras",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Sistema Contra Incendio  Projetos",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Sistema Contra Incendio Projetos",
+      "slug": "despesa-sistema-contra-incendio-projetos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Manutenção Equipamentos Contra Incêndio",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Manutenção Equipamentos Contra Incêndio",
+      "slug": "despesa-manutencao-equipamentos-contra-incendio",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Manutenção Piscinas e Saunas - Materiais  Peças e Reparos",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Manutenção Piscinas e Saunas - Materiais Peças e Reparos",
+      "slug": "despesa-manutencao-piscinas-e-saunas-materiais-pecas-e-reparos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Manutenção Equipamentos de Informatica",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Manutenção Equipamentos de Informatica",
+      "slug": "despesa-manutencao-equipamentos-de-informatica",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Tapetes - Capachos e Capas",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Tapetes - Capachos e Capas",
+      "slug": "despesa-tapetes-capachos-e-capas",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Serviços Engenharia e Arquitetura e Projetos",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Serviços Engenharia e Arquitetura e Projetos",
+      "slug": "despesa-servicos-engenharia-e-arquitetura-e-projetos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Material de Manutenção - Reparos",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Material de Manutenção - Reparos",
+      "slug": "despesa-material-de-manutencao-reparos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Aquisição de Máquinas e Equipamentos",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Aquisição de Máquinas e Equipamentos",
+      "slug": "despesa-aquisicao-de-maquinas-e-equipamentos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Aquisição de Controle - Tag",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Aquisição de Controle - Tag",
+      "slug": "despesa-aquisicao-de-controle-tag",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Despesas Bancárias",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Despesas Bancárias",
+      "slug": "despesa-despesas-bancarias",
+      "tipo": "DESPESA",
+      "grupo": "Financeiras",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- ISS Agrupado",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "ISS Agrupado",
+      "slug": "despesa-iss-agrupado",
+      "tipo": "DESPESA",
+      "grupo": "Impostos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Impostos Taxas e Contribuições",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Impostos Taxas e Contribuições",
+      "slug": "despesa-impostos-taxas-e-contribuicoes",
+      "tipo": "DESPESA",
+      "grupo": "Impostos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- DARF Previdenciário",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "DARF Previdenciário",
+      "slug": "despesa-darf-previdenciario",
+      "tipo": "DESPESA",
+      "grupo": "Impostos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Equipamentos de Informática",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Equipamentos de Informática",
+      "slug": "despesa-equipamentos-de-informatica",
+      "tipo": "DESPESA",
+      "grupo": "Patrimônio",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Aquisição de Impressora",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Aquisição de Impressora",
+      "slug": "despesa-aquisicao-de-impressora",
+      "tipo": "DESPESA",
+      "grupo": "Patrimônio",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Tapetes e Capachos",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Tapetes e Capachos",
+      "slug": "despesa-tapetes-e-capachos",
+      "tipo": "DESPESA",
+      "grupo": "Patrimônio",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Equipamentos -Materiais Esportivos",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Equipamentos -Materiais Esportivos",
+      "slug": "despesa-equipamentos-materiais-esportivos",
+      "tipo": "DESPESA",
+      "grupo": "Patrimônio",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Equipamentos Sistema de Segurança",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Equipamentos Sistema de Segurança",
+      "slug": "despesa-equipamentos-sistema-de-seguranca",
+      "tipo": "DESPESA",
+      "grupo": "Patrimônio",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Aquisição Motores-Bombas-Compressor-Geradores",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Aquisição Motores-Bombas-Compressor-Geradores",
+      "slug": "despesa-aquisicao-motores-bombas-compressor-geradores",
+      "tipo": "DESPESA",
+      "grupo": "Patrimônio",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Equipamentos Sauna e Piscina",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Equipamentos Sauna e Piscina",
+      "slug": "despesa-equipamentos-sauna-e-piscina",
+      "tipo": "DESPESA",
+      "grupo": "Patrimônio",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Eletrodomésticos-Eletroeletrônicos",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Eletrodomésticos-Eletroeletrônicos",
+      "slug": "despesa-eletrodomesticos-eletroeletronicos",
+      "tipo": "DESPESA",
+      "grupo": "Patrimônio",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Aquisição Containers-Lixeiras-Carrinhos Compra",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Aquisição Containers-Lixeiras-Carrinhos Compra",
+      "slug": "despesa-aquisicao-containers-lixeiras-carrinhos-compra",
+      "tipo": "DESPESA",
+      "grupo": "Patrimônio",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Filtros - Bebedouros",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Filtros - Bebedouros",
+      "slug": "despesa-filtros-bebedouros",
+      "tipo": "DESPESA",
+      "grupo": "Patrimônio",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Multas Administrativas - Órgãos GDF",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Multas Administrativas - Órgãos GDF",
+      "slug": "despesa-multas-administrativas-orgaos-gdf",
+      "tipo": "DESPESA",
+      "grupo": "Eventuais",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Reembolsos créditos indevidos",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Reembolsos créditos indevidos",
+      "slug": "despesa-reembolsos-creditos-indevidos",
+      "tipo": "DESPESA",
+      "grupo": "Eventuais",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Aquisição Equipamentos",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Aquisição Equipamentos",
+      "slug": "despesa-aquisicao-equipamentos",
+      "tipo": "DESPESA",
+      "grupo": "Taxas extras",
+      "natureza": "TAXA_EXTRA"
+    },
+    {
+      "nomeCru": "Manutenções e Reformas Fundo de Reserva",
+      "origem": "PLANILHA_2026",
+      "nomeCanonico": "Manutenções e Reformas Fundo de Reserva",
+      "slug": "despesa-manutencoes-e-reformas-fundo-de-reserva",
+      "tipo": "DESPESA",
+      "grupo": "Fundo de reserva",
+      "natureza": "FUNDO_RESERVA"
+    },
+    {
+      "nomeCru": "- Cotas de Condomínio",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Cotas de Condomínio",
+      "slug": "receita-cotas-de-condominio",
+      "tipo": "RECEITA",
+      "grupo": "Cotas ordinárias",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Rateio Água Caesb",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Rateio Água Caesb",
+      "slug": "receita-rateio-agua-caesb",
+      "tipo": "RECEITA",
+      "grupo": "Cotas ordinárias",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Rateio Seguro Residencial",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Rateio Seguro Residencial",
+      "slug": "receita-rateio-seguro-residencial",
+      "tipo": "RECEITA",
+      "grupo": "Cotas ordinárias",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Rateio Energia Elétrica",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Rateio Energia Elétrica",
+      "slug": "receita-rateio-energia-eletrica",
+      "tipo": "RECEITA",
+      "grupo": "Cotas ordinárias",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Rateio Gás",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Rateio Gás",
+      "slug": "receita-rateio-gas",
+      "tipo": "RECEITA",
+      "grupo": "Cotas ordinárias",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Fundo de Reserva",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Fundo de Reserva",
+      "slug": "receita-fundo-de-reserva",
+      "tipo": "RECEITA",
+      "grupo": "Fundo de reserva",
+      "natureza": "FUNDO_RESERVA"
+    },
+    {
+      "nomeCru": "Aluguel Salão de Festas",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Aluguel Salão de Festas",
+      "slug": "receita-aluguel-salao-de-festas",
+      "tipo": "RECEITA",
+      "grupo": "Aluguéis",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Aluguel Churrasqueira Gourmet",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Aluguel Churrasqueira Gourmet",
+      "slug": "receita-aluguel-churrasqueira-gourmet",
+      "tipo": "RECEITA",
+      "grupo": "Aluguéis",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Aluguel Churrasqueira Panoramica",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Aluguel Churrasqueira Panoramica",
+      "slug": "receita-aluguel-churrasqueira-panoramica",
+      "tipo": "RECEITA",
+      "grupo": "Aluguéis",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Rendimento de Aplicações Financeiras",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Rendimento de Aplicações Financeiras",
+      "slug": "receita-rendimento-de-aplicacoes-financeiras",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS FINANCEIRAS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Rendimento Fundo de Reserva",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Rendimento Fundo de Reserva",
+      "slug": "receita-rendimento-fundo-de-reserva",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS FINANCEIRAS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Multa e Juros",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Multa e Juros",
+      "slug": "receita-multa-e-juros",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Taxa de Cobrança",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Taxa de Cobrança",
+      "slug": "receita-taxa-de-cobranca",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Recebimento a Maior",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Recebimento a Maior",
+      "slug": "receita-recebimento-a-maior",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Teste de Cobrança",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Teste de Cobrança",
+      "slug": "receita-teste-de-cobranca",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Tarifa Bancária",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Tarifa Bancária",
+      "slug": "receita-tarifa-bancaria",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Cotas de Acordo",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Cotas de Acordo",
+      "slug": "receita-cotas-de-acordo",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Ressarcimento de Despesa",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Ressarcimento de Despesa",
+      "slug": "receita-ressarcimento-de-despesa",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Reembolso de Despesas",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Reembolso de Despesas",
+      "slug": "receita-reembolso-de-despesas",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Desconto",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Desconto",
+      "slug": "receita-desconto",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Reembolsos",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Reembolsos",
+      "slug": "receita-reembolsos",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Multa Regimento Interno",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Multa Regimento Interno",
+      "slug": "receita-multa-regimento-interno",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Repasse Canaã Prime Market - LTDA  Mercadinho",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Repasse Canaã Prime Market - LTDA Mercadinho",
+      "slug": "receita-repasse-canaa-prime-market-ltda-mercadinho",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Doações",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Doações",
+      "slug": "receita-doacoes",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Contribuição Festa Junina",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Contribuição Festa Junina",
+      "slug": "receita-contribuicao-festa-junina",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Outros",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Outros",
+      "slug": "receita-outros",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Reembolso Controle Remotos e TAGS",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Reembolso Controle Remotos e TAGS",
+      "slug": "receita-reembolso-controle-remotos-e-tags",
+      "tipo": "RECEITA",
+      "grupo": "RECEITAS EVENTUAIS",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Água e Esgoto",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Água e Esgoto",
+      "slug": "despesa-agua-e-esgoto",
+      "tipo": "DESPESA",
+      "grupo": "Tarifas públicas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Gás",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Gás",
+      "slug": "despesa-gas",
+      "tipo": "DESPESA",
+      "grupo": "Tarifas públicas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Energia Elétrica",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Energia Elétrica",
+      "slug": "despesa-energia-eletrica",
+      "tipo": "DESPESA",
+      "grupo": "Tarifas públicas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Energia Solar",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Energia Solar",
+      "slug": "despesa-energia-solar",
+      "tipo": "DESPESA",
+      "grupo": "Tarifas públicas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Telefone - Internet",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Telefone - Internet",
+      "slug": "despesa-telefone-internet",
+      "tipo": "DESPESA",
+      "grupo": "Tarifas públicas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Pró Labore do Síndico",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Pró Labore do Síndico",
+      "slug": "despesa-pro-labore-do-sindico",
+      "tipo": "DESPESA",
+      "grupo": "Contratos fixos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Assessoria Jurídica",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Assessoria Jurídica",
+      "slug": "despesa-assessoria-juridica",
+      "tipo": "DESPESA",
+      "grupo": "Contratos fixos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Serviços Contábeis e Administrativos",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Serviços Contábeis e Administrativos",
+      "slug": "despesa-servicos-contabeis-e-administrativos",
+      "tipo": "DESPESA",
+      "grupo": "Contratos fixos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Empresa Terceirizada",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Empresa Terceirizada",
+      "slug": "despesa-empresa-terceirizada",
+      "tipo": "DESPESA",
+      "grupo": "Contratos fixos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Manutenção Mensal de Elevadores",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Manutenção Mensal de Elevadores",
+      "slug": "despesa-manutencao-mensal-de-elevadores",
+      "tipo": "DESPESA",
+      "grupo": "Contratos fixos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Sistema de Segurança e Interfones - Manutenção",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Sistema de Segurança e Interfones - Manutenção",
+      "slug": "despesa-sistema-de-seguranca-e-interfones-manutencao",
+      "tipo": "DESPESA",
+      "grupo": "Contratos fixos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Equipamentos Esportivos - Academia  Manutenção",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Equipamentos Esportivos - Academia Manutenção",
+      "slug": "despesa-equipamentos-esportivos-academia-manutencao",
+      "tipo": "DESPESA",
+      "grupo": "Contratos fixos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Manutenção Bombas Motores - Contrato",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Manutenção Bombas Motores - Contrato",
+      "slug": "despesa-manutencao-bombas-motores-contrato",
+      "tipo": "DESPESA",
+      "grupo": "Contratos fixos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Sistema de Leitura de Hidrômetros",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Sistema de Leitura de Hidrômetros",
+      "slug": "despesa-sistema-de-leitura-de-hidrometros",
+      "tipo": "DESPESA",
+      "grupo": "Contratos fixos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Sistema de controle de acesso e reservas",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Sistema de controle de acesso e reservas",
+      "slug": "despesa-sistema-de-controle-de-acesso-e-reservas",
+      "tipo": "DESPESA",
+      "grupo": "Contratos fixos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Piscina Contrato Manutenção",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Piscina Contrato Manutenção",
+      "slug": "despesa-piscina-contrato-manutencao",
+      "tipo": "DESPESA",
+      "grupo": "Contratos fixos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Despesas com Confraternização Funcionários",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Despesas com Confraternização Funcionários",
+      "slug": "despesa-despesas-com-confraternizacao-funcionarios",
+      "tipo": "DESPESA",
+      "grupo": "Pessoal",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Serviços Prestados",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Serviços Prestados",
+      "slug": "despesa-servicos-prestados",
+      "tipo": "DESPESA",
+      "grupo": "Pessoal",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Cópias Digitalizações e Encadernações",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Cópias Digitalizações e Encadernações",
+      "slug": "despesa-copias-digitalizacoes-e-encadernacoes",
+      "tipo": "DESPESA",
+      "grupo": "Administrativas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Cartório",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Cartório",
+      "slug": "despesa-cartorio",
+      "tipo": "DESPESA",
+      "grupo": "Administrativas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Material de Escritório e Expediente",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Material de Escritório e Expediente",
+      "slug": "despesa-material-de-escritorio-e-expediente",
+      "tipo": "DESPESA",
+      "grupo": "Administrativas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Honorários Advocatícios",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Honorários Advocatícios",
+      "slug": "despesa-honorarios-advocaticios",
+      "tipo": "DESPESA",
+      "grupo": "Administrativas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Repasse Taxa de Cobrança",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Repasse Taxa de Cobrança",
+      "slug": "despesa-repasse-taxa-de-cobranca",
+      "tipo": "DESPESA",
+      "grupo": "Administrativas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Seguro Obrigatório",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Seguro Obrigatório",
+      "slug": "despesa-seguro-obrigatorio",
+      "tipo": "DESPESA",
+      "grupo": "Administrativas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Certificado Digital",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Certificado Digital",
+      "slug": "despesa-certificado-digital",
+      "tipo": "DESPESA",
+      "grupo": "Administrativas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Taxa Anal Encerramento Serviços Contábeis",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Taxa Anal Encerramento Serviços Contábeis",
+      "slug": "despesa-taxa-anal-encerramento-servicos-contabeis",
+      "tipo": "DESPESA",
+      "grupo": "Administrativas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Confraternizações - Comemorações",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Confraternizações - Comemorações",
+      "slug": "despesa-confraternizacoes-comemoracoes",
+      "tipo": "DESPESA",
+      "grupo": "Administrativas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Material de Uso e Consumo",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Material de Uso e Consumo",
+      "slug": "despesa-material-de-uso-e-consumo",
+      "tipo": "DESPESA",
+      "grupo": "Administrativas",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Material Elétrico-Eletrônico-Serviços",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Material Elétrico-Eletrônico-Serviços",
+      "slug": "despesa-material-eletrico-eletronico-servicos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Manutenção Condominial e Bens - Material-Serviços",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Manutenção Condominial e Bens - Material-Serviços",
+      "slug": "despesa-manutencao-condominial-e-bens-material-servicos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Material de Pintura e Serviços",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Material de Pintura e Serviços",
+      "slug": "despesa-material-de-pintura-e-servicos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Material e Serviços de Chaveiro",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Material e Serviços de Chaveiro",
+      "slug": "despesa-material-e-servicos-de-chaveiro",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Elevadores Peças e Reparos",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Elevadores Peças e Reparos",
+      "slug": "despesa-elevadores-pecas-e-reparos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Desentupimentos",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Desentupimentos",
+      "slug": "despesa-desentupimentos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Sistema de Segurança-Peças e Reparos",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Sistema de Segurança-Peças e Reparos",
+      "slug": "despesa-sistema-de-seguranca-pecas-e-reparos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Bombas-Motores e Geradores Peças e Reparos",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Bombas-Motores e Geradores Peças e Reparos",
+      "slug": "despesa-bombas-motores-e-geradores-pecas-e-reparos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Equipamentos Esportivos Peças e Reparos",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Equipamentos Esportivos Peças e Reparos",
+      "slug": "despesa-equipamentos-esportivos-pecas-e-reparos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Recarga de Extintores-Manutenção",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Recarga de Extintores-Manutenção",
+      "slug": "despesa-recarga-de-extintores-manutencao",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Desinsetização-Desratização",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Desinsetização-Desratização",
+      "slug": "despesa-desinsetizacao-desratizacao",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Manutenção Predial e Reformas",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Manutenção Predial e Reformas",
+      "slug": "despesa-manutencao-predial-e-reformas",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Instalação e Manutenção em Ar Condicionado",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Instalação e Manutenção em Ar Condicionado",
+      "slug": "despesa-instalacao-e-manutencao-em-ar-condicionado",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Recuperação de Container-Lixeiras",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Recuperação de Container-Lixeiras",
+      "slug": "despesa-recuperacao-de-container-lixeiras",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Manutenção Equipamentos Contra Incêndio",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Manutenção Equipamentos Contra Incêndio",
+      "slug": "despesa-manutencao-equipamentos-contra-incendio",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Manutenção Piscinas e Saunas - Materiais  Peças e Reparos",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Manutenção Piscinas e Saunas - Materiais Peças e Reparos",
+      "slug": "despesa-manutencao-piscinas-e-saunas-materiais-pecas-e-reparos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Placas Faixas e Sinalizações",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Placas Faixas e Sinalizações",
+      "slug": "despesa-placas-faixas-e-sinalizacoes",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Manutenção Equipamentos de Informatica",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Manutenção Equipamentos de Informatica",
+      "slug": "despesa-manutencao-equipamentos-de-informatica",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Serviços Engenharia e Arquitetura e Projetos",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Serviços Engenharia e Arquitetura e Projetos",
+      "slug": "despesa-servicos-engenharia-e-arquitetura-e-projetos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Serviços Gráficos",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Serviços Gráficos",
+      "slug": "despesa-servicos-graficos",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Manutenção e Limpeza de Caixa de Agua",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Manutenção e Limpeza de Caixa de Agua",
+      "slug": "despesa-manutencao-e-limpeza-de-caixa-de-agua",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Serviços de Lavanderia - Cortinas",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Serviços de Lavanderia - Cortinas",
+      "slug": "despesa-servicos-de-lavanderia-cortinas",
+      "tipo": "DESPESA",
+      "grupo": "Manutenção",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Despesas Bancárias",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Despesas Bancárias",
+      "slug": "despesa-despesas-bancarias",
+      "tipo": "DESPESA",
+      "grupo": "Financeiras",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- ISS Agrupado",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "ISS Agrupado",
+      "slug": "despesa-iss-agrupado",
+      "tipo": "DESPESA",
+      "grupo": "Impostos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- DARF Previdenciário",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "DARF Previdenciário",
+      "slug": "despesa-darf-previdenciario",
+      "tipo": "DESPESA",
+      "grupo": "Impostos",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Equipamentos de Informática",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Equipamentos de Informática",
+      "slug": "despesa-equipamentos-de-informatica",
+      "tipo": "DESPESA",
+      "grupo": "Patrimônio",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Equipamentos Sistema de Segurança",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Equipamentos Sistema de Segurança",
+      "slug": "despesa-equipamentos-sistema-de-seguranca",
+      "tipo": "DESPESA",
+      "grupo": "Patrimônio",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Equipamentos Sauna e Piscina",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Equipamentos Sauna e Piscina",
+      "slug": "despesa-equipamentos-sauna-e-piscina",
+      "tipo": "DESPESA",
+      "grupo": "Patrimônio",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Eletrodomésticos-Eletroeletrônicos",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Eletrodomésticos-Eletroeletrônicos",
+      "slug": "despesa-eletrodomesticos-eletroeletronicos",
+      "tipo": "DESPESA",
+      "grupo": "Patrimônio",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Aquisição Containers-Lixeiras-Carrinhos Compra",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Aquisição Containers-Lixeiras-Carrinhos Compra",
+      "slug": "despesa-aquisicao-containers-lixeiras-carrinhos-compra",
+      "tipo": "DESPESA",
+      "grupo": "Patrimônio",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Filtros - Bebedouros",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Filtros - Bebedouros",
+      "slug": "despesa-filtros-bebedouros",
+      "tipo": "DESPESA",
+      "grupo": "Patrimônio",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Equipamentos Copa e Cozinha",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Equipamentos Copa e Cozinha",
+      "slug": "despesa-equipamentos-copa-e-cozinha",
+      "tipo": "DESPESA",
+      "grupo": "Patrimônio",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Indenizações-Reparo em Bens de Terceiros",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Indenizações-Reparo em Bens de Terceiros",
+      "slug": "despesa-indenizacoes-reparo-em-bens-de-terceiros",
+      "tipo": "DESPESA",
+      "grupo": "Eventuais",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "- Reembolsos créditos indevidos",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Reembolsos créditos indevidos",
+      "slug": "despesa-reembolsos-creditos-indevidos",
+      "tipo": "DESPESA",
+      "grupo": "Eventuais",
+      "natureza": "ORDINARIA"
+    },
+    {
+      "nomeCru": "Manutenções e Reformas Fundo de Reserva",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Manutenções e Reformas Fundo de Reserva",
+      "slug": "despesa-manutencoes-e-reformas-fundo-de-reserva",
+      "tipo": "DESPESA",
+      "grupo": "Fundo de reserva",
+      "natureza": "FUNDO_RESERVA"
+    },
+    {
+      "nomeCru": "Desentupimentos Emergencial Fundo de Reserva",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Desentupimentos Emergencial Fundo de Reserva",
+      "slug": "despesa-desentupimentos-emergencial-fundo-de-reserva",
+      "tipo": "DESPESA",
+      "grupo": "Fundo de reserva",
+      "natureza": "FUNDO_RESERVA"
+    },
+    {
+      "nomeCru": "Sistema Contra Incêndio - Fundo de Reserva",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Sistema Contra Incêndio - Fundo de Reserva",
+      "slug": "despesa-sistema-contra-incendio-fundo-de-reserva",
+      "tipo": "DESPESA",
+      "grupo": "Fundo de reserva",
+      "natureza": "FUNDO_RESERVA"
+    },
+    {
+      "nomeCru": "Teste Estanqueidade - Fundo de Reserva",
+      "origem": "PLANILHA_2025",
+      "nomeCanonico": "Teste Estanqueidade - Fundo de Reserva",
+      "slug": "despesa-teste-estanqueidade-fundo-de-reserva",
+      "tipo": "DESPESA",
+      "grupo": "Fundo de reserva",
+      "natureza": "FUNDO_RESERVA"
+    }
+  ]
+}

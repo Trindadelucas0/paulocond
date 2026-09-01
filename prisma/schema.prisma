@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Condominio {
+  id           String                 @id @default(cuid())
+  nome         String
+  codigo       String                 @unique
+  criadoEm     DateTime               @default(now())
+  periodos     Periodo[]
+  categorias   Categoria[]
+  lancamentos  Lancamento[]
+  dicionario   DicionarioCategoria[]
+  totaisOficiais TotalOficial[]
+}
+
+model TotalOficial {
+  id                     String     @id @default(cuid())
+  condominioId           String
+  condominio             Condominio @relation(fields: [condominioId], references: [id])
+  origem                 String
+  arquivo                String
+  periodoInicio          String
+  periodoFim             String
+  rotulo                 String
+  receitaCents           Int
+  despesaCents           Int
+  resultadoCents         Int
+  saldoInicialCents      Int
+  saldoFinalCents        Int
+  movimentoLiquidoCents  Int
+  qualidade              String
+  avisosJson             String     @default("[]")
+
+  @@unique([condominioId, origem])
+  @@index([condominioId])
+}
+
+model Periodo {
+  id                    String        @id @default(cuid())
+  condominioId          String
+  condominio            Condominio    @relation(fields: [condominioId], references: [id])
+  competencia           String
+  origem                String
+  saldoAnteriorCents    Int?
+  saldoFinalCents       Int?
+  movimentoLiquidoCents Int?
+  qualidade             String
+  lancamentos           Lancamento[]
+
+  @@unique([condominioId, competencia, origem])
+  @@index([condominioId])
+}
+
+model Categoria {
+  id           String                 @id @default(cuid())
+  condominioId String
+  condominio   Condominio             @relation(fields: [condominioId], references: [id])
+  slug         String
+  nome         String
+  tipo         String
+  grupo        String
+  natureza     String
+  lancamentos  Lancamento[]
+  dicionario   DicionarioCategoria[]
+
+  @@unique([condominioId, slug, tipo])
+  @@index([condominioId])
+}
+
+model DicionarioCategoria {
+  id           String     @id @default(cuid())
+  condominioId String
+  condominio   Condominio @relation(fields: [condominioId], references: [id])
+  nomeCru      String
+  origem       String
+  categoriaId  String
+  categoria    Categoria  @relation(fields: [categoriaId], references: [id])
+
+  @@unique([condominioId, nomeCru, origem])
+  @@index([condominioId])
+}
+
+model Lancamento {
+  id            String     @id @default(cuid())
+  condominioId  String
+  condominio    Condominio @relation(fields: [condominioId], references: [id])
+  periodoId     String
+  periodo       Periodo    @relation(fields: [periodoId], references: [id])
+  categoriaId   String
+  categoria     Categoria  @relation(fields: [categoriaId], references: [id])
+  tipo          String
+  valorCents    Int
+  status        String
+  origem        String
+  origemValor   String
+  linhaPlanilha Int
+  arquivo       String
+  rotuloCru     String
+
+  @@index([condominioId, tipo])
+  @@index([condominioId, origem])
+  @@index([periodoId])
+}
