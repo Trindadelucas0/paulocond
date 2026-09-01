@@ -72,7 +72,7 @@ export function CardInadimplencia({ dados }: { dados: InadimplenciaPayload }) {
                   key={mes.competencia}
                   className={`border-b border-line/80 ${pico ? "bg-warning-soft/60" : ""}`}
                 >
-                  <th scope="row" className={`py-2 pr-2 font-medium ${anoCorrente ? "font-semibold" : "font-medium"}`}>
+                  <th scope="row" className={`py-2 pr-2 ${anoCorrente ? "font-semibold" : "font-medium"}`}>
                     {mes.rotulo}
                     {atual ? <span className="sr-only"> (último mês)</span> : null}
                     {pico ? <span className="sr-only"> (maior saldo)</span> : null}

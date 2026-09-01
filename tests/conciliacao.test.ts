@@ -116,4 +116,6 @@ test("visão geral recorte 2026: card saldo usa valor definido na home", async (
   assert.equal(payload.kpis.saldo.valorCents, SALDO_GERENCIAL_HOME_CENTS);
   assert.equal(payload.kpis.saldo.variacaoPct, null);
   assert.equal(payload.serieSaldo.at(-1)?.saldoCents, 35_123_901);
+  assert.equal(payload.inadimplencia.ultimo.valorCents, 1_363_663);
+  assert.equal(payload.inadimplencia.mediaPercentualBp, 456);
 });
