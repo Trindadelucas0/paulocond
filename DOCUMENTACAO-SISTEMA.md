@@ -3,7 +3,7 @@
 | Item | Valor |
 |------|--------|
 | Versão do sistema | 0.2.1 — Telas do menu |
-| Última atualização | 01/09/2026 (layout com escala reduzida e telas adaptáveis) |
+| Última atualização | 01/09/2026 (deploy Êxito PM2 :3789; layout com escala reduzida) |
 | Fonte oficial | Este arquivo |
 
 ## 1. Como usar este documento
@@ -238,6 +238,8 @@ Não implementado: CSRF de mutação (não há POST), RBAC, cookies de sessão, 
 
 ## 11. Deploy / ambiente (sem secrets)
 
+### Local
+
 Variáveis (`.env.example`):
 
 ```
@@ -248,6 +250,44 @@ CONDOMINIO_CODIGO="132"
 O arquivo SQLite fica em `prisma/dev.db` após `prisma db push`.  
 Planilhas: `dados/originais/`. Referências visuais: `docs/referencias/`.  
 Comandos: `npm run setup`, `npm run dev`, `npm run build`, `npm start`, `npm test`.
+
+### Servidor Êxito (produção)
+
+| Item | Valor |
+|------|--------|
+| Host SSH | `exito` (`192.168.15.8`, usuário `exito`) |
+| Pasta | `/home/exito/projetos/paulocond` |
+| Repositório | `https://github.com/Trindadelucas0/paulocond.git` |
+| PM2 | `paulocond` |
+| Porta | `3789` |
+| URL LAN | `http://192.168.15.8:3789` |
+| Config PM2 | `ecosystem.config.cjs` (`npm start -- -H 0.0.0.0 -p 3789`) |
+
+**Primeiro deploy (no servidor):**
+
+```bash
+cd /home/exito/projetos
+git clone https://github.com/Trindadelucas0/paulocond.git
+cd paulocond
+cp .env.example .env   # ou criar .env com DATABASE_URL e CONDOMINIO_CODIGO
+npm ci
+npm run setup
+npm run build
+pm2 start ecosystem.config.cjs
+pm2 save
+```
+
+**Atualizar após `git push`:**
+
+```bash
+cd /home/exito/projetos/paulocond
+git pull origin main
+npm ci
+npm run build
+pm2 restart paulocond --update-env
+```
+
+Reimportar planilhas no servidor (se os Excel em `dados/originais/` mudarem): `npm run importar` (não apaga o `.env` nem reinicia o PM2 sozinho).
 
 ## 12. Ao atualizar este documento
 
