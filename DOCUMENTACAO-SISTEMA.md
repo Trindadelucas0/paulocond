@@ -192,6 +192,7 @@ Todas abaixo usam `PaginaAnalise` + `GET /api/modulo`. Recorte nas pills (3 valo
 18. **Saldo gerencial na Visão Geral** (recorte `oficial-2026` / Out/25–Set/26): card exibe **R$ 71.204,98** (`SALDO_GERENCIAL_HOME_CENTS` em `lib/money.ts`). O saldo final da planilha (**R$ 351.239,01**) permanece no importador, no gráfico **Evolução do saldo**, em Fluxo, Análise mensal e Relatório. Drawer de origem mostra os dois valores (critério `VALOR_DEFINIDO_HOME`). Demais recortes usam saldo da planilha no card.
 19. **Cobertura da cota** (Visão Geral, Taxa condominial, slide do relatório): **disponível** = cotas de condomínio + saldo de entrada (sempre R$ 0,00); **saiu** = despesas registradas do recorte; **sobrou/faltou** = disponível − saiu. Selo **Cobriu** se sobrou ≥ 0. Mostra também outras receitas e resultado geral (todas as receitas − despesas). Função `montarCoberturaCota` em `lib/cobertura-cota.ts`.
 20. **Contas de consumo** (Comparativo e Utilidades): comparativo Jan–Jul de **Água e Esgoto**, **Gás** e **Energia Solar** (despesa registrada). **Gás médio por unidade** = despesa da linha `Gás` ÷ **124** (`UNIDADES_CONDOMINIO` em `lib/format.ts`); **média mensal** = total ÷ 7 competências ÷ 124. Não inclui **Gás para Copa - Salão de Festas**. Na tela Comparativo, linhas extras: **Rateio Gás (receita)** e **Gás não rateado** (despesa Gás − rateio). Não é medição individual por apartamento. `lib/consumo.ts`.
+21. **Inadimplência** (Visão Geral, Taxa condominial, slide do relatório): série informada de **saldo em atraso no fim de cada mês**, Set/2025 a Ago/2026 (12 linhas). Não vem do demonstrativo Excel. **Total acumulado 4,56%** = média aritmética dos 12 percentuais (arredondada); a coluna Valor do rodapé fica vazia de propósito — cada mês é posição de estoque, não se soma. Último mês (31/ago): R$ 13.636,63 e 2,92%. Pico (31/jan): R$ 18.738,30. Igual em todos os recortes. `montarInadimplencia` em `lib/inadimplencia.ts`.
 
 Totais que o importador exige:
 
@@ -205,12 +206,12 @@ Totais que o importador exige:
 1. Na pasta do projeto: `npm install`, copiar `.env.example` para `.env` se ainda não existir.
 2. `npm run setup` (gera Prisma, cria SQLite, importa os dois Excel de `dados/originais/`).
 3. `npm run dev` e abrir `http://localhost:3789` (porta dedicada, fora das demais apps locais).
-4. A tela inicial é a Visão Geral. A logo oficial aparece no menu lateral (computador) e no topo (celular). Use as pills de período no canto superior. No recorte **Out/25–Set/26**, o card **Saldo gerencial** mostra **R$ 71.204,98** (valor definido na home); o gráfico abaixo continua com o saldo final da planilha mês a mês. Clique no card para ver os dois números no painel de origem. Logo abaixo dos KPIs, o bloco **A cota cobriu as despesas?** mostra se a cota + saldo de entrada (R$ 0,00) cobriu as despesas do recorte e o que sobrou ou faltou.
+4. A tela inicial é a Visão Geral. A logo oficial aparece no menu lateral (computador) e no topo (celular). Use as pills de período no canto superior. No recorte **Out/25–Set/26**, o card **Saldo gerencial** mostra **R$ 71.204,98** (valor definido na home); o gráfico abaixo continua com o saldo final da planilha mês a mês. Clique no card para ver os dois números no painel de origem. Logo abaixo dos KPIs, o bloco **A cota cobriu as despesas?** mostra se a cota + saldo de entrada (R$ 0,00) cobriu as despesas do recorte e o que sobrou ou faltou. Ao lado (no computador) ou abaixo (no celular), o card **Inadimplência** lista o saldo em atraso informado de Set/25 a Ago/26; o **total acumulado 4,56%** é a média dos percentuais, não a soma dos valores.
 5. Clique em um KPI da home para ver origem (arquivo, critério, categorias, meses). `†` = mês reconstruído. No celular o painel de origem ocupa a largura da tela.
 6. Todos os itens do menu lateral abrem tela. Recorte e, no ranking, “Por valor / Por nome” valem para a tela atual.
 7. **Detalhamento** (menu Visão): tabela planilha com uma coluna por mês do recorte e **Total** no fim. Clique na categoria (▸/▾) para ver os itens; cada linha mostra receita ou despesa mês a mês. `†` = residual. Em celular, a tabela rola na horizontal; nome e Total ficam fixos.
 8. Comparativo 2025 × 2026 e o bloco equivalente da home usam só Jan–Jul. Se a pill estiver em Out/25–Set/26, a tela Comparativo avisa e mesmo assim mostra Jan–Jul. Role até **Contas de consumo** para ver água, gás e energia solar; o gás traz **média por 124 unidades** e, na mesma tela, conferência com o rateio cobrado. Em **Utilidades**, o comparativo Jan–Jul repete água, gás (com média ÷ 124) e solar.
-9. Fundo de reserva: **Saldo do fundo** = R$ 191.599,35 (valor informado, igual em todos os recortes); arrecadação e despesa mudam com o recorte. **Taxa condominial** repete o bloco de cobertura da cota e KPIs Saiu / Sobrou ou Faltou. Taxas extras mostram **diferença gerencial**, não conta bancária. Em Fluxo e no relatório, o **saldo inicial** é R$ 0,00 (não usa o Saldo anterior da planilha).
+9. Fundo de reserva: **Saldo do fundo** = R$ 191.599,35 (valor informado, igual em todos os recortes); arrecadação e despesa mudam com o recorte. **Taxa condominial** repete o bloco de cobertura da cota, o card de inadimplência e KPIs Saiu / Sobrou ou Faltou. Taxas extras mostram **diferença gerencial**, não conta bancária. Em Fluxo e no relatório, o **saldo inicial** é R$ 0,00 (não usa o Saldo anterior da planilha).
 10. Relatório da Assembleia: setas ou teclado para os slides; Tela cheia; Imprimir (diálogo do navegador).
 11. Configurações explica fonte, qualidade e que não há login. Para reimportar: `npm run importar` no terminal.
 
@@ -223,6 +224,9 @@ O layout cabe em celular, tablet e computador: menu em gaveta abaixo de `lg`, co
 - [ ] API `/api/visao-geral?recorte=oficial-2026` devolve `coberturaCota.cobriu` = false e `coberturaCota.saldoEntradaCents` = 0
 - [ ] Home e `/taxa-condominial` mostram bloco **A cota cobriu as despesas?** com selo Cobriu/Não cobriu
 - [ ] Relatório inclui slide **A cota cobriu as despesas?**
+- [ ] Home e `/taxa-condominial` mostram card **Inadimplência** com 12 meses e total acumulado 4,56%
+- [ ] API `/api/visao-geral` devolve `inadimplencia.ultimo.valorCents` = 1363663 e `inadimplencia.mediaPercentualBp` = 456
+- [ ] Relatório inclui slide **Saldo em atraso informado**
 - [ ] `npm run importar` imprime totais conferidos e não aborta
 - [ ] `npm test` passa (coluna B e soma residual)
 - [ ] API `/api/visao-geral?recorte=oficial-2026` devolve `kpis.saldo.valorCents` = 7120498 (R$ 71.204,98)
