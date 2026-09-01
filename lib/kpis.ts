@@ -1,5 +1,6 @@
 import type { Categoria, Lancamento, Periodo, TotalOficial } from "@prisma/client";
 import { montarCoberturaCota, type CoberturaCotaPayload } from "@/lib/cobertura-cota";
+import { montarInadimplencia, type InadimplenciaPayload } from "@/lib/inadimplencia";
 import {
   COMPETENCIAS_JAN_JUL_2025,
   COMPETENCIAS_JAN_JUL_2026,
@@ -52,6 +53,7 @@ export type VisaoGeralPayload = {
   statusDespesa: "Despesa registrada";
   fonte: { arquivos: string[]; atualizadoEm: string };
   coberturaCota: CoberturaCotaPayload;
+  inadimplencia: InadimplenciaPayload;
 };
 
 type KpiCard = {
@@ -341,5 +343,6 @@ export function montarVisaoGeral(params: {
       receitaCents: receita,
       despesaCents: despesa,
     }),
+    inadimplencia: montarInadimplencia(),
   };
 }

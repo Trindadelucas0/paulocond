@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Composicao } from "@/components/visao-geral/Composicao";
 import { CoberturaCota } from "@/components/visao-geral/CoberturaCota";
+import { CardInadimplencia } from "@/components/visao-geral/CardInadimplencia";
 import { BarrasMensais } from "@/components/visao-geral/BarrasMensais";
 import { AreaChartSaldo } from "@/components/visao-geral/AreaChartSaldo";
 import { BarrasValor } from "@/components/paginas/BarrasValor";
@@ -167,7 +168,14 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
 
       <KpiGrid itens={data.kpis} />
 
-      {data.coberturaCota ? <CoberturaCota dados={data.coberturaCota} /> : null}
+      {data.coberturaCota || data.inadimplencia ? (
+        <div
+          className={`grid min-w-0 gap-3 ${data.coberturaCota && data.inadimplencia ? "xl:grid-cols-2" : ""}`}
+        >
+          {data.coberturaCota ? <CoberturaCota dados={data.coberturaCota} /> : null}
+          {data.inadimplencia ? <CardInadimplencia dados={data.inadimplencia} /> : null}
+        </div>
+      ) : null}
 
       {data.waterfall.length > 0 ? <WaterfallChart passos={data.waterfall} /> : null}
 

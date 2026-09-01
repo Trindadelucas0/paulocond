@@ -2,6 +2,7 @@ import type { Periodo, TotalOficial } from "@prisma/client";
 import { montarAlertas } from "@/lib/alertas";
 import { avisoComparativoJanJul, montarComparativoConsumo, totaisConsumoJanJul } from "@/lib/consumo";
 import { montarCoberturaCota, type CoberturaCotaPayload } from "@/lib/cobertura-cota";
+import { montarInadimplencia, type InadimplenciaPayload } from "@/lib/inadimplencia";
 import {
   composicaoGrupo,
   janJul,
@@ -14,7 +15,7 @@ import {
   somaTipo,
   totaisRecorte,
 } from "@/lib/dataset";
-import { formatBRL, formatPct, mesLabel, type ModuloId, type OrdemId, type RecorteId } from "@/lib/format";
+import { formatBRL, formatPct, formatPercentualBp, mesLabel, type ModuloId, type OrdemId, type RecorteId } from "@/lib/format";
 import { SALDO_FUNDO_RESERVA_CENTS } from "@/lib/money";
 import type { Alerta, Fatia, LancamentoComRel } from "@/lib/kpis";
 
@@ -123,6 +124,7 @@ export type ModuloPayload = {
   fonte: { arquivos: string[] };
   ordem: OrdemId;
   coberturaCota: CoberturaCotaPayload | null;
+  inadimplencia: InadimplenciaPayload | null;
 };
 
 function variacao(atual: number, anterior: number): number | null {
@@ -287,6 +289,7 @@ function emptyBase(
     fonte: { arquivos: ctx.fonte },
     ordem: ctx.ordem,
     coberturaCota: null,
+    inadimplencia: null,
   };
 }
 
@@ -414,6 +417,7 @@ export function montarModulo(params: {
       { id: "media", rotulo: "Média mensal (meses com valor)", valorCents: stats.media },
     ];
     p.coberturaCota = cobertura;
+    p.inadimplencia = montarInadimplencia();
     p.destaques = [
       {
         id: "part",
@@ -794,6 +798,7 @@ export function montarModulo(params: {
       receitaCents: totaisR.receita,
       despesaCents: totaisR.despesa,
     });
+    const inadimplencia = montarInadimplencia();
     p.slides = [
       {
         id: "capa",
@@ -863,6 +868,24 @@ export function montarModulo(params: {
         nota: cobertura.cobriu
           ? "A cota e o saldo de entrada cobriram as despesas registradas do recorte."
           : "A cota sozinha não cobriu todas as despesas. Outras receitas (aluguéis, fundo, taxas extras, eventuais) entram no resultado geral.",
+      },
+      {
+        id: "inadimplencia",
+        kicker: "Inadimplência",
+        titulo: "Saldo em atraso informado",
+        linhas: [
+          { rotulo: "Período", valor: inadimplencia.rotuloPeriodo },
+          {
+            rotulo: `Último mês (${inadimplencia.ultimo.rotulo})`,
+            valor: `${formatBRL(inadimplencia.ultimo.valorCents)} · ${formatPercentualBp(inadimplencia.ultimo.percentualBp)}`,
+          },
+          {
+            rotulo: `Maior saldo (${inadimplencia.pico.rotulo})`,
+            valor: `${formatBRL(inadimplencia.pico.valorCents)} · ${formatPercentualBp(inadimplencia.pico.percentualBp)}`,
+          },
+          { rotulo: "Média 12 meses", valor: formatPercentualBp(inadimplencia.mediaPercentualBp) },
+        ],
+        nota: inadimplencia.nota,
       },
       {
         id: "fundo",

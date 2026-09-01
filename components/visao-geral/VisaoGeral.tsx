@@ -8,6 +8,7 @@ import { AreaChartSaldo } from "./AreaChartSaldo";
 import { BarrasMensais } from "./BarrasMensais";
 import { Composicao } from "./Composicao";
 import { CoberturaCota } from "./CoberturaCota";
+import { CardInadimplencia } from "./CardInadimplencia";
 import { OrigemDrawer, type OrigemData } from "./OrigemDrawer";
 
 export function VisaoGeral() {
@@ -237,7 +238,10 @@ export function VisaoGeral() {
       </section>
       <p className="text-xs text-muted">{data.saldoGerencialLabel}</p>
 
-      <CoberturaCota dados={data.coberturaCota} />
+      <div className="grid min-w-0 gap-3 xl:grid-cols-2">
+        <CoberturaCota dados={data.coberturaCota} />
+        <CardInadimplencia dados={data.inadimplencia} />
+      </div>
 
       <section className="grid min-w-0 gap-3 xl:grid-cols-[1.4fr_1fr]">
         <article className="js-panel min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">

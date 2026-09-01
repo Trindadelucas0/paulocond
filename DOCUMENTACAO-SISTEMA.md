@@ -2,8 +2,8 @@
 
 | Item | Valor |
 |------|--------|
-| Versão do sistema | 0.3.1 — Contas de consumo |
-| Última atualização | 01/09/2026 (Comparativo e Utilidades: água, gás e solar Jan–Jul; gás ÷ 124 unidades) |
+| Versão do sistema | 0.4.0 — Inadimplência |
+| Última atualização | 01/09/2026 (card Inadimplência Set/25–Ago/26; média 4,56%; valor informado) |
 | Fonte oficial | Este arquivo |
 
 ## 1. Como usar este documento
@@ -27,6 +27,7 @@ Frontend não acessa banco nem Excel. Regras e totais saem da API.
 
 | Versão | Data | O que mudou |
 |--------|------|-------------|
+| 0.4.0 — Inadimplência | 01/09/2026 | Card **Inadimplência** na Visão Geral e em Taxa condominial: série informada Set/25–Ago/26 (valor e % no fim de cada mês); último mês Ago/26 R$ 13.636,63 (2,92%); pico Jan/26 R$ 18.738,30; **total acumulado 4,56%** = média dos 12 percentuais (não soma dos R$); slide no Relatório; `lib/inadimplencia.ts` |
 | 0.3.1 — Contas de consumo | 01/09/2026 | Comparativo e Utilidades: bloco **Contas de consumo** Jan–Jul (água, gás, energia solar); gás médio por **124 unidades**; conferência rateio gás; `lib/consumo.ts`, `lib/format.ts` (`UNIDADES_CONDOMINIO`) |
 | 0.3.0 — Cobertura da cota | 01/09/2026 | Bloco **A cota cobriu as despesas?** na Visão Geral e em Taxa condominial: cota + saldo de entrada (R$ 0,00) − despesas registradas; selo Cobriu/Não cobriu; outras receitas e resultado geral; slide no Relatório da Assembleia; `lib/cobertura-cota.ts` |
 | 0.2.5 — Visão Geral | 01/09/2026 | Card **Saldo gerencial** na home (recorte Out/25–Set/26) = **R$ 71.204,98** (`SALDO_GERENCIAL_HOME_CENTS`); gráfico e importador mantêm saldo final da planilha R$ 351.239,01; drawer mostra os dois valores |
@@ -69,7 +70,7 @@ A API filtra pelo condomínio do ambiente (`CONDOMINIO_CODIGO=132`). Sem esse c�
 | `/receitas` | Ordinárias, extra, eventuais, composição, ranking | `app/receitas/page.tsx` |
 | `/despesas` | Natureza, top 10, impostos | `app/despesas/page.tsx` |
 | `/fluxo` | Waterfall: saldo inicial R$ 0,00 + receitas − despesas; saldo final da planilha | `app/fluxo/page.tsx` |
-| `/taxa-condominial` | Cotas, cobertura da cota, saiu/sobrou, média, vs 2025 | `app/taxa-condominial/page.tsx` |
+| `/taxa-condominial` | Cotas, cobertura da cota, inadimplência, saiu/sobrou, média, vs 2025 | `app/taxa-condominial/page.tsx` |
 | `/fundo-reserva` | Arrecadação, despesa, saldo do fundo (informado) | `app/fundo-reserva/page.tsx` |
 | `/taxas-extras` | Academia arrecadado vs utilizado | `app/taxas-extras/page.tsx` |
 | `/contratos` | Ranking + Empresa Terceirizada | `app/contratos/page.tsx` |
@@ -88,7 +89,7 @@ A API filtra pelo condomínio do ambiente (`CONDOMINIO_CODIGO=132`). Sem esse c�
 | `GET /api/modulo?modulo=&recorte=&ordem=` | Payload das 16 telas | `app/api/modulo/route.ts`, `lib/modulos.ts` |
 | Chrome compartilhado | Recorte, loading, GSAP | `components/paginas/PaginaAnalise.tsx` |
 | `npm run importar` | Lê Excel, valida totais, grava SQLite | `scripts/importar-demonstrativo.ts` |
-| `npm test` | Conciliação coluna B + cobertura da cota | `tests/conciliacao.test.ts`, `tests/cobertura-cota.test.ts` |
+| `npm test` | Conciliação coluna B + cobertura da cota + consumo + inadimplência | `tests/conciliacao.test.ts`, `tests/cobertura-cota.test.ts`, `tests/consumo.test.ts`, `tests/inadimplencia.test.ts` |
 | `npx tsx scripts/conciliar-debitos.ts` | Cruza extrato fiscal `debitos_detalhe` com SQLite (somente leitura) | `scripts/conciliar-debitos.ts`, `dados/conciliacao-debitos.json` |
 | Schema | Tabelas de negócio com `condominioId` | `prisma/schema.prisma` |
 
@@ -116,6 +117,7 @@ KPIs de origem (home): `saldo`, `receitas`, `despesas`, `resultado`.
 | KPI | Resultado | Receitas − despesas | Sim | Cálculo servidor | Mov. líquido oficial | Origem | — | — | `lib/kpis.ts` |
 | KPI saldo | Margem / cobertura | Resultado/receita e saldo/média de despesa dos meses COMPLETO | Não | Cálculo servidor | Série mensal | — | Set/2026 fora da média | — | `lib/kpis.ts` |
 | Bloco | Cobertura da cota | A cota cobriu as despesas? | Sim | Cálculo servidor | Cotas + saldo 0 − despesa do recorte | — | Selo Cobriu/Não cobriu; barra %; outras receitas e resultado geral | Saldo de entrada sempre R$ 0,00; não usa Saldo anterior da planilha | `lib/cobertura-cota.ts`, `components/visao-geral/CoberturaCota.tsx` |
+| Bloco | Inadimplência | Saldo em atraso informado | Sim | Constante (servidor) | Série Set/25–Ago/26 (`INADIMPLENCIA_MESES`) | Taxa condominial / Relatório | Último mês, pico, tabela mês/valor/%, média 4,56% | Não vem do Excel; não soma os R$; igual em todos os recortes | `lib/inadimplencia.ts`, `components/visao-geral/CardInadimplencia.tsx` |
 | Gráfico | Evolução do saldo | Área verde | Sim | API `serieSaldo` | `Periodo.saldoFinalCents` | Clique no ponto foca o mês | pathLength GSAP | — | `components/visao-geral/AreaChartSaldo.tsx` |
 | Composição | Despesas / receitas | Barra segmentada + lista | Sim | API | Soma de lançamentos por grupo (inclui residual) | — | — | — | `components/visao-geral/Composicao.tsx` |
 | Barras | Receita × despesa mês | Hachura; mês foco sólido | Sim | API `serieMensal` | Lançamentos | Foco do mês | `*` parcial `†` residual | — | `components/visao-geral/BarrasMensais.tsx` |
@@ -136,7 +138,7 @@ Todas abaixo usam `PaginaAnalise` + `GET /api/modulo`. Recorte nas pills (3 valo
 | Receitas | `/receitas` | KPIs ordinárias / extra / eventuais, composição, evolução, ranking | Total oficial = coluna B no recorte oficial | `lib/modulos.ts` receitas |
 | Despesas | `/despesas` | Total, contratos, manutenção, card Impostos, top 10, evolução | Rótulo Despesa registrada | `lib/modulos.ts` despesas |
 | Fluxo | `/fluxo` | Waterfall: saldo inicial R$ 0,00; receitas; despesas; saldo gerencial final da planilha; série mensal | Saldo inicial não vem da linha Saldo anterior | `lib/modulos.ts` fluxo |
-| Taxa condominial | `/taxa-condominial` | Cotas, bloco cobertura, saiu/sobrou, média, participação, vs Jan–Jul/2025 | Saldo de entrada R$ 0,00 na cobertura | `lib/modulos.ts` taxa-condominial, `lib/cobertura-cota.ts` |
+| Taxa condominial | `/taxa-condominial` | Cotas, bloco cobertura, card inadimplência, saiu/sobrou, média, participação, vs Jan–Jul/2025 | Saldo de entrada R$ 0,00 na cobertura; inadimplência informada (não do demonstrativo) | `lib/modulos.ts` taxa-condominial, `lib/cobertura-cota.ts`, `lib/inadimplencia.ts` |
 | Fundo de reserva | `/fundo-reserva` | Arrecadação, despesa, **saldo do fundo** (R$ 191.599,35 informado) | Arrecadação/despesa = recorte; saldo = constante; nunca “saldo bancário” | `lib/modulos.ts` fundo-reserva, `lib/money.ts` |
 | Taxas extras | `/taxas-extras` | Academia arrecadado vs Aquisição Equipamentos vs diferença gerencial | Não é saldo bancário da taxa extra | `lib/modulos.ts` taxas-extras |
 | Contratos | `/contratos` | Ranking do grupo Contratos fixos; destaque Empresa Terceirizada e % da despesa | — | `lib/modulos.ts` contratos |
@@ -155,7 +157,7 @@ Todas abaixo usam `PaginaAnalise` + `GET /api/modulo`. Recorte nas pills (3 valo
 | Header | Recorte | Mesmas pills | Sim | Usuário | Allowlist | Recarrega API | Slides recálculo | — | `PaginaAnalise.tsx` |
 | Ações | Tela cheia | `requestFullscreen` no palco | Não | Usuário | Browser | — | Alterna fullscreen | — | `RelatorioAssembleia.tsx` |
 | Ações | Imprimir | `window.print()` | Não | Usuário | Browser | CSS print | Todos os slides | Sem PDF gerado no servidor | `RelatorioAssembleia.tsx` |
-| Palco | Slides | Quadro-resumo, receitas, despesas, cotas, cobertura da cota, fundo, academia, terceirizada, Jan–Jul, alertas, fonte | Sim | Servidor | `montarModulo` | Setas / teclado | Sem opinião | Só números do demonstrativo | `lib/modulos.ts` relatorio |
+| Palco | Slides | Quadro-resumo, receitas, despesas, cotas, cobertura da cota, inadimplência, fundo, academia, terceirizada, Jan–Jul, alertas, fonte | Sim | Servidor | `montarModulo` | Setas / teclado | Sem opinião | Só números do demonstrativo, salvo slide de inadimplência (série informada) | `lib/modulos.ts` relatorio |
 
 ### 6.4 Configurações (`/configuracoes`)
 
