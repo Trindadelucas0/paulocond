@@ -81,7 +81,12 @@ export function VisaoGeral() {
             tl.to(splitK.chars, { y: 0, autoAlpha: 1, stagger: 0.018, duration: 0.45 })
               .to(splitT.chars, { y: 0, autoAlpha: 1, stagger: 0.02, duration: 0.55 }, "-=0.2")
               .from(".js-seal", { autoAlpha: 0, y: 8, duration: 0.4 }, "<0.1")
-              .from(".js-kpi", { y: 24, autoAlpha: 0, stagger: 0.08, duration: d }, "-=0.15")
+              .fromTo(
+                ".js-kpi",
+                { y: 24, autoAlpha: 0 },
+                { y: 0, autoAlpha: 1, stagger: 0.08, duration: d },
+                "-=0.15",
+              )
               .from(".js-panel", { y: 28, autoAlpha: 0, stagger: 0.1, duration: 0.6 }, "-=0.3")
               .fromTo(".js-line", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.1, ease: "power2.inOut" }, "-=0.5");
           } else {
@@ -203,7 +208,7 @@ export function VisaoGeral() {
           <button
             key={kpi.id}
             type="button"
-            className="js-kpi rounded-3xl border border-card-line bg-surface p-5 text-left shadow-[var(--shadow-card)] transition hover:-translate-y-0.5"
+            className="js-kpi rounded-3xl border border-card-line bg-surface p-5 text-left shadow-[var(--shadow-card)] transition-transform hover:-translate-y-0.5"
             onClick={() => {
               void abrirOrigem(kpi.id);
             }}
