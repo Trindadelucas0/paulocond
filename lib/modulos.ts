@@ -1,8 +1,10 @@
 import type { Periodo, TotalOficial } from "@prisma/client";
 import { montarAlertas } from "@/lib/alertas";
 import { avisoComparativoJanJul, montarComparativoConsumo, totaisConsumoJanJul } from "@/lib/consumo";
+import { montarAnaliseTaxa, type AnaliseTaxaPayload } from "@/lib/analise-taxa";
 import { montarCoberturaCota, type CoberturaCotaPayload } from "@/lib/cobertura-cota";
 import { montarInadimplencia, type InadimplenciaPayload } from "@/lib/inadimplencia";
+import { montarNovaTaxaIdeal, type NovaTaxaIdealPayload } from "@/lib/nova-taxa-ideal";
 import {
   composicaoGrupo,
   janJul,
@@ -125,6 +127,8 @@ export type ModuloPayload = {
   ordem: OrdemId;
   coberturaCota: CoberturaCotaPayload | null;
   inadimplencia: InadimplenciaPayload | null;
+  analiseTaxa: AnaliseTaxaPayload | null;
+  novaTaxaIdeal: NovaTaxaIdealPayload | null;
 };
 
 function variacao(atual: number, anterior: number): number | null {
@@ -186,16 +190,6 @@ function serieCategoria(lista: LancamentoComRel[], periodos: Periodo[], nome: st
   });
 }
 
-function statsMeses(valores: number[]) {
-  const n = valores.filter((v) => v !== 0);
-  if (n.length === 0) return { media: 0, maior: 0, menor: 0 };
-  return {
-    media: Math.round(n.reduce((a, b) => a + b, 0) / n.length),
-    maior: Math.max(...n),
-    menor: Math.min(...n),
-  };
-}
-
 function montarDetalhamento(lista: LancamentoComRel[], periodos: Periodo[]) {
   const competencias = periodos.map((p) => p.competencia);
   const map = new Map<string, DetalheGrupo>();
@@ -205,7 +199,7 @@ function montarDetalhamento(lista: LancamentoComRel[], periodos: Periodo[]) {
       grupo: rotuloGrupo(l.categoria.grupo),
       tipo: l.tipo,
       totalCents: 0,
-      itens: [],
+      itens: [] as DetalheItem[],
     };
     grupo.totalCents += l.valorCents;
     let item = grupo.itens.find((i) => i.nome === l.categoria.nome);
@@ -290,6 +284,8 @@ function emptyBase(
     ordem: ctx.ordem,
     coberturaCota: null,
     inadimplencia: null,
+    analiseTaxa: null,
+    novaTaxaIdeal: null,
   };
 }
 
@@ -394,10 +390,7 @@ export function montarModulo(params: {
 
   if (modulo === "taxa-condominial") {
     const p = emptyBase(modulo, "Taxa condominial", ctx);
-    const cotas = somaNome(rec, "Cotas de Condomínio", "RECEITA");
-    const totalRec = somaTipo(rec, "RECEITA") || totaisR.receita;
     const serieCotas = serieCategoria(rec, periodosR, "Cotas de Condomínio");
-    const stats = statsMeses(serieCotas.map((s) => s.valorCents));
     const cotas25 = somaNome(jj25, "Cotas de Condomínio", "RECEITA");
     const cotas26 = somaNome(jj26, "Cotas de Condomínio", "RECEITA");
     const cobertura = montarCoberturaCota({
@@ -405,28 +398,12 @@ export function montarModulo(params: {
       receitaCents: totaisR.receita,
       despesaCents: totaisR.despesa,
     });
-    p.kpis = [
-      { id: "cotas", rotulo: "Cotas de condomínio", valorCents: cotas },
-      { id: "saiu", rotulo: "Saiu (despesas registradas)", valorCents: cobertura.despesaCents },
-      {
-        id: "sobrou",
-        rotulo: cobertura.sobrouCents >= 0 ? "Sobrou" : "Faltou",
-        valorCents: Math.abs(cobertura.sobrouCents),
-        extra: cobertura.cobriu ? "Cobriu as despesas" : "Não cobriu só com a cota",
-      },
-      { id: "media", rotulo: "Média mensal (meses com valor)", valorCents: stats.media },
-    ];
+    p.kpis = [];
     p.coberturaCota = cobertura;
     p.inadimplencia = montarInadimplencia();
-    p.destaques = [
-      {
-        id: "part",
-        rotulo: "Participação nas receitas do recorte",
-        valorCents: cotas,
-        extra: totalRec === 0 ? "—" : formatPct(cotas / totalRec).replace("+", ""),
-        nota: "Sobre a soma das receitas lançadas neste recorte.",
-      },
-    ];
+    p.analiseTaxa = montarAnaliseTaxa(filtrados);
+    p.novaTaxaIdeal = montarNovaTaxaIdeal(filtrados);
+    p.destaques = [];
     p.serie = serieCotas;
     p.serieRotulo = "Cotas por competência";
     p.comparativos = [

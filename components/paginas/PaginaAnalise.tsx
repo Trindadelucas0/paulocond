@@ -6,15 +6,31 @@ import { CoberturaCota } from "@/components/visao-geral/CoberturaCota";
 import { CardInadimplencia } from "@/components/visao-geral/CardInadimplencia";
 import { BarrasMensais } from "@/components/visao-geral/BarrasMensais";
 import { AreaChartSaldo } from "@/components/visao-geral/AreaChartSaldo";
+import { AnaliseTaxaDemo } from "@/components/paginas/AnaliseTaxaDemo";
 import { BarrasValor } from "@/components/paginas/BarrasValor";
 import { DetalhamentoTabela } from "@/components/paginas/DetalhamentoTabela";
 import { KpiGrid } from "@/components/paginas/KpiGrid";
+import { NovaTaxaCanvas } from "@/components/paginas/NovaTaxaCanvas";
 import { RankingLista } from "@/components/paginas/RankingLista";
 import { RelatorioAssembleia } from "@/components/paginas/RelatorioAssembleia";
 import { WaterfallChart } from "@/components/paginas/WaterfallChart";
 import { RECORTE_OPCOES, formatBRL, formatPct, type ModuloId, type OrdemId, type RecorteId } from "@/lib/format";
 import { gsap, registerMotion, SplitText, useGSAP } from "@/lib/motion";
 import type { ModuloPayload } from "@/lib/modulos";
+
+export type VisaoTaxa = "analise" | "nova-taxa";
+
+function visaoDaUrl(): VisaoTaxa {
+  if (typeof window === "undefined") return "analise";
+  return new URLSearchParams(window.location.search).get("visao") === "nova-taxa" ? "nova-taxa" : "analise";
+}
+
+function gravarVisaoUrl(visao: VisaoTaxa) {
+  const url = new URL(window.location.href);
+  if (visao === "nova-taxa") url.searchParams.set("visao", "nova-taxa");
+  else url.searchParams.delete("visao");
+  window.history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
+}
 
 export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
   const root = useRef<HTMLDivElement>(null);
@@ -24,6 +40,17 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
   const [erro, setErro] = useState<string | null>(null);
   const [carregando, setCarregando] = useState(true);
   const [mesFoco, setMesFoco] = useState<string | null>(null);
+  const [visaoTaxa, setVisaoTaxa] = useState<VisaoTaxa>("analise");
+
+  useEffect(() => {
+    if (modulo !== "taxa-condominial") return;
+    setVisaoTaxa(visaoDaUrl());
+  }, [modulo]);
+
+  const escolherVisao = useCallback((visao: VisaoTaxa) => {
+    setVisaoTaxa(visao);
+    gravarVisaoUrl(visao);
+  }, []);
 
   const carregar = useCallback(async (r: RecorteId, o: OrdemId) => {
     setCarregando(true);
@@ -123,8 +150,10 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
     );
   }
 
+  const ehTaxa = data.modulo === "taxa-condominial";
+  const visaoAnalise = !ehTaxa || visaoTaxa === "analise";
   const seriePar = data.modulo === "fluxo" || data.modulo === "analise-mensal" || data.modulo === "receitas" || data.modulo === "despesas" || data.modulo === "contratos" || data.modulo === "manutencao" || data.modulo === "utilidades" || data.modulo === "patrimonio" || data.modulo === "fundo-reserva";
-  const serieUnica = data.modulo === "taxa-condominial" || data.modulo === "taxas-extras";
+  const serieUnica = visaoAnalise && (data.modulo === "taxa-condominial" || data.modulo === "taxas-extras");
 
   return (
     <div ref={root} className="space-y-4 sm:space-y-5">
@@ -156,30 +185,100 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
         </div>
       </header>
 
-      {data.avisos.length > 0 ? (
-        <ul className="js-block space-y-2">
+      {data.modulo === "taxa-condominial" ? (
+        <div className="sticky top-14 z-10 -mx-1 bg-page/95 px-1 py-2 backdrop-blur lg:top-0">
+          <div
+            className="grid grid-cols-2 gap-1 rounded-full border border-line bg-surface p-1 shadow-[var(--shadow-card)]"
+            role="tablist"
+            aria-label="Visão da taxa condominial"
+          >
+            {(
+              [
+                { id: "analise" as const, rotulo: "Análise" },
+                { id: "nova-taxa" as const, rotulo: "Nova taxa condominial" },
+              ] as const
+            ).map((op) => {
+              const ativa = visaoTaxa === op.id;
+              return (
+                <button
+                  key={op.id}
+                  type="button"
+                  role="tab"
+                  id={`visao-taxa-${op.id}`}
+                  aria-selected={ativa}
+                  className={`min-h-11 rounded-full px-2 py-2 text-center text-xs font-semibold sm:text-sm ${
+                    ativa ? "bg-forest text-white" : "text-muted"
+                  }`}
+                  onClick={() => escolherVisao(op.id)}
+                >
+                  {op.rotulo}
+                </button>
+              );
+            })}
+          </div>
+          {visaoTaxa === "analise" && data.analiseTaxa ? (
+            <p className="mt-2 truncate text-sm font-extrabold tabular-nums text-forest md:hidden">
+              Resultado 3 · {formatBRL(data.analiseTaxa.resultado3Cents)}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
+
+      {data.avisos.length > 0 && visaoAnalise ? (
+        <ul
+          className={`js-block ${
+            data.modulo === "taxa-condominial"
+              ? "rounded-xl bg-warning-soft px-3 py-2 text-xs leading-snug text-warning"
+              : "space-y-2"
+          }`}
+        >
           {data.avisos.map((aviso) => (
-            <li key={aviso} className="rounded-2xl bg-warning-soft px-4 py-3 text-sm text-warning">
+            <li
+              key={aviso}
+              className={
+                data.modulo === "taxa-condominial"
+                  ? "before:mr-1 before:content-['•']"
+                  : "rounded-2xl bg-warning-soft px-4 py-3 text-sm text-warning"
+              }
+            >
               {aviso}
             </li>
           ))}
         </ul>
       ) : null}
 
-      <KpiGrid itens={data.kpis} />
+      {data.modulo === "taxa-condominial" && visaoTaxa === "analise" && data.analiseTaxa ? (
+        <AnaliseTaxaDemo dados={data.analiseTaxa} onIrNovaTaxa={() => escolherVisao("nova-taxa")} />
+      ) : null}
 
-      {data.coberturaCota || data.inadimplencia ? (
+      {data.modulo === "taxa-condominial" && visaoTaxa === "nova-taxa" && data.novaTaxaIdeal ? (
+        <NovaTaxaCanvas dados={data.novaTaxaIdeal} />
+      ) : null}
+
+      {data.modulo !== "taxa-condominial" ? <KpiGrid itens={data.kpis} /> : null}
+
+      {(data.coberturaCota || data.inadimplencia) &&
+      (data.modulo !== "taxa-condominial" || visaoTaxa === "analise") ? (
         <div
           className={`grid min-w-0 gap-3 ${data.coberturaCota && data.inadimplencia ? "xl:grid-cols-2" : ""}`}
         >
-          {data.coberturaCota ? <CoberturaCota dados={data.coberturaCota} /> : null}
+          {data.coberturaCota ? (
+            <CoberturaCota
+              dados={data.coberturaCota}
+              subtitulo={
+                data.modulo === "taxa-condominial"
+                  ? "Cota versus todas as despesas registradas do recorte (não é o demonstrativo acima)."
+                  : undefined
+              }
+            />
+          ) : null}
           {data.inadimplencia ? <CardInadimplencia dados={data.inadimplencia} /> : null}
         </div>
       ) : null}
 
       {data.waterfall.length > 0 ? <WaterfallChart passos={data.waterfall} /> : null}
 
-      {data.destaques.length > 0 ? (
+      {visaoAnalise && data.destaques.length > 0 ? (
         <section className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
           {data.destaques.map((d) => (
             <article key={d.id} className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
@@ -254,7 +353,7 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
         </article>
       ) : null}
 
-      {data.comparativos.length > 0
+      {visaoAnalise && data.comparativos.length > 0
         ? data.comparativos.map((bloco) => (
             <article
               key={bloco.rotulo}

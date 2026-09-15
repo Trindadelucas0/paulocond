@@ -2,8 +2,8 @@
 
 | Item | Valor |
 |------|--------|
-| Versão do sistema | 0.4.0 — Inadimplência |
-| Última atualização | 01/09/2026 (card Inadimplência Set/25–Ago/26; média 4,56%; valor informado) |
+| Versão do sistema | 0.5.0 — Análise da taxa |
+| Última atualização | 15/09/2026 (visões Análise e Nova taxa condominial em `/taxa-condominial`; demonstrativo Resultado 3; taxa ideal ÷ 124) |
 | Fonte oficial | Este arquivo |
 
 ## 1. Como usar este documento
@@ -27,6 +27,7 @@ Frontend não acessa banco nem Excel. Regras e totais saem da API.
 
 | Versão | Data | O que mudou |
 |--------|------|-------------|
+| 0.5.0 — Análise da taxa | 15/09/2026 | `/taxa-condominial`: tablist **Análise** / **Nova taxa condominial** (`?visao=nova-taxa`); demonstrativo (cotas − contratos − manutenção + acordo = Resultado 3); KPIs cotas/saiu/sobrou/média removidos desta tela; cobertura permanece abaixo (cota vs todas as despesas); canvas da taxa ideal (médias + 4,56% + ÷ 124) e folha por unidade; `lib/analise-taxa.ts`, `lib/nova-taxa-ideal.ts` |
 | 0.4.0 — Inadimplência | 01/09/2026 | Card **Inadimplência** na Visão Geral e em Taxa condominial: série informada Set/25–Ago/26 (valor e % no fim de cada mês); último mês Ago/26 R$ 13.636,63 (2,92%); pico Jan/26 R$ 18.738,30; **total acumulado 4,56%** = média dos 12 percentuais (não soma dos R$); slide no Relatório; `lib/inadimplencia.ts` |
 | 0.3.1 — Contas de consumo | 01/09/2026 | Comparativo e Utilidades: bloco **Contas de consumo** Jan–Jul (água, gás, energia solar); gás médio por **124 unidades**; conferência rateio gás; `lib/consumo.ts`, `lib/format.ts` (`UNIDADES_CONDOMINIO`) |
 | 0.3.0 — Cobertura da cota | 01/09/2026 | Bloco **A cota cobriu as despesas?** na Visão Geral e em Taxa condominial: cota + saldo de entrada (R$ 0,00) − despesas registradas; selo Cobriu/Não cobriu; outras receitas e resultado geral; slide no Relatório da Assembleia; `lib/cobertura-cota.ts` |
@@ -70,7 +71,7 @@ A API filtra pelo condomínio do ambiente (`CONDOMINIO_CODIGO=132`). Sem esse c�
 | `/receitas` | Ordinárias, extra, eventuais, composição, ranking | `app/receitas/page.tsx` |
 | `/despesas` | Natureza, top 10, impostos | `app/despesas/page.tsx` |
 | `/fluxo` | Waterfall: saldo inicial R$ 0,00 + receitas − despesas; saldo final da planilha | `app/fluxo/page.tsx` |
-| `/taxa-condominial` | Cotas, cobertura da cota, inadimplência, saiu/sobrou, média, vs 2025 | `app/taxa-condominial/page.tsx` |
+| `/taxa-condominial` | Análise da taxa (demonstrativo) e Nova taxa condominial (mesmo rota, tablist) | `app/taxa-condominial/page.tsx`, `lib/analise-taxa.ts`, `lib/nova-taxa-ideal.ts` |
 | `/fundo-reserva` | Arrecadação, despesa, saldo do fundo (informado) | `app/fundo-reserva/page.tsx` |
 | `/taxas-extras` | Academia arrecadado vs utilizado | `app/taxas-extras/page.tsx` |
 | `/contratos` | Ranking + Empresa Terceirizada | `app/contratos/page.tsx` |
@@ -89,7 +90,7 @@ A API filtra pelo condomínio do ambiente (`CONDOMINIO_CODIGO=132`). Sem esse c�
 | `GET /api/modulo?modulo=&recorte=&ordem=` | Payload das 16 telas | `app/api/modulo/route.ts`, `lib/modulos.ts` |
 | Chrome compartilhado | Recorte, loading, GSAP | `components/paginas/PaginaAnalise.tsx` |
 | `npm run importar` | Lê Excel, valida totais, grava SQLite | `scripts/importar-demonstrativo.ts` |
-| `npm test` | Conciliação coluna B + cobertura da cota + consumo + inadimplência | `tests/conciliacao.test.ts`, `tests/cobertura-cota.test.ts`, `tests/consumo.test.ts`, `tests/inadimplencia.test.ts` |
+| `npm test` | Conciliação coluna B + cobertura + consumo + inadimplência + análise da taxa + taxa ideal | `tests/conciliacao.test.ts`, `tests/cobertura-cota.test.ts`, `tests/consumo.test.ts`, `tests/inadimplencia.test.ts`, `tests/analise-taxa.test.ts`, `tests/nova-taxa-ideal.test.ts` |
 | `npx tsx scripts/conciliar-debitos.ts` | Cruza extrato fiscal `debitos_detalhe` com SQLite (somente leitura) | `scripts/conciliar-debitos.ts`, `dados/conciliacao-debitos.json` |
 | Schema | Tabelas de negócio com `condominioId` | `prisma/schema.prisma` |
 
@@ -138,7 +139,7 @@ Todas abaixo usam `PaginaAnalise` + `GET /api/modulo`. Recorte nas pills (3 valo
 | Receitas | `/receitas` | KPIs ordinárias / extra / eventuais, composição, evolução, ranking | Total oficial = coluna B no recorte oficial | `lib/modulos.ts` receitas |
 | Despesas | `/despesas` | Total, contratos, manutenção, card Impostos, top 10, evolução | Rótulo Despesa registrada | `lib/modulos.ts` despesas |
 | Fluxo | `/fluxo` | Waterfall: saldo inicial R$ 0,00; receitas; despesas; saldo gerencial final da planilha; série mensal | Saldo inicial não vem da linha Saldo anterior | `lib/modulos.ts` fluxo |
-| Taxa condominial | `/taxa-condominial` | Cotas, bloco cobertura, card inadimplência, saiu/sobrou, média, participação, vs Jan–Jul/2025 | Saldo de entrada R$ 0,00 na cobertura; inadimplência informada (não do demonstrativo) | `lib/modulos.ts` taxa-condominial, `lib/cobertura-cota.ts`, `lib/inadimplencia.ts` |
+| Taxa condominial | `/taxa-condominial` | Recorte nas pills do header. Abaixo do título: tablist **Análise** (padrão) e **Nova taxa condominial** (`?visao=nova-taxa`). Sem item extra na sidebar e sem rota nova. | Demonstrativo ≠ cobertura; sem upload; sem CTA ao lado das pills | `lib/modulos.ts` taxa-condominial, `lib/analise-taxa.ts`, `lib/nova-taxa-ideal.ts`, `PaginaAnalise.tsx` |
 | Fundo de reserva | `/fundo-reserva` | Arrecadação, despesa, **saldo do fundo** (R$ 191.599,35 informado) | Arrecadação/despesa = recorte; saldo = constante; nunca “saldo bancário” | `lib/modulos.ts` fundo-reserva, `lib/money.ts` |
 | Taxas extras | `/taxas-extras` | Academia arrecadado vs Aquisição Equipamentos vs diferença gerencial | Não é saldo bancário da taxa extra | `lib/modulos.ts` taxas-extras |
 | Contratos | `/contratos` | Ranking do grupo Contratos fixos; destaque Empresa Terceirizada e % da despesa | — | `lib/modulos.ts` contratos |
@@ -147,6 +148,26 @@ Todas abaixo usam `PaginaAnalise` + `GET /api/modulo`. Recorte nas pills (3 valo
 | Patrimônio | `/patrimonio` | Bens do grupo Patrimônio | Sem inventário físico | `lib/modulos.ts` patrimonio |
 | Comparativo | `/comparativo` | Jan–Jul/2025 × Jan–Jul/2026 + **Contas de consumo** (água, gás, solar; gás ÷ 124) | Aviso se recorte Out/25–Set/26; gás médio igualitário, não medição individual | `lib/modulos.ts` comparativo, `lib/consumo.ts` |
 | Análise mensal | `/analise-mensal` | Tabela receita/despesa/resultado/saldo gerencial por competência | * parcial † residual | `lib/modulos.ts` analise-mensal |
+
+### 6.2.1 Taxa condominial — campos
+
+| Aba / seção | Campo | O que é | Obrigatório | Quem preenche | De onde vem | Para onde conecta | Como funciona | Regra / bloqueio | Onde olhar no código |
+|-------------|-------|---------|-------------|---------------|-------------|-------------------|---------------|------------------|----------------------|
+| Header | Recorte | Período | Sim | Usuário | Allowlist | Recarrega API | Pills no header | Só 3 valores | `PaginaAnalise.tsx` |
+| Abaixo do título | Visão | Análise ou Nova taxa | Sim | Usuário | `visao` na URL (opcional) | Mesma rota | Tablist 50/50 no celular; ≥44px | Só `analise` ou `nova-taxa`; outro valor = Análise | `PaginaAnalise.tsx` |
+| Análise | Demonstrativo | Taxa − contratos − manutenção + acordo | Sim | Cálculo servidor | `somaNome` / `somaGrupo` no recorte | Nova taxa (link no rodapé) | Resultado 3 é o único número extra-grande; sticky no celular | Não é cobertura (cota vs todas as despesas). Contratos = grupo inteiro (inclui pró-labore) | `lib/analise-taxa.ts`, `AnaliseTaxaDemo.tsx` |
+| Análise | KPIs cotas/saiu/sobrou/média | Removidos desta tela | — | — | — | Cobertura abaixo | Evita duplicar a história | — | `lib/modulos.ts` |
+| Análise | Cobertura da cota | Cota vs **todas** as despesas | Sim | Servidor | `montarCoberturaCota` | — | Abaixo do demonstrativo | Distinto do Resultado 3 | `CoberturaCota.tsx` |
+| Análise | Inadimplência | Série informada | Sim | Constante | `montarInadimplencia` | — | Ao lado da cobertura no desktop | Não vem do Excel | `CardInadimplencia.tsx` |
+| Análise | Cotas por competência | Série | Sim | Servidor | Linha Cotas de Condomínio | — | Só na visão Análise | — | `BarrasValor.tsx` |
+| Análise | Comparativo Jan–Jul | 2025 vs 2026 | Sim | Soma equivalentes | Lançamentos | — | Só na visão Análise | Nunca 7 vs 12 | `lib/modulos.ts` |
+| Análise | Avisos | Recorte / Set parcial / pagamento | Sim | Servidor | `avisoPeriodos` | — | Uma faixa amarela compacta | — | `PaginaAnalise.tsx` |
+| Nova taxa | Taxa ideal | Média mensal do condomínio | Sim | Cálculo servidor | Médias + markup 4,56% | Folha por unidade | Canvas (não é gaveta) | Set/2026 fora da média; meses com valor | `lib/nova-taxa-ideal.ts`, `NovaTaxaCanvas.tsx` |
+| Nova taxa | Por unidade | Taxa ideal ÷ 124 | Sim | Cálculo | `UNIDADES_CONDOMINIO` | Folha | Rateio igualitário | Sem nomes de unidade | `lib/format.ts` |
+| Nova taxa | Composição | Contratos (sem pró-labore) + síndico + manutenção + inadimplência | Sim | Cálculo | Grupos/nomes canônicos | — | Pró-labore separado, não duplicado | Nomes em `dados/dicionario.json` | `lib/nova-taxa-ideal.ts` |
+| Nova taxa | Relatório por unidade | 124 × mesmo valor | Não | Usuário | Taxa por unidade | `window.print` | Overlay + painel (como Origem); lista 1–124 só na impressão; Esc fecha | Sem upload; sem nomes | `RelatorioUnidadeFolha.tsx` |
+
+Oculto na visão Nova taxa: cobertura, inadimplência, gráfico de cotas, comparativo.
 | Detalhamento | `/detalhamento` | Planilha: categoria (expansível) e itens com coluna por competência + Total | Soma dos meses ≠ coluna B se houver residual (†); rolagem horizontal; nome e Total fixos | `components/paginas/DetalhamentoTabela.tsx`, `lib/modulos.ts` detalhamento |
 | Alertas | `/alertas` | Motor objetivo | Sem texto subjetivo | `lib/alertas.ts` |
 
@@ -193,6 +214,8 @@ Todas abaixo usam `PaginaAnalise` + `GET /api/modulo`. Recorte nas pills (3 valo
 19. **Cobertura da cota** (Visão Geral, Taxa condominial, slide do relatório): **disponível** = cotas de condomínio + saldo de entrada (sempre R$ 0,00); **saiu** = despesas registradas do recorte; **sobrou/faltou** = disponível − saiu. Selo **Cobriu** se sobrou ≥ 0. Mostra também outras receitas e resultado geral (todas as receitas − despesas). Função `montarCoberturaCota` em `lib/cobertura-cota.ts`.
 20. **Contas de consumo** (Comparativo e Utilidades): comparativo Jan–Jul de **Água e Esgoto**, **Gás** e **Energia Solar** (despesa registrada). **Gás médio por unidade** = despesa da linha `Gás` ÷ **124** (`UNIDADES_CONDOMINIO` em `lib/format.ts`); **média mensal** = total ÷ 7 competências ÷ 124. Não inclui **Gás para Copa - Salão de Festas**. Na tela Comparativo, linhas extras: **Rateio Gás (receita)** e **Gás não rateado** (despesa Gás − rateio). Não é medição individual por apartamento. `lib/consumo.ts`.
 21. **Inadimplência** (Visão Geral, Taxa condominial, slide do relatório): série informada de **saldo em atraso no fim de cada mês**, Set/2025 a Ago/2026 (12 linhas). Não vem do demonstrativo Excel. **Total acumulado 4,56%** = média aritmética dos 12 percentuais (arredondada); a coluna Valor do rodapé fica vazia de propósito — cada mês é posição de estoque, não se soma. Último mês (31/ago): R$ 13.636,63 e 2,92%. Pico (31/jan): R$ 18.738,30. Igual em todos os recortes. `montarInadimplencia` em `lib/inadimplencia.ts`.
+22. **Demonstrativo da taxa** (visão Análise em `/taxa-condominial`): **Valor da taxa** = `Cotas de Condomínio` (RECEITA); **(−) Contratos** = grupo `Contratos fixos` (DESPESA, grupo inteiro, inclui pró-labore); **Resultado 1**; **(−) Manutenções** = grupo `Manutenção`; **Resultado 2**; **(+) Cotas de Acordo** (RECEITA); **Resultado 3**. Totais do recorte (coluna B / soma equivalente), não médias. **Não** é cobertura da cota contra todas as despesas. `montarAnaliseTaxa` em `lib/analise-taxa.ts`.
+23. **Nova taxa condominial** (mesma rota): **Taxa ideal mensal** = média de Contratos fixos **sem** `Pró Labore do Síndico` + média do pró-labore + média de Manutenção + markup de **4,56%** (`INADIMPLENCIA_MEDIA_PERCENTUAL_BP` = 456) sobre a soma das três médias. **Por unidade** = taxa ideal ÷ **124**. Média = meses **com valor**; **Set/2026** (PARCIAL) fora, igual à média de cobertura. Sem upload. Folha por unidade: 124 linhas iguais, sem nomes. `montarNovaTaxaIdeal` em `lib/nova-taxa-ideal.ts`.
 
 Totais que o importador exige:
 
@@ -211,7 +234,7 @@ Totais que o importador exige:
 6. Todos os itens do menu lateral abrem tela. Recorte e, no ranking, “Por valor / Por nome” valem para a tela atual.
 7. **Detalhamento** (menu Visão): tabela planilha com uma coluna por mês do recorte e **Total** no fim. Clique na categoria (▸/▾) para ver os itens; cada linha mostra receita ou despesa mês a mês. `†` = residual. Em celular, a tabela rola na horizontal; nome e Total ficam fixos.
 8. Comparativo 2025 × 2026 e o bloco equivalente da home usam só Jan–Jul. Se a pill estiver em Out/25–Set/26, a tela Comparativo avisa e mesmo assim mostra Jan–Jul. Role até **Contas de consumo** para ver água, gás e energia solar; o gás traz **média por 124 unidades** e, na mesma tela, conferência com o rateio cobrado. Em **Utilidades**, o comparativo Jan–Jul repete água, gás (com média ÷ 124) e solar.
-9. Fundo de reserva: **Saldo do fundo** = R$ 191.599,35 (valor informado, igual em todos os recortes); arrecadação e despesa mudam com o recorte. **Taxa condominial** repete o bloco de cobertura da cota, o card de inadimplência e KPIs Saiu / Sobrou ou Faltou. Taxas extras mostram **diferença gerencial**, não conta bancária. Em Fluxo e no relatório, o **saldo inicial** é R$ 0,00 (não usa o Saldo anterior da planilha).
+9. Fundo de reserva: **Saldo do fundo** = R$ 191.599,35 (valor informado, igual em todos os recortes); arrecadação e despesa mudam com o recorte. **Taxa condominial**: as pills de recorte continuam no topo. Logo abaixo do título, escolha **Análise** (padrão) ou **Nova taxa condominial**. Em Análise, o **demonstrativo** mostra Resultado 3 (cotas − contratos − manutenção + acordo); em seguida vêm cobertura da cota (cota vs todas as despesas) e inadimplência, depois o gráfico de cotas e o comparativo Jan–Jul. A visão Nova taxa mostra a taxa ideal do condomínio e o valor por unidade (÷ 124); **Relatório por unidade** abre o painel lateral (imprimir lista 1–124). Taxas extras mostram **diferença gerencial**, não conta bancária. Em Fluxo e no relatório, o **saldo inicial** é R$ 0,00 (não usa o Saldo anterior da planilha).
 10. Relatório da Assembleia: setas ou teclado para os slides; Tela cheia; Imprimir (diálogo do navegador).
 11. Configurações explica fonte, qualidade e que não há login. Para reimportar: `npm run importar` no terminal.
 
@@ -222,7 +245,12 @@ O layout cabe em celular, tablet e computador: menu em gaveta abaixo de `lg`, co
 ## 9. Checklist de validação
 
 - [ ] API `/api/visao-geral?recorte=oficial-2026` devolve `coberturaCota.cobriu` = false e `coberturaCota.saldoEntradaCents` = 0
-- [ ] Home e `/taxa-condominial` mostram bloco **A cota cobriu as despesas?** com selo Cobriu/Não cobriu
+- [ ] Home e `/taxa-condominial` (visão Análise) mostram bloco **A cota cobriu as despesas?** com selo Cobriu/Não cobriu
+- [ ] `/taxa-condominial` tem tablist Análise | Nova taxa condominial; `?visao=nova-taxa` abre a segunda visão
+- [ ] Visão Análise: demonstrativo com Resultado 3; **sem** os 4 KPIs cotas/saiu/sobrou/média; cobertura abaixo com subtítulo cota vs todas as despesas
+- [ ] Visão Nova taxa: esconde cobertura, inadimplência, gráfico de cotas e comparativo; mostra taxa ideal e por unidade (÷ 124)
+- [ ] Relatório por unidade: overlay fecha com Esc; impressão lista 1–124; sem nomes de unidade
+- [ ] `npm test` inclui `tests/analise-taxa.test.ts` e `tests/nova-taxa-ideal.test.ts`
 - [ ] Relatório inclui slide **A cota cobriu as despesas?**
 - [ ] Home e `/taxa-condominial` mostram card **Inadimplência** com 12 meses e total acumulado 4,56%
 - [ ] API `/api/visao-geral` devolve `inadimplencia.ultimo.valorCents` = 1363663 e `inadimplencia.mediaPercentualBp` = 456

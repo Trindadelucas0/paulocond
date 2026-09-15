@@ -126,12 +126,43 @@ body {
   }
 }
 
+.print-only {
+  display: none;
+}
+
 @media print {
   .no-print {
     display: none !important;
   }
 
+  .print-only {
+    display: block !important;
+  }
+
   body {
     background: white;
+  }
+
+  body.print-folha-unidade * {
+    visibility: hidden;
+  }
+
+  body.print-folha-unidade .folha-unidade-print,
+  body.print-folha-unidade .folha-unidade-print * {
+    visibility: visible;
+  }
+
+  body.print-folha-unidade .folha-unidade-print {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    overflow: visible;
+    box-shadow: none;
+  }
+
+  body.print-folha-unidade .no-print {
+    display: none !important;
+    visibility: hidden !important;
   }
 }

@@ -16,7 +16,13 @@ function LinhaValor({ rotulo, valorCents, destaque }: Linha) {
   );
 }
 
-export function CoberturaCota({ dados }: { dados: CoberturaCotaPayload }) {
+export function CoberturaCota({
+  dados,
+  subtitulo,
+}: {
+  dados: CoberturaCotaPayload;
+  subtitulo?: string;
+}) {
   const barraPct =
     dados.coberturaPct === null ? 0 : Math.min(100, Math.max(0, dados.coberturaPct * 100));
   const restoPositivo = dados.sobrouCents >= 0;
@@ -32,7 +38,7 @@ export function CoberturaCota({ dados }: { dados: CoberturaCotaPayload }) {
             A cota cobriu as despesas?
           </h2>
           <p className="mt-1 text-sm text-muted">
-            Conta simples: cota + saldo de entrada − despesas registradas do recorte.
+            {subtitulo ?? "Conta simples: cota + saldo de entrada − despesas registradas do recorte."}
           </p>
         </div>
         <span
