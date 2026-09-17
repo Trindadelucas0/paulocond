@@ -347,7 +347,7 @@ O layout cabe em celular, tablet e computador: menu em gaveta abaixo de `lg`, co
 
 ## 10. Segurança (só o que existe)
 
-- Autenticação: cookie `sabia_sessao` HttpOnly, SameSite=Lax; flag `Secure` só se `AUTH_COOKIE_SECURE=true`. Na VPS pública (HTTPS Cloudflare) fica `true`; no Êxito LAN HTTP fica `false`. Token opaco + HMAC (`AUTH_SECRET`); hash SHA-256 no banco. Sem JWT no `localStorage`.
+- Autenticação: cookie `sabia_sessao` HttpOnly, SameSite=Lax; flag `Secure` só se `AUTH_COOKIE_SECURE=true`. Na VPS pública o acesso atual é HTTP no IP (`false`); no Êxito LAN HTTP também `false`. Token opaco + HMAC (`AUTH_SECRET`); hash SHA-256 no banco. Sem JWT no `localStorage`.
 - Autorização no servidor (`requireAuth` / `requireAdmin` / `podeVerConfig` / `podeTrocarSenha`). Menu esconde Configurações, Usuários e Minha senha para LEITURA; isso não autoriza.
 - Login: mensagem genérica; rate limit 5/min por IP; senha `scrypt`.
 - Mutações: checagem de `Origin` igual ao `Host`.
@@ -408,9 +408,9 @@ Comandos: `npm run setup`, `npm run seed:admin`, `npm run dev`, `npm run build`,
 | Repositório | `https://github.com/Trindadelucas0/paulocond.git` |
 | PM2 | `exito-paulocond` (ecosystem em `/root/PROJETOS/exito/ecosystem.config.cjs`) |
 | Porta | `3789` (loopback/túnel; UFW não abre 3789 na internet) |
-| URL | `https://cond-staging.avadesk.com.br` (e `https://sabia-staging.avadesk.com.br`) |
+| URL | `http://179.199.149.12:3789` (UFW 3789/tcp). Hostnames Cloudflare `cond-staging` / `sabia-staging` ainda não resolvem neste ambiente |
 | Postgres | container Docker `paulocond-pg` em `127.0.0.1:5437`, database `sabia`, user `sabia` |
-| Cookie | `AUTH_COOKIE_SECURE=true` (HTTPS Cloudflare) |
+| Cookie | `AUTH_COOKIE_SECURE=false` enquanto o acesso for HTTP no IP |
 
 **Atualizar a VPS após `git push`:**
 
