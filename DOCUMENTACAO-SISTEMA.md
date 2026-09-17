@@ -3,7 +3,7 @@
 | Item | Valor |
 |------|--------|
 | Versão do sistema | 0.9.1 — Login e usuários |
-| Última atualização | 17/09/2026 (cookie AUTH_COOKIE_SECURE; deploy VPS com SCP do .env) |
+| Última atualização | 17/09/2026 (produção na VPS 179.199.149.12; PM2 exito-paulocond) |
 | Fonte oficial | Este arquivo |
 
 ## 1. Como usar este documento
@@ -28,7 +28,7 @@ Frontend não acessa banco nem Excel. Regras e totais saem da API.
 
 | Versão | Data | O que mudou |
 |--------|------|-------------|
-| 0.9.1 — Login e usuários | 17/09/2026 | LEITURA não vê `/configuracoes` nem `GET /api/modulo?modulo=configuracoes`; não troca senha em `/conta` nem `PATCH /api/conta/senha`. ADMIN redefine senha em Usuários. `SemPermissao.tsx`. Cookie `Secure` só se `AUTH_COOKIE_SECURE=true` (LAN HTTP no Êxito fica sem Secure). |
+| 0.9.1 — Login e usuários | 17/09/2026 | LEITURA não vê `/configuracoes` nem `GET /api/modulo?modulo=configuracoes`; não troca senha em `/conta` nem `PATCH /api/conta/senha`. ADMIN redefine senha em Usuários. `SemPermissao.tsx`. Cookie `Secure` só se `AUTH_COOKIE_SECURE=true` (HTTPS na VPS pública; LAN HTTP no Êxito fica `false`). |
 | 0.9.0 — Login e usuários | 17/09/2026 | Login `/login`; papéis ADMIN e LEITURA; `/usuarios` só admin; cookie HttpOnly; APIs financeiras exigem sessão; Prisma em PostgreSQL (`sabia`) com RLS; seed `npm run seed:admin` |
 | 0.8.1 — Folha por unidade | 17/09/2026 | Relatório por unidade: print em fluxo (portal no `body`, tabela com `thead`, sem `visibility`/`position: absolute`); PDF não sobrepõe páginas; GSAP zera transform em `print`; `RelatorioUnidadeFolha.tsx`, `app/globals.css` |
 | 0.8.0 — PDF por card | 17/09/2026 | Cada card de conteúdo (home e telas de análise) tem botão PDF; `window.print` isolado (`print-card-isolado`); sem PDF no servidor; Relatório da Assembleia continua Imprimir de todos os slides; `CardExportavel.tsx`, `lib/exportar-card.ts` |
@@ -347,7 +347,7 @@ O layout cabe em celular, tablet e computador: menu em gaveta abaixo de `lg`, co
 
 ## 10. Segurança (só o que existe)
 
-- Autenticação: cookie `sabia_sessao` HttpOnly, SameSite=Lax; flag `Secure` só se `AUTH_COOKIE_SECURE=true` (no Êxito a URL é HTTP na LAN, então fica `false`). Token opaco + HMAC (`AUTH_SECRET`); hash SHA-256 no banco. Sem JWT no `localStorage`.
+- Autenticação: cookie `sabia_sessao` HttpOnly, SameSite=Lax; flag `Secure` só se `AUTH_COOKIE_SECURE=true`. Na VPS pública (HTTPS Cloudflare) fica `true`; no Êxito LAN HTTP fica `false`. Token opaco + HMAC (`AUTH_SECRET`); hash SHA-256 no banco. Sem JWT no `localStorage`.
 - Autorização no servidor (`requireAuth` / `requireAdmin` / `podeVerConfig` / `podeTrocarSenha`). Menu esconde Configurações, Usuários e Minha senha para LEITURA; isso não autoriza.
 - Login: mensagem genérica; rate limit 5/min por IP; senha `scrypt`.
 - Mutações: checagem de `Origin` igual ao `Host`.
@@ -386,53 +386,48 @@ PostgreSQL local, database `sabia`. Role `postgres` só no ambiente local.
 Planilhas: `dados/originais/`. Referências visuais: `docs/referencias/`.  
 Comandos: `npm run setup`, `npm run seed:admin`, `npm run dev`, `npm run build`, `npm start`, `npm test`.
 
-`.env` nunca vai no git. Na VPS o arquivo entra por SCP (`chmod 600`), não por `git pull`.
+`.env` nunca vai no git. No servidor o arquivo entra por SCP ou é gerado no disco (`chmod 600`), não por `git pull`.
 
-### Servidor Êxito (produção)
+### Servidor Êxito (LAN)
 
 | Item | Valor |
 |------|--------|
 | Host SSH | `exito` (`192.168.15.8`, usuário `exito`) |
 | Pasta | `/home/exito/projetos/paulocond` |
-| Repositório | `https://github.com/Trindadelucas0/paulocond.git` |
 | PM2 | `paulocond` |
 | Porta | `3789` |
-| URL LAN | `http://192.168.15.8:3789` |
-| Config PM2 | `ecosystem.config.cjs` (`npm start -- -H 0.0.0.0 -p 3789`) |
+| URL | `http://192.168.15.8:3789` |
 | Cookie | `AUTH_COOKIE_SECURE=false` (HTTP na LAN) |
 
-**Primeiro deploy (no servidor):**
+### VPS pública (produção a manter atualizada)
+
+| Item | Valor |
+|------|--------|
+| Host SSH | `vps-avadesk` / `root@179.199.149.12` |
+| Pasta | `/root/PROJETOS/exito/paulocond` |
+| Repositório | `https://github.com/Trindadelucas0/paulocond.git` |
+| PM2 | `exito-paulocond` (ecosystem em `/root/PROJETOS/exito/ecosystem.config.cjs`) |
+| Porta | `3789` (loopback/túnel; UFW não abre 3789 na internet) |
+| URL | `https://cond-staging.avadesk.com.br` (e `https://sabia-staging.avadesk.com.br`) |
+| Postgres | container Docker `paulocond-pg` em `127.0.0.1:5437`, database `sabia`, user `sabia` |
+| Cookie | `AUTH_COOKIE_SECURE=true` (HTTPS Cloudflare) |
+
+**Atualizar a VPS após `git push`:**
 
 ```bash
-cd /home/exito/projetos
-git clone https://github.com/Trindadelucas0/paulocond.git
-cd paulocond
-# copiar .env por SCP a partir da máquina de desenvolvimento (nunca commitar senha)
-# preencher DATABASE_URL, AUTH_SECRET, SEED_ADMIN_*, AUTH_COOKIE_SECURE=false
-chmod 600 .env
-npm ci
-npm run setup
-npm run build
-pm2 start ecosystem.config.cjs
-pm2 save
-```
-
-**Atualizar após `git push` (código) + SCP do `.env` se as variáveis mudaram:**
-
-```bash
-cd /home/exito/projetos/paulocond
-cp -a .env .env.bak
+ssh vps-avadesk
+cd /root/PROJETOS/exito/paulocond
 git pull origin main
-chmod 600 .env
 npm ci
-npm run setup
 npm run build
-pm2 restart paulocond --update-env
+pm2 restart exito-paulocond --update-env
 ```
 
-`npm run setup` no primeiro Postgres: migrate + importar planilhas + seed admin. Nas atualizações seguintes, se o banco já existe, `npm run setup` reimporta lançamentos (não apaga usuários). Se só o código mudou: `npm ci`, `npm run build`, `pm2 restart`.
+Primeiro Postgres nesta VPS: subir `paulocond-pg`, gravar `.env` (`chmod 600`), `npm run setup` (migrate + importar + seed). `npm run setup` reimporta lançamentos e não apaga usuários.
 
-Reimportar planilhas no servidor (se os Excel em `dados/originais/` mudarem): `npm run importar` (não apaga o `.env` nem reinicia o PM2 sozinho).
+Reimportar planilhas: `npm run importar` (não apaga o `.env` nem reinicia o PM2 sozinho).
+
+Na LAN Êxito: `git pull`, `npm ci`, `npm run build`, `pm2 restart paulocond --update-env`. `ecosystem.config.cjs` do repo usa `cwd: __dirname`.
 
 ## 12. Ao atualizar este documento
 
