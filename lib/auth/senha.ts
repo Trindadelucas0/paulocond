@@ -1,11 +1,23 @@
 import { randomBytes, scrypt as scryptCb, timingSafeEqual } from "node:crypto";
-import { promisify } from "node:util";
 import { SENHA_MINIMA } from "@/lib/auth/papeis";
 
 export { SENHA_MINIMA };
 
-const scrypt = promisify(scryptCb);
 const KEYLEN = 64;
+
+function scrypt(
+  senha: string,
+  salt: Buffer,
+  keylen: number,
+  options: { N: number; r: number; p: number },
+): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    scryptCb(senha, salt, keylen, options, (error, derived) => {
+      if (error) reject(error);
+      else resolve(derived);
+    });
+  });
+}
 const DUMMY_HASH =
   "scrypt$16384$8$1$AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA$AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
@@ -15,17 +27,17 @@ export function senhaMinimaOk(senha: string) {
 
 export async function hashSenha(senha: string): Promise<string> {
   const salt = randomBytes(32);
-  const key = (await scrypt(senha, salt, KEYLEN, { N: 16384, r: 8, p: 1 })) as Buffer;
+  const key = await scrypt(senha, salt, KEYLEN, { N: 16384, r: 8, p: 1 });
   return `scrypt$16384$8$1$${salt.toString("base64url")}$${key.toString("base64url")}`;
 }
 
 export async function verificarSenha(senha: string, senhaHash: string | null): Promise<boolean> {
   const parsed = parseHash(senhaHash ?? DUMMY_HASH);
-  const key = (await scrypt(senha, parsed.salt, KEYLEN, {
+  const key = await scrypt(senha, parsed.salt, KEYLEN, {
     N: parsed.N,
     r: parsed.r,
     p: parsed.p,
-  })) as Buffer;
+  });
   if (!senhaHash || senhaHash === DUMMY_HASH) {
     timingSafeEqual(key, key);
     return false;
