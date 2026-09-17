@@ -3,48 +3,49 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model Condominio {
-  id           String                 @id @default(cuid())
-  nome         String
-  codigo       String                 @unique
-  criadoEm     DateTime               @default(now())
-  periodos     Periodo[]
-  categorias   Categoria[]
-  lancamentos  Lancamento[]
-  dicionario   DicionarioCategoria[]
+  id             String                 @id @default(cuid())
+  nome           String
+  codigo         String                 @unique
+  criadoEm       DateTime               @default(now())
+  periodos       Periodo[]
+  categorias     Categoria[]
+  lancamentos    Lancamento[]
+  dicionario     DicionarioCategoria[]
   totaisOficiais TotalOficial[]
+  usuarios       Usuario[]
 }
 
 model TotalOficial {
-  id                     String     @id @default(cuid())
-  condominioId           String
-  condominio             Condominio @relation(fields: [condominioId], references: [id])
-  origem                 String
-  arquivo                String
-  periodoInicio          String
-  periodoFim             String
-  rotulo                 String
-  receitaCents           Int
-  despesaCents           Int
-  resultadoCents         Int
-  saldoInicialCents      Int
-  saldoFinalCents        Int
-  movimentoLiquidoCents  Int
-  qualidade              String
-  avisosJson             String     @default("[]")
+  id                    String     @id @default(cuid())
+  condominioId          String
+  condominio            Condominio @relation(fields: [condominioId], references: [id])
+  origem                String
+  arquivo               String
+  periodoInicio         String
+  periodoFim            String
+  rotulo                String
+  receitaCents          Int
+  despesaCents          Int
+  resultadoCents        Int
+  saldoInicialCents     Int
+  saldoFinalCents       Int
+  movimentoLiquidoCents Int
+  qualidade             String
+  avisosJson            String     @default("[]")
 
   @@unique([condominioId, origem])
   @@index([condominioId])
 }
 
 model Periodo {
-  id                    String        @id @default(cuid())
+  id                    String       @id @default(cuid())
   condominioId          String
-  condominio            Condominio    @relation(fields: [condominioId], references: [id])
+  condominio            Condominio   @relation(fields: [condominioId], references: [id])
   competencia           String
   origem                String
   saldoAnteriorCents    Int?
@@ -106,4 +107,31 @@ model Lancamento {
   @@index([condominioId, tipo])
   @@index([condominioId, origem])
   @@index([periodoId])
+}
+
+model Usuario {
+  id           String     @id @default(cuid())
+  condominioId String
+  condominio   Condominio @relation(fields: [condominioId], references: [id])
+  nome         String
+  email        String
+  senhaHash    String
+  papel        String
+  ativo        Boolean    @default(true)
+  criadoEm     DateTime   @default(now())
+  sessoes      Sessao[]
+
+  @@unique([condominioId, email])
+  @@index([condominioId])
+}
+
+model Sessao {
+  id        String   @id @default(cuid())
+  usuarioId String
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  expiraEm  DateTime
+  criadoEm  DateTime @default(now())
+
+  @@index([usuarioId])
 }

@@ -4,6 +4,7 @@ export const dynamic = "force-dynamic";
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { condominioAtivo, jsonError } from "@/lib/tenant";
+import { requireAuth } from "@/lib/auth/sessao";
 import { SALDO_GERENCIAL_HOME_CENTS, SALDO_INICIAL_CENTS } from "@/lib/money";
 import {
   COMPETENCIAS_JAN_JUL_2026,
@@ -37,7 +38,8 @@ export async function GET(request: NextRequest) {
     }
     const kpi: KpiId = kpiParam;
     const recorte: RecorteId = recorteParam;
-    const condominio = await condominioAtivo();
+    const sessao = await requireAuth(request);
+    const condominio = await condominioAtivo(sessao.condominio.id);
 
     const origem = recorte === "oficial-2025" ? "PLANILHA_2025" : "PLANILHA_2026";
     const janJul = new Set<string>(COMPETENCIAS_JAN_JUL_2026);

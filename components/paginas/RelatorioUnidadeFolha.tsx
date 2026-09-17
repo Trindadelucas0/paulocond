@@ -1,18 +1,22 @@
 "use client";
 
 import { useCallback, useEffect, useId, useRef } from "react";
-import { formatBRL, UNIDADES_CONDOMINIO } from "@/lib/format";
+import { createPortal } from "react-dom";
+import type { LinhaRateioFracao } from "@/lib/fracao-ideal";
+import { formatBRL } from "@/lib/format";
 import { gsap, registerMotion, useGSAP } from "@/lib/motion";
 
 export function RelatorioUnidadeFolha({
   aberta,
-  porUnidadeCents,
-  unidades = UNIDADES_CONDOMINIO,
+  linhas,
+  totalCents,
+  rotuloBase,
   onClose,
 }: {
   aberta: boolean;
-  porUnidadeCents: number;
-  unidades?: number;
+  linhas: LinhaRateioFracao[];
+  totalCents: number;
+  rotuloBase: string;
   onClose: () => void;
 }) {
   const panel = useRef<HTMLElement>(null);
@@ -45,28 +49,40 @@ export function RelatorioUnidadeFolha({
       registerMotion();
       if (!panel.current) return;
       const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: reduce)", () => {
-        gsap.set(panel.current, { x: aberta ? 0 : 420, autoAlpha: aberta ? 1 : 0 });
-      });
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        gsap.to(panel.current, {
-          x: aberta ? 0 : 420,
-          autoAlpha: aberta ? 1 : 0,
-          duration: 0.45,
-          ease: "power2.out",
-        });
-      });
+      mm.add(
+        {
+          isPrint: "print",
+          reduce: "(prefers-reduced-motion: reduce)",
+          motion: "(prefers-reduced-motion: no-preference)",
+        },
+        (context) => {
+          if (!panel.current) return;
+          if (context.conditions?.isPrint) {
+            gsap.set(panel.current, { x: 0, y: 0, autoAlpha: 1, clearProps: "transform" });
+            panel.current.style.transform = "none";
+            return;
+          }
+          if (context.conditions?.reduce) {
+            gsap.set(panel.current, { x: aberta ? 0 : 420, autoAlpha: aberta ? 1 : 0 });
+            return;
+          }
+          gsap.to(panel.current, {
+            x: aberta ? 0 : 420,
+            autoAlpha: aberta ? 1 : 0,
+            duration: 0.45,
+            ease: "power2.out",
+          });
+        },
+      );
       return () => mm.revert();
     },
     { dependencies: [aberta] },
   );
 
-  if (!aberta) return null;
+  if (!aberta || typeof document === "undefined") return null;
 
-  const lista = Array.from({ length: unidades }, (_, i) => i + 1);
-
-  return (
-    <div className="fixed inset-0 z-50 flex justify-end">
+  return createPortal(
+    <div className="folha-unidade-overlay fixed inset-0 z-50 flex justify-end">
       <button type="button" className="no-print absolute inset-0 bg-ink/30" aria-label="Fechar relatório" onClick={fechar} />
       <aside
         ref={panel}
@@ -91,13 +107,14 @@ export function RelatorioUnidadeFolha({
           </button>
         </div>
 
-        <p className="mt-5 text-sm text-muted">
-          Cada uma das {unidades} unidades ={" "}
-          <strong className="text-ink tabular-nums">{formatBRL(porUnidadeCents)}</strong>
-        </p>
-        <p className="mt-2 text-xs text-muted">
-          Rateio igualitário. Não há nomes de unidades neste sistema.
-        </p>
+        <header className="folha-unidade-cabecalho mt-5">
+          <h2 className="print-only text-xl font-extrabold">Relatório por unidade</h2>
+          <p className="text-sm text-muted">
+            Rateio por fração ideal · {linhas.length} unidades · {rotuloBase}. Total{" "}
+            <strong className="text-ink tabular-nums">{formatBRL(totalCents)}</strong>.
+          </p>
+          <p className="mt-2 text-xs text-muted">Inclui 124 apartamentos e 12 vagas. Valores diferem pela fração.</p>
+        </header>
 
         <div className="no-print mt-6 flex flex-wrap gap-2">
           <button
@@ -109,18 +126,24 @@ export function RelatorioUnidadeFolha({
           </button>
         </div>
 
-        <ol className="print-only mt-6 list-none space-y-1 text-sm" aria-hidden="true">
-          <li className="mb-3 font-bold">
-            Relatório por unidade · {unidades} un. · {formatBRL(porUnidadeCents)} cada
-          </li>
-          {lista.map((n) => (
-            <li key={n} className="flex justify-between border-b border-line py-1 tabular-nums">
-              <span>Unidade {n}</span>
-              <span>{formatBRL(porUnidadeCents)}</span>
-            </li>
-          ))}
-        </ol>
+        <table className="folha-unidade-tabela mt-6 w-full border-collapse text-sm">
+          <thead>
+            <tr className="border-b border-line text-left text-xs uppercase tracking-wide text-muted">
+              <th className="py-2 pr-3 font-semibold">Unidade</th>
+              <th className="py-2 text-right font-semibold">Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            {linhas.map((l) => (
+              <tr key={l.codigo} className="border-b border-line tabular-nums">
+                <td className="py-1.5 pr-3">{l.codigo}</td>
+                <td className="py-1.5 text-right">{formatBRL(l.valorCents)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </aside>
-    </div>
+    </div>,
+    document.body,
   );
 }

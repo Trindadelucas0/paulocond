@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { VisaoGeralPayload } from "@/lib/kpis";
 import { formatBRL, formatPct, mesLabel, RECORTE_OPCOES, type RecorteId } from "@/lib/format";
 import { gsap, registerMotion, SplitText, useGSAP } from "@/lib/motion";
+import { CardExportProvider, CardExportavel } from "@/components/paginas/CardExportavel";
 import { AreaChartSaldo } from "./AreaChartSaldo";
 import { BarrasMensais } from "./BarrasMensais";
 import { Composicao } from "./Composicao";
@@ -172,8 +173,16 @@ export function VisaoGeral() {
 
   const kpis = [data.kpis.saldo, data.kpis.receitas, data.kpis.despesas, data.kpis.resultado];
   const foco = data.serieMensal.find((m) => m.competencia === mesFoco) ?? data.serieMensal.at(-1);
+  const recorteLabel = RECORTE_OPCOES.find((op) => op.id === recorte)?.label ?? recorte;
 
   return (
+    <CardExportProvider
+      value={{
+        tela: "Visão geral",
+        recorteLabel,
+        condominio: `${data.condominio.nome} · Código ${data.condominio.codigo}`,
+      }}
+    >
     <div ref={root} className="space-y-4 sm:space-y-5">
       <header className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
         <div className="min-w-0">
@@ -207,33 +216,40 @@ export function VisaoGeral() {
 
       <section className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 xl:grid-cols-4" aria-label="Indicadores">
         {kpis.map((kpi) => (
-          <button
+          <CardExportavel
             key={kpi.id}
-            type="button"
-            className="js-kpi min-w-0 rounded-3xl border border-card-line bg-surface p-4 text-left shadow-[var(--shadow-card)] transition-transform hover:-translate-y-0.5 sm:p-5"
-            onClick={() => {
-              void abrirOrigem(kpi.id);
-            }}
+            as="article"
+            className="js-kpi transition-transform hover:-translate-y-0.5"
+            titulo={kpi.rotulo}
             data-kpi={kpi.id}
           >
-            <p className="text-sm text-muted">{kpi.rotulo}</p>
-            <p className="kpi-valor" data-cents={kpi.valorCents}>
-              {formatBRL(kpi.valorCents)}
-            </p>
-            <div className="mt-3 flex flex-wrap items-center gap-2">
-              {kpi.variacaoPct !== null ? (
-                <span
-                  className={`rounded-full px-2 py-0.5 text-xs font-bold ${
-                    kpi.variacaoPct >= 0 ? "bg-forest-soft text-forest" : "bg-danger-soft text-danger"
-                  }`}
-                >
-                  {formatPct(kpi.variacaoPct)}
-                </span>
-              ) : null}
-              <span className="text-[11px] text-muted">{kpi.variacaoBase}</span>
-            </div>
-            {kpi.extra ? <p className="mt-3 text-xs text-muted">{kpi.extra}</p> : null}
-          </button>
+            <button
+              type="button"
+              className="w-full min-w-0 text-left"
+              aria-label={`Ver origem de ${kpi.rotulo}`}
+              onClick={() => {
+                void abrirOrigem(kpi.id);
+              }}
+            >
+              <p className="text-sm text-muted">{kpi.rotulo}</p>
+              <p className="kpi-valor" data-cents={kpi.valorCents}>
+                {formatBRL(kpi.valorCents)}
+              </p>
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                {kpi.variacaoPct !== null ? (
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-xs font-bold ${
+                      kpi.variacaoPct >= 0 ? "bg-forest-soft text-forest" : "bg-danger-soft text-danger"
+                    }`}
+                  >
+                    {formatPct(kpi.variacaoPct)}
+                  </span>
+                ) : null}
+                <span className="text-[11px] text-muted">{kpi.variacaoBase}</span>
+              </div>
+              {kpi.extra ? <p className="mt-3 text-xs text-muted">{kpi.extra}</p> : null}
+            </button>
+          </CardExportavel>
         ))}
       </section>
       <p className="text-xs text-muted">{data.saldoGerencialLabel}</p>
@@ -244,7 +260,7 @@ export function VisaoGeral() {
       </div>
 
       <section className="grid min-w-0 gap-3 xl:grid-cols-[1.4fr_1fr]">
-        <article className="js-panel min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+        <CardExportavel as="article" className="js-panel" titulo="Evolução do saldo">
           <div className="mb-3 flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-start sm:gap-3">
             <div>
               <h2 className="text-lg font-bold">Evolução do saldo</h2>
@@ -257,26 +273,26 @@ export function VisaoGeral() {
             ) : null}
           </div>
           <AreaChartSaldo serie={data.serieSaldo} foco={mesFoco} onFoco={setMesFoco} />
-        </article>
-        <article className="js-panel min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+        </CardExportavel>
+        <CardExportavel as="article" className="js-panel" titulo="Composição das despesas">
           <h2 className="text-lg font-bold">Composição das despesas</h2>
           <p className="mb-4 text-sm text-muted">Participação no total do recorte</p>
           <Composicao fatias={data.composicaoDespesas} />
-        </article>
+        </CardExportavel>
       </section>
 
-      <section className="js-panel min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+      <CardExportavel as="section" className="js-panel" titulo="Receitas e despesas por mês">
         <h2 className="text-lg font-bold">Receitas e despesas por mês</h2>
         <p className="mb-4 text-sm text-muted">Barras hachuradas; o mês em foco fica verde sólido. Set/2026 incompleto não entra em média.</p>
         <BarrasMensais serie={data.serieMensal} foco={mesFoco} onFoco={setMesFoco} />
-      </section>
+      </CardExportavel>
 
       <section className="grid min-w-0 gap-3 lg:grid-cols-2">
-        <article className="js-panel min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+        <CardExportavel as="article" className="js-panel" titulo="Composição das receitas">
           <h2 className="text-lg font-bold">Composição das receitas</h2>
           <Composicao fatias={data.composicaoReceitas} />
-        </article>
-        <article className="js-panel min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+        </CardExportavel>
+        <CardExportavel as="article" className="js-panel" titulo={data.comparativoJanJul.rotulo}>
           <h2 className="text-lg font-bold">{data.comparativoJanJul.rotulo}</h2>
           <p className="mb-4 text-sm text-muted">Único comparativo da home: meses equivalentes, não 7 contra 12.</p>
           <dl className="grid grid-cols-1 gap-3 text-sm min-[420px]:grid-cols-2">
@@ -291,11 +307,11 @@ export function VisaoGeral() {
               <dd className="text-muted">despesa {formatBRL(data.comparativoJanJul.ano2026.despesaCents)}</dd>
             </div>
           </dl>
-        </article>
+        </CardExportavel>
       </section>
 
       <section className="js-alerts grid min-w-0 gap-3 lg:grid-cols-2">
-        <article className="min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+        <CardExportavel as="article" titulo="Pontos de atenção">
           <h2 className="text-lg font-bold">Pontos de atenção</h2>
           <ul className="mt-4 space-y-3">
             {data.alertas.map((alerta) => (
@@ -309,8 +325,8 @@ export function VisaoGeral() {
               </li>
             ))}
           </ul>
-        </article>
-        <article className="min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+        </CardExportavel>
+        <CardExportavel as="article" titulo="Qualidade dos dados">
           <h2 className="text-lg font-bold">Qualidade dos dados</h2>
           <ul className="mt-4 space-y-2 text-sm">
             {data.qualidade.map((q) => (
@@ -325,7 +341,7 @@ export function VisaoGeral() {
           <p className="mt-4 text-xs text-muted">
             Fonte: {data.fonte.arquivos.join(" · ")} · {data.statusDespesa}
           </p>
-        </article>
+        </CardExportavel>
       </section>
 
       <OrigemDrawer
@@ -337,5 +353,6 @@ export function VisaoGeral() {
         }}
       />
     </div>
+    </CardExportProvider>
   );
 }

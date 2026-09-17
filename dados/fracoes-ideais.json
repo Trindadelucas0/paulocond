@@ -1,0 +1,548 @@
+{
+  "unidades": [
+    {
+      "codigo": "101",
+      "fracao": 0.008357
+    },
+    {
+      "codigo": "102",
+      "fracao": 0.008651
+    },
+    {
+      "codigo": "103",
+      "fracao": 0.007119
+    },
+    {
+      "codigo": "104",
+      "fracao": 0.007104
+    },
+    {
+      "codigo": "105",
+      "fracao": 0.007119
+    },
+    {
+      "codigo": "106",
+      "fracao": 0.007104
+    },
+    {
+      "codigo": "107",
+      "fracao": 0.008357
+    },
+    {
+      "codigo": "108",
+      "fracao": 0.008357
+    },
+    {
+      "codigo": "201",
+      "fracao": 0.007786
+    },
+    {
+      "codigo": "202",
+      "fracao": 0.007786
+    },
+    {
+      "codigo": "203",
+      "fracao": 0.006785
+    },
+    {
+      "codigo": "204",
+      "fracao": 0.006772
+    },
+    {
+      "codigo": "205",
+      "fracao": 0.006785
+    },
+    {
+      "codigo": "206",
+      "fracao": 0.006772
+    },
+    {
+      "codigo": "207",
+      "fracao": 0.007786
+    },
+    {
+      "codigo": "208",
+      "fracao": 0.007786
+    },
+    {
+      "codigo": "301",
+      "fracao": 0.008651
+    },
+    {
+      "codigo": "302",
+      "fracao": 0.008651
+    },
+    {
+      "codigo": "303",
+      "fracao": 0.007119
+    },
+    {
+      "codigo": "304",
+      "fracao": 0.007104
+    },
+    {
+      "codigo": "305",
+      "fracao": 0.007119
+    },
+    {
+      "codigo": "306",
+      "fracao": 0.007104
+    },
+    {
+      "codigo": "307",
+      "fracao": 0.008651
+    },
+    {
+      "codigo": "308",
+      "fracao": 0.008357
+    },
+    {
+      "codigo": "401",
+      "fracao": 0.007786
+    },
+    {
+      "codigo": "402",
+      "fracao": 0.007786
+    },
+    {
+      "codigo": "403",
+      "fracao": 0.006785
+    },
+    {
+      "codigo": "404",
+      "fracao": 0.006772
+    },
+    {
+      "codigo": "405",
+      "fracao": 0.006785
+    },
+    {
+      "codigo": "406",
+      "fracao": 0.006772
+    },
+    {
+      "codigo": "407",
+      "fracao": 0.007786
+    },
+    {
+      "codigo": "408",
+      "fracao": 0.008079
+    },
+    {
+      "codigo": "501",
+      "fracao": 0.008651
+    },
+    {
+      "codigo": "502",
+      "fracao": 0.008651
+    },
+    {
+      "codigo": "503",
+      "fracao": 0.007119
+    },
+    {
+      "codigo": "504",
+      "fracao": 0.007104
+    },
+    {
+      "codigo": "505",
+      "fracao": 0.007119
+    },
+    {
+      "codigo": "506",
+      "fracao": 0.007104
+    },
+    {
+      "codigo": "507",
+      "fracao": 0.008651
+    },
+    {
+      "codigo": "508",
+      "fracao": 0.008651
+    },
+    {
+      "codigo": "601",
+      "fracao": 0.008331
+    },
+    {
+      "codigo": "602",
+      "fracao": 0.00833
+    },
+    {
+      "codigo": "603",
+      "fracao": 0.006785
+    },
+    {
+      "codigo": "604",
+      "fracao": 0.006772
+    },
+    {
+      "codigo": "605",
+      "fracao": 0.006785
+    },
+    {
+      "codigo": "606",
+      "fracao": 0.006772
+    },
+    {
+      "codigo": "607",
+      "fracao": 0.008079
+    },
+    {
+      "codigo": "608",
+      "fracao": 0.008257
+    },
+    {
+      "codigo": "701",
+      "fracao": 0.008856
+    },
+    {
+      "codigo": "702",
+      "fracao": 0.00892
+    },
+    {
+      "codigo": "703",
+      "fracao": 0.007412
+    },
+    {
+      "codigo": "704",
+      "fracao": 0.007397
+    },
+    {
+      "codigo": "705",
+      "fracao": 0.007412
+    },
+    {
+      "codigo": "706",
+      "fracao": 0.007397
+    },
+    {
+      "codigo": "707",
+      "fracao": 0.008856
+    },
+    {
+      "codigo": "708",
+      "fracao": 0.00892
+    },
+    {
+      "codigo": "801",
+      "fracao": 0.00832
+    },
+    {
+      "codigo": "802",
+      "fracao": 0.008348
+    },
+    {
+      "codigo": "803",
+      "fracao": 0.007079
+    },
+    {
+      "codigo": "804",
+      "fracao": 0.007066
+    },
+    {
+      "codigo": "805",
+      "fracao": 0.007079
+    },
+    {
+      "codigo": "806",
+      "fracao": 0.007066
+    },
+    {
+      "codigo": "807",
+      "fracao": 0.008351
+    },
+    {
+      "codigo": "808",
+      "fracao": 0.008255
+    },
+    {
+      "codigo": "901",
+      "fracao": 0.008836
+    },
+    {
+      "codigo": "902",
+      "fracao": 0.00893
+    },
+    {
+      "codigo": "903",
+      "fracao": 0.007412
+    },
+    {
+      "codigo": "904",
+      "fracao": 0.007397
+    },
+    {
+      "codigo": "905",
+      "fracao": 0.007412
+    },
+    {
+      "codigo": "906",
+      "fracao": 0.007104
+    },
+    {
+      "codigo": "907",
+      "fracao": 0.00891
+    },
+    {
+      "codigo": "908",
+      "fracao": 0.008836
+    },
+    {
+      "codigo": "1001",
+      "fracao": 0.008264
+    },
+    {
+      "codigo": "1002",
+      "fracao": 0.008339
+    },
+    {
+      "codigo": "1003",
+      "fracao": 0.006785
+    },
+    {
+      "codigo": "1004",
+      "fracao": 0.006772
+    },
+    {
+      "codigo": "1005",
+      "fracao": 0.006785
+    },
+    {
+      "codigo": "1006",
+      "fracao": 0.006772
+    },
+    {
+      "codigo": "1007",
+      "fracao": 0.008257
+    },
+    {
+      "codigo": "1008",
+      "fracao": 0.008351
+    },
+    {
+      "codigo": "1101",
+      "fracao": 0.009226
+    },
+    {
+      "codigo": "1102",
+      "fracao": 0.008944
+    },
+    {
+      "codigo": "1103",
+      "fracao": 0.007119
+    },
+    {
+      "codigo": "1104",
+      "fracao": 0.007104
+    },
+    {
+      "codigo": "1105",
+      "fracao": 0.007119
+    },
+    {
+      "codigo": "1106",
+      "fracao": 0.007397
+    },
+    {
+      "codigo": "1107",
+      "fracao": 0.008906
+    },
+    {
+      "codigo": "1108",
+      "fracao": 0.008895
+    },
+    {
+      "codigo": "1201",
+      "fracao": 0.00829
+    },
+    {
+      "codigo": "1202",
+      "fracao": 0.00834
+    },
+    {
+      "codigo": "1203",
+      "fracao": 0.007079
+    },
+    {
+      "codigo": "1204",
+      "fracao": 0.007066
+    },
+    {
+      "codigo": "1205",
+      "fracao": 0.007079
+    },
+    {
+      "codigo": "1206",
+      "fracao": 0.007066
+    },
+    {
+      "codigo": "1207",
+      "fracao": 0.008259
+    },
+    {
+      "codigo": "1208",
+      "fracao": 0.00828
+    },
+    {
+      "codigo": "1301",
+      "fracao": 0.008846
+    },
+    {
+      "codigo": "1302",
+      "fracao": 0.008843
+    },
+    {
+      "codigo": "1303",
+      "fracao": 0.007412
+    },
+    {
+      "codigo": "1304",
+      "fracao": 0.007397
+    },
+    {
+      "codigo": "1305",
+      "fracao": 0.007412
+    },
+    {
+      "codigo": "1306",
+      "fracao": 0.007397
+    },
+    {
+      "codigo": "1307",
+      "fracao": 0.008842
+    },
+    {
+      "codigo": "1308",
+      "fracao": 0.008862
+    },
+    {
+      "codigo": "1401",
+      "fracao": 0.008288
+    },
+    {
+      "codigo": "1402",
+      "fracao": 0.008921
+    },
+    {
+      "codigo": "1403",
+      "fracao": 0.007079
+    },
+    {
+      "codigo": "1404",
+      "fracao": 0.007066
+    },
+    {
+      "codigo": "1405",
+      "fracao": 0.007079
+    },
+    {
+      "codigo": "1406",
+      "fracao": 0.007066
+    },
+    {
+      "codigo": "1407",
+      "fracao": 0.008856
+    },
+    {
+      "codigo": "1408",
+      "fracao": 0.008856
+    },
+    {
+      "codigo": "1501",
+      "fracao": 0.009495
+    },
+    {
+      "codigo": "1502",
+      "fracao": 0.009428
+    },
+    {
+      "codigo": "1503",
+      "fracao": 0.007412
+    },
+    {
+      "codigo": "1504",
+      "fracao": 0.007397
+    },
+    {
+      "codigo": "1505",
+      "fracao": 0.007412
+    },
+    {
+      "codigo": "1506",
+      "fracao": 0.007397
+    },
+    {
+      "codigo": "1507",
+      "fracao": 0.009515
+    },
+    {
+      "codigo": "1508",
+      "fracao": 0.009507
+    },
+    {
+      "codigo": "1601",
+      "fracao": 0.01452
+    },
+    {
+      "codigo": "1602",
+      "fracao": 0.014426
+    },
+    {
+      "codigo": "1603",
+      "fracao": 0.014446
+    },
+    {
+      "codigo": "1604",
+      "fracao": 0.014336
+    },
+    {
+      "codigo": "V055",
+      "fracao": 0.000294
+    },
+    {
+      "codigo": "V056",
+      "fracao": 0.000294
+    },
+    {
+      "codigo": "V057",
+      "fracao": 0.000294
+    },
+    {
+      "codigo": "V058",
+      "fracao": 0.000294
+    },
+    {
+      "codigo": "V059",
+      "fracao": 0.000294
+    },
+    {
+      "codigo": "V060",
+      "fracao": 0.000294
+    },
+    {
+      "codigo": "V067",
+      "fracao": 0.000294
+    },
+    {
+      "codigo": "V068",
+      "fracao": 0.000294
+    },
+    {
+      "codigo": "V069",
+      "fracao": 0.000294
+    },
+    {
+      "codigo": "V070",
+      "fracao": 0.000294
+    },
+    {
+      "codigo": "V071",
+      "fracao": 0.000294
+    },
+    {
+      "codigo": "V072",
+      "fracao": 0.000294
+    }
+  ]
+}

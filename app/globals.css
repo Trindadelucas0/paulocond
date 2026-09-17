@@ -143,25 +143,80 @@ body {
     background: white;
   }
 
-  body.print-folha-unidade * {
-    visibility: hidden;
+  body.print-folha-unidade {
+    background: white !important;
   }
 
-  body.print-folha-unidade .folha-unidade-print,
-  body.print-folha-unidade .folha-unidade-print * {
-    visibility: visible;
+  body.print-folha-unidade > *:not(.folha-unidade-overlay) {
+    display: none !important;
+  }
+
+  body.print-folha-unidade .folha-unidade-overlay {
+    position: static !important;
+    inset: auto !important;
+    display: block !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    transform: none !important;
+    background: transparent !important;
   }
 
   body.print-folha-unidade .folha-unidade-print {
+    position: static !important;
+    inset: auto !important;
+    height: auto !important;
+    max-height: none !important;
+    max-width: none !important;
+    width: 100% !important;
+    overflow: visible !important;
+    transform: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+
+  body.print-folha-unidade .folha-unidade-tabela {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  body.print-folha-unidade .folha-unidade-tabela thead {
+    display: table-header-group;
+  }
+
+  body.print-folha-unidade .folha-unidade-tabela tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  body.print-folha-unidade .folha-unidade-cabecalho {
+    break-after: avoid;
+  }
+
+  body.print-card-isolado * {
+    visibility: hidden;
+  }
+
+  body.print-card-isolado [data-card-print-ativo],
+  body.print-card-isolado [data-card-print-ativo] * {
+    visibility: visible;
+  }
+
+  body.print-card-isolado [data-card-print-ativo] {
     position: absolute;
     inset: 0;
     width: 100%;
     max-width: none;
     overflow: visible;
     box-shadow: none;
+    padding-right: 1.25rem;
   }
 
-  body.print-folha-unidade .no-print {
+  body.print-card-isolado [data-card-print-ativo] .overflow-x-auto {
+    overflow: visible;
+  }
+
+  body.print-card-isolado .no-print {
     display: none !important;
     visibility: hidden !important;
   }

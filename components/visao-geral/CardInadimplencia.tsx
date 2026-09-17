@@ -1,5 +1,6 @@
 "use client";
 
+import { CardExportavel } from "@/components/paginas/CardExportavel";
 import { formatBRL, formatPercentualBp } from "@/lib/format";
 import type { InadimplenciaPayload } from "@/lib/inadimplencia";
 
@@ -7,10 +8,7 @@ export function CardInadimplencia({ dados }: { dados: InadimplenciaPayload }) {
   const maxBp = Math.max(...dados.meses.map((m) => m.percentualBp), 1);
 
   return (
-    <article
-      className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5"
-      aria-labelledby="inadimplencia-titulo"
-    >
+    <CardExportavel as="article" className="js-block" titulo="Inadimplência" aria-labelledby="inadimplencia-titulo">
       <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h2 id="inadimplencia-titulo" className="text-lg font-bold">
@@ -109,6 +107,6 @@ export function CardInadimplencia({ dados }: { dados: InadimplenciaPayload }) {
       </div>
 
       <p className="mt-4 text-xs text-muted">{dados.nota}</p>
-    </article>
+    </CardExportavel>
   );
 }

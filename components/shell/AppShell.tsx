@@ -4,7 +4,15 @@ import { useState } from "react";
 import { BrandLogo } from "./BrandLogo";
 import { Sidebar } from "./Sidebar";
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+type UsuarioShell = { id: string; nome: string; papel: string };
+
+export function AppShell({
+  children,
+  usuario,
+}: {
+  children: React.ReactNode;
+  usuario: UsuarioShell;
+}) {
   const [aberto, setAberto] = useState(false);
 
   return (
@@ -15,7 +23,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       >
         Ir para o conteúdo
       </a>
-      <Sidebar aberto={aberto} onClose={() => setAberto(false)} />
+      <Sidebar aberto={aberto} onClose={() => setAberto(false)} usuario={usuario} />
       <div className="print:pl-0 lg:pl-[var(--sidebar-w)]">
         <header className="sticky top-0 z-20 flex items-center justify-between gap-2 border-b border-line/80 bg-page/90 px-3 py-2 backdrop-blur print:hidden sm:px-4 lg:hidden">
           <button

@@ -5,7 +5,9 @@ import { NextRequest } from "next/server";
 import { carregarDadosCondominio } from "@/lib/dados";
 import { isModuloId, isOrdemId, isRecorteId, type ModuloId, type OrdemId, type RecorteId } from "@/lib/format";
 import { montarModulo } from "@/lib/modulos";
-import { jsonError } from "@/lib/tenant";
+import { jsonError, ApiError } from "@/lib/tenant";
+import { requireAuth } from "@/lib/auth/sessao";
+import { podeVerConfig } from "@/lib/auth/papeis";
 
 export async function GET(request: NextRequest) {
   try {
@@ -47,7 +49,11 @@ export async function GET(request: NextRequest) {
     const modulo: ModuloId = moduloParam;
     const recorte: RecorteId = recorteParam;
     const ordem: OrdemId = ordemParam;
-    const { condominio, totais, periodos, lancamentos } = await carregarDadosCondominio();
+    const sessao = await requireAuth(request);
+    if (modulo === "configuracoes" && !podeVerConfig(sessao.usuario.papel)) {
+      throw new ApiError(403, "SEM_PERMISSAO", "Apenas administradores veem as configurações.");
+    }
+    const { condominio, totais, periodos, lancamentos } = await carregarDadosCondominio(sessao);
 
     const payload = montarModulo({
       modulo,

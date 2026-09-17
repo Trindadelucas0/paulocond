@@ -4,6 +4,7 @@ export const dynamic = "force-dynamic";
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { condominioAtivo, jsonError } from "@/lib/tenant";
+import { requireAuth } from "@/lib/auth/sessao";
 import { isRecorteId, type RecorteId } from "@/lib/format";
 import { montarVisaoGeral, type LancamentoComRel } from "@/lib/kpis";
 import { montarAlertas } from "@/lib/alertas";
@@ -24,7 +25,8 @@ export async function GET(request: NextRequest) {
       );
     }
     const recorte: RecorteId = recorteParam;
-    const condominio = await condominioAtivo();
+    const sessao = await requireAuth(request);
+    const condominio = await condominioAtivo(sessao.condominio.id);
 
     const [totais, periodos, lancamentos] = await Promise.all([
       prisma.totalOficial.findMany({ where: { condominioId: condominio.id } }),

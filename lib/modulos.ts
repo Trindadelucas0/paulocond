@@ -4,7 +4,7 @@ import { avisoComparativoJanJul, montarComparativoConsumo, totaisConsumoJanJul }
 import { montarAnaliseTaxa, type AnaliseTaxaPayload } from "@/lib/analise-taxa";
 import { montarCoberturaCota, type CoberturaCotaPayload } from "@/lib/cobertura-cota";
 import { montarInadimplencia, type InadimplenciaPayload } from "@/lib/inadimplencia";
-import { montarNovaTaxaIdeal, type NovaTaxaIdealPayload } from "@/lib/nova-taxa-ideal";
+import { montarNovaTaxaIdeal, montarNovaTaxaMensal, type NovaTaxaIdealPayload, type NovaTaxaMensalPayload } from "@/lib/nova-taxa-ideal";
 import {
   composicaoGrupo,
   janJul,
@@ -87,6 +87,7 @@ export type Slide = {
   titulo: string;
   linhas: { rotulo: string; valor: string }[];
   nota?: string;
+  tabela?: NovaTaxaMensalPayload;
 };
 
 export type ConfigBloco = {
@@ -776,6 +777,8 @@ export function montarModulo(params: {
       despesaCents: totaisR.despesa,
     });
     const inadimplencia = montarInadimplencia();
+    p.novaTaxaIdeal = montarNovaTaxaIdeal(filtrados);
+    const novaTaxa = p.novaTaxaIdeal;
     p.slides = [
       {
         id: "capa",
@@ -825,6 +828,23 @@ export function montarModulo(params: {
             valor: somaTipo(rec, "RECEITA") === 0 ? "—" : formatPct(cotas / somaTipo(rec, "RECEITA")).replace("+", ""),
           },
         ],
+      },
+      {
+        id: "nova-taxa-prevista",
+        kicker: "Nova taxa condominial prevista",
+        titulo: "Novo custo e média por unidade",
+        linhas: [
+          { rotulo: "Novo custo", valor: formatBRL(novaTaxa.valorIdealMensalCents) },
+          { rotulo: "Média por unidade", valor: formatBRL(novaTaxa.porUnidadeCents) },
+          { rotulo: "Unidades", valor: String(novaTaxa.unidades) },
+          { rotulo: "Meses na média", valor: String(novaTaxa.mesesComValor) },
+        ],
+        nota: "Mesma taxa ideal da visão Nova taxa condominial. Coluna Média ignora Set/2026 e meses zerados. Impostos não entram neste total.",
+        tabela: montarNovaTaxaMensal(
+          filtrados,
+          periodosR.map((per) => per.competencia),
+          novaTaxa,
+        ),
       },
       {
         id: "cobertura-cota",
@@ -953,7 +973,7 @@ export function montarModulo(params: {
     ],
     importador: "Para atualizar os dados, rode npm run importar no terminal. Não há importador nesta tela.",
     pagamento: "Status de pagamento não disponível. Rótulo usado em todo o sistema: Despesa registrada.",
-    login: "Não há login nem papéis neste ciclo. A API usa o condomínio do ambiente (CONDOMINIO_CODIGO).",
+    login: "Acesso com login. Admin gerencia usuários em Usuários. A API usa o condomínio da sessão (código 132 neste deploy).",
   };
   return p;
 }

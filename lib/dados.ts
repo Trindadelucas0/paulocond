@@ -1,9 +1,10 @@
-import { prisma } from "@/lib/prisma";
 import { ApiError, condominioAtivo } from "@/lib/tenant";
+import type { SessaoAutenticada } from "@/lib/auth/sessao";
+import { prisma } from "@/lib/prisma";
 import type { LancamentoComRel } from "@/lib/kpis";
 
-export async function carregarDadosCondominio() {
-  const condominio = await condominioAtivo();
+export async function carregarDadosCondominio(sessao: SessaoAutenticada) {
+  const condominio = await condominioAtivo(sessao.condominio.id);
   const [totais, periodos, lancamentos] = await Promise.all([
     prisma.totalOficial.findMany({ where: { condominioId: condominio.id } }),
     prisma.periodo.findMany({

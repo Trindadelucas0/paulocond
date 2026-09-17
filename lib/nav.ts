@@ -29,6 +29,7 @@ export const MENU_GRUPOS = [
     itens: [
       { id: "relatorio", label: "Relatório da Assembleia", href: "/relatorio" },
       { id: "config", label: "Configurações", href: "/configuracoes" },
+      { id: "usuarios", label: "Usuários", href: "/usuarios" },
     ],
   },
 ] as const;

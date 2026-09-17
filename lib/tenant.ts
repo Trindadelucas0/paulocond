@@ -11,7 +11,7 @@ export class ApiError extends Error {
   }
 }
 
-export async function condominioAtivo() {
+export async function condominioDoCodigo() {
   const codigo = process.env.CONDOMINIO_CODIGO?.trim();
   if (!codigo) {
     throw new ApiError(400, "TENANT_AUSENTE", "Condomínio ativo não informado.");
@@ -27,6 +27,14 @@ export async function condominioAtivo() {
     );
   }
   return condominio;
+}
+
+export async function condominioAtivo(condominioId: string) {
+  const esperado = await condominioDoCodigo();
+  if (esperado.id !== condominioId) {
+    throw new ApiError(403, "TENANT_INVALIDO", "Condomínio da sessão não corresponde ao ambiente.");
+  }
+  return esperado;
 }
 
 export function jsonError(error: unknown): Response {

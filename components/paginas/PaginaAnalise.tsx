@@ -10,6 +10,7 @@ import { AnaliseTaxaDemo } from "@/components/paginas/AnaliseTaxaDemo";
 import { BarrasValor } from "@/components/paginas/BarrasValor";
 import { DetalhamentoTabela } from "@/components/paginas/DetalhamentoTabela";
 import { KpiGrid } from "@/components/paginas/KpiGrid";
+import { CardExportProvider, CardExportavel } from "@/components/paginas/CardExportavel";
 import { NovaTaxaCanvas } from "@/components/paginas/NovaTaxaCanvas";
 import { RankingLista } from "@/components/paginas/RankingLista";
 import { RelatorioAssembleia } from "@/components/paginas/RelatorioAssembleia";
@@ -155,7 +156,16 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
   const seriePar = data.modulo === "fluxo" || data.modulo === "analise-mensal" || data.modulo === "receitas" || data.modulo === "despesas" || data.modulo === "contratos" || data.modulo === "manutencao" || data.modulo === "utilidades" || data.modulo === "patrimonio" || data.modulo === "fundo-reserva";
   const serieUnica = visaoAnalise && (data.modulo === "taxa-condominial" || data.modulo === "taxas-extras");
 
+  const recorteLabel = RECORTE_OPCOES.find((op) => op.id === recorte)?.label ?? recorte;
+
   return (
+    <CardExportProvider
+      value={{
+        tela: data.titulo,
+        recorteLabel,
+        condominio: `${data.condominio.nome} · Código ${data.condominio.codigo}`,
+      }}
+    >
     <div ref={root} className="space-y-4 sm:space-y-5">
       <header className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
         <div className="min-w-0">
@@ -281,7 +291,7 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
       {visaoAnalise && data.destaques.length > 0 ? (
         <section className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
           {data.destaques.map((d) => (
-            <article key={d.id} className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+            <CardExportavel key={d.id} as="article" className="js-block" titulo={d.rotulo}>
               <p className="text-sm text-muted">{d.rotulo}</p>
               <p className="kpi-valor">{formatBRL(d.valorCents)}</p>
               {d.extra ? (
@@ -290,17 +300,17 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
                 </p>
               ) : null}
               {d.nota ? <p className="mt-3 text-xs text-muted">{d.nota}</p> : null}
-            </article>
+            </CardExportavel>
           ))}
         </section>
       ) : null}
 
       {data.composicao.length > 0 ? (
-        <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+        <CardExportavel as="article" className="js-block" titulo="Composição">
           <h2 className="text-lg font-bold">Composição</h2>
           <p className="mb-4 text-sm text-muted">Participação no total do recorte</p>
           <Composicao fatias={data.composicao} />
-        </article>
+        </CardExportavel>
       ) : null}
 
       {data.ranking.length > 0 || data.mostrarOrdem ? (
@@ -328,36 +338,38 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
       ) : null}
 
       {data.serie.length > 0 && seriePar ? (
-        <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+        <CardExportavel as="article" className="js-block" titulo={data.serieRotulo}>
           <h2 className="text-lg font-bold">{data.serieRotulo}</h2>
           <p className="mb-4 text-sm text-muted">Barras hachuradas. * parcial · † residual.</p>
           <BarrasMensais serie={data.serie} foco={mesFoco} onFoco={setMesFoco} />
-        </article>
+        </CardExportavel>
       ) : null}
 
       {data.serie.length > 0 && serieUnica ? (
-        <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+        <CardExportavel as="article" className="js-block" titulo={data.serieRotulo}>
           <h2 className="text-lg font-bold">{data.serieRotulo}</h2>
           <BarrasValor serie={data.serie} rotulo={data.serieRotulo} />
-        </article>
+        </CardExportavel>
       ) : null}
 
       {data.modulo === "fluxo" && data.serie.length > 0 ? (
-        <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+        <CardExportavel as="article" className="js-block" titulo="Saldo gerencial ao fim de cada competência">
           <h2 className="text-lg font-bold">Saldo gerencial ao fim de cada competência</h2>
           <AreaChartSaldo
             serie={data.serie.map((s) => ({ competencia: s.competencia, saldoCents: s.saldoCents, qualidade: s.qualidade }))}
             foco={mesFoco}
             onFoco={setMesFoco}
           />
-        </article>
+        </CardExportavel>
       ) : null}
 
       {visaoAnalise && data.comparativos.length > 0
         ? data.comparativos.map((bloco) => (
-            <article
+            <CardExportavel
               key={bloco.rotulo}
-              className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5"
+              as="article"
+              className="js-block"
+              titulo={bloco.rotulo}
             >
               <h2 className="text-lg font-bold">{bloco.rotulo}</h2>
               {bloco.aviso ? (
@@ -399,12 +411,12 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
                   </tbody>
                 </table>
               </div>
-            </article>
+            </CardExportavel>
           ))
         : null}
 
       {data.modulo === "analise-mensal" && data.detalhamento.grupos.length > 0 ? (
-        <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+        <CardExportavel as="article" className="js-block" titulo="Receita, despesa, resultado e saldo por mês">
           <h2 className="text-lg font-bold">Receita, despesa, resultado e saldo por mês</h2>
           <div className="mt-4 overflow-x-auto">
             <table className="min-w-[36rem] w-full text-sm">
@@ -439,21 +451,21 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
               </tbody>
             </table>
           </div>
-        </article>
+        </CardExportavel>
       ) : null}
 
       {data.modulo === "detalhamento" ? (
-        <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+        <CardExportavel as="article" className="js-block" titulo="Categoria e item mês a mês">
           <h2 className="text-lg font-bold">Categoria e item mês a mês</h2>
           <p className="mb-4 text-sm text-muted">
             Uma coluna por competência do recorte e Total no fim. Expanda a categoria para ver cada item linha a linha.
           </p>
           <DetalhamentoTabela competencias={data.detalhamento.competencias} grupos={data.detalhamento.grupos} />
-        </article>
+        </CardExportavel>
       ) : null}
 
       {data.modulo === "alertas" ? (
-        <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+        <CardExportavel as="article" className="js-block" titulo="Pontos de atenção">
           <h2 className="text-lg font-bold">Pontos de atenção</h2>
           {data.alertas.length === 0 ? (
             <p className="mt-3 text-sm text-muted">Nenhum alerta objetivo disparado neste conjunto de dados.</p>
@@ -471,14 +483,14 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
               ))}
             </ul>
           )}
-        </article>
+        </CardExportavel>
       ) : null}
 
       {data.modulo === "relatorio" ? <RelatorioAssembleia slides={data.slides} titulo={data.titulo} /> : null}
 
       {data.config ? (
         <div className="grid gap-3 lg:grid-cols-2">
-          <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+          <CardExportavel as="article" className="js-block" titulo="Condomínio">
             <h2 className="text-lg font-bold">Condomínio</h2>
             <dl className="mt-3 space-y-2 text-sm">
               <div className="flex justify-between gap-3">
@@ -491,8 +503,8 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
               </div>
             </dl>
             <p className="mt-4 text-sm text-muted">{data.config.login}</p>
-          </article>
-          <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+          </CardExportavel>
+          <CardExportavel as="article" className="js-block" titulo="Fonte e período">
             <h2 className="text-lg font-bold">Fonte e período</h2>
             <ul className="mt-3 space-y-2 text-sm">
               {data.config.periodos.map((per) => (
@@ -503,8 +515,8 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
               ))}
             </ul>
             <p className="mt-4 text-xs text-muted">{data.config.fonte.join(" · ")}</p>
-          </article>
-          <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+          </CardExportavel>
+          <CardExportavel as="article" className="js-block" titulo="Qualidade dos dados">
             <h2 className="text-lg font-bold">Qualidade dos dados</h2>
             <ul className="mt-3 space-y-2 text-sm">
               {data.config.qualidade.map((q) => (
@@ -512,12 +524,12 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
               ))}
             </ul>
             <p className="mt-4 rounded-2xl bg-warning-soft px-4 py-3 text-sm text-warning">{data.config.pagamento}</p>
-          </article>
-          <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+          </CardExportavel>
+          <CardExportavel as="article" className="js-block" titulo="Atualizar dados">
             <h2 className="text-lg font-bold">Atualizar dados</h2>
             <p className="mt-3 text-sm text-muted">{data.config.importador}</p>
             <p className="mt-4 rounded-2xl bg-page px-4 py-3 font-mono text-sm">npm run importar</p>
-          </article>
+          </CardExportavel>
         </div>
       ) : null}
 
@@ -526,5 +538,6 @@ export function PaginaAnalise({ modulo }: { modulo: ModuloId }) {
         {data.fonte.arquivos.join(" · ")}
       </p>
     </div>
+    </CardExportProvider>
   );
 }

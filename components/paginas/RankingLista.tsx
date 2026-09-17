@@ -1,20 +1,21 @@
 "use client";
 
+import { CardExportavel } from "@/components/paginas/CardExportavel";
 import { formatBRL, formatPct } from "@/lib/format";
 import type { RankingItem } from "@/lib/modulos";
 
 export function RankingLista({ itens, rotulo }: { itens: RankingItem[]; rotulo: string }) {
   if (itens.length === 0) {
     return (
-      <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+      <CardExportavel as="article" className="js-block" titulo={rotulo}>
         <h2 className="text-lg font-bold">{rotulo}</h2>
         <p className="mt-3 text-sm text-muted">Sem itens neste recorte.</p>
-      </article>
+      </CardExportavel>
     );
   }
   const max = Math.max(...itens.map((i) => Math.abs(i.valorCents)), 1);
   return (
-    <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+    <CardExportavel as="article" className="js-block" titulo={rotulo}>
       <h2 className="text-lg font-bold">{rotulo}</h2>
       <ul className="mt-4 space-y-3">
         {itens.map((item) => (
@@ -42,6 +43,6 @@ export function RankingLista({ itens, rotulo }: { itens: RankingItem[]; rotulo: 
           </li>
         ))}
       </ul>
-    </article>
+    </CardExportavel>
   );
 }

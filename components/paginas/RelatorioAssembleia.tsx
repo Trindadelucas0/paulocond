@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { TabelaNovaTaxaMensal } from "@/components/paginas/TabelaNovaTaxaMensal";
 import { gsap, registerMotion, useGSAP } from "@/lib/motion";
 import type { Slide } from "@/lib/modulos";
 
@@ -105,6 +106,11 @@ export function RelatorioAssembleia({
           ))}
         </dl>
         {slide.nota ? <p className="js-slide-el mt-6 text-sm text-muted">{slide.nota}</p> : null}
+        {slide.tabela ? (
+          <div className="js-slide-el">
+            <TabelaNovaTaxaMensal dados={slide.tabela} />
+          </div>
+        ) : null}
         <p className="js-slide-el mt-8 text-xs text-muted">
           Slide {indice + 1} de {slides.length}
         </p>
@@ -148,13 +154,14 @@ export function RelatorioAssembleia({
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-forest">{s.kicker}</p>
             <h2 className="mt-2 text-2xl font-extrabold">{s.titulo}</h2>
             <ul className="mt-4 space-y-2 text-sm">
-              {s.linhas.map((linha) => (
-                <li key={`${s.id}-${linha.rotulo}`}>
+              {s.linhas.map((linha, i) => (
+                <li key={`${s.id}-${i}-${linha.rotulo}`}>
                   <strong>{linha.rotulo}:</strong> {linha.valor}
                 </li>
               ))}
             </ul>
             {s.nota ? <p className="mt-3 text-sm text-muted">{s.nota}</p> : null}
+            {s.tabela ? <TabelaNovaTaxaMensal dados={s.tabela} /> : null}
           </section>
         ))}
       </div>

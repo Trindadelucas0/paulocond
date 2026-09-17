@@ -1,5 +1,6 @@
 "use client";
 
+import { CardExportavel } from "@/components/paginas/CardExportavel";
 import { formatBRL } from "@/lib/format";
 import type { WaterfallStep } from "@/lib/modulos";
 
@@ -7,7 +8,7 @@ export function WaterfallChart({ passos }: { passos: WaterfallStep[] }) {
   if (passos.length === 0) return null;
   const max = Math.max(...passos.map((p) => Math.abs(p.valorCents)), 1);
   return (
-    <article className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+    <CardExportavel as="article" className="js-block" titulo="Composição do saldo gerencial">
       <h2 className="text-lg font-bold">Composição do saldo gerencial</h2>
       <p className="mb-4 text-sm text-muted">
         Saldo inicial fixado em R$ 0,00. Receitas − despesas registradas. Saldo gerencial final permanece o da planilha.
@@ -39,6 +40,6 @@ export function WaterfallChart({ passos }: { passos: WaterfallStep[] }) {
           );
         })}
       </ul>
-    </article>
+    </CardExportavel>
   );
 }

@@ -5,6 +5,7 @@ export const NOME_COTAS_CONDOMINIO = "Cotas de Condomínio";
 export const NOME_COTAS_ACORDO = "Cotas de Acordo";
 export const GRUPO_CONTRATOS_FIXOS = "Contratos fixos";
 export const GRUPO_MANUTENCAO = "Manutenção";
+export const GRUPO_IMPOSTOS = "Impostos";
 
 export type AnaliseTaxaPapel = "entrada" | "saida" | "subtotal" | "resultado";
 
@@ -18,6 +19,7 @@ export type AnaliseTaxaLinha = {
 export type AnaliseTaxaPayload = {
   taxaCents: number;
   contratosCents: number;
+  impostosCents: number;
   resultado1Cents: number;
   manutencoesCents: number;
   resultado2Cents: number;
@@ -28,12 +30,13 @@ export type AnaliseTaxaPayload = {
 
 /**
  * Demonstrativo da taxa no recorte: cotas − contratos fixos (grupo inteiro)
- * − manutenção + cotas de acordo. Não é cobertura (cota vs todas as despesas).
+ * − impostos − manutenção + cotas de acordo. Não é cobertura (cota vs todas as despesas).
  */
 export function montarAnaliseTaxa(lancamentos: LancamentoComRel[]): AnaliseTaxaPayload {
   const taxaCents = somaNome(lancamentos, NOME_COTAS_CONDOMINIO, "RECEITA");
   const contratosCents = somaGrupo(lancamentos, GRUPO_CONTRATOS_FIXOS, "DESPESA");
-  const resultado1Cents = taxaCents - contratosCents;
+  const impostosCents = somaGrupo(lancamentos, GRUPO_IMPOSTOS, "DESPESA");
+  const resultado1Cents = taxaCents - contratosCents - impostosCents;
   const manutencoesCents = somaGrupo(lancamentos, GRUPO_MANUTENCAO, "DESPESA");
   const resultado2Cents = resultado1Cents - manutencoesCents;
   const cotasAcordoCents = somaNome(lancamentos, NOME_COTAS_ACORDO, "RECEITA");
@@ -42,14 +45,16 @@ export function montarAnaliseTaxa(lancamentos: LancamentoComRel[]): AnaliseTaxaP
   return {
     taxaCents,
     contratosCents,
+    impostosCents,
     resultado1Cents,
     manutencoesCents,
     resultado2Cents,
     cotasAcordoCents,
     resultado3Cents,
     linhas: [
-      { id: "taxa", rotulo: "Valor da taxa condominial", valorCents: taxaCents, papel: "entrada" },
-      { id: "contratos", rotulo: "(−) Contratos", valorCents: contratosCents, papel: "saida" },
+      { id: "taxa", rotulo: "Cotas de Condomínio", valorCents: taxaCents, papel: "entrada" },
+      { id: "contratos", rotulo: "(−) Contratos fixos", valorCents: contratosCents, papel: "saida" },
+      { id: "impostos", rotulo: "(−) Impostos", valorCents: impostosCents, papel: "saida" },
       { id: "r1", rotulo: "Resultado 1", valorCents: resultado1Cents, papel: "subtotal" },
       { id: "manutencoes", rotulo: "(−) Manutenções", valorCents: manutencoesCents, papel: "saida" },
       { id: "r2", rotulo: "Resultado 2", valorCents: resultado2Cents, papel: "subtotal" },

@@ -1,5 +1,6 @@
 "use client";
 
+import { CardExportavel } from "@/components/paginas/CardExportavel";
 import { formatBRL } from "@/lib/format";
 import type { AnaliseTaxaPayload } from "@/lib/analise-taxa";
 
@@ -11,16 +12,18 @@ export function AnaliseTaxaDemo({
   onIrNovaTaxa: () => void;
 }) {
   return (
-    <article
-      className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5"
+    <CardExportavel
+      as="article"
+      className="js-block"
+      titulo="Demonstrativo da taxa"
       aria-labelledby="analise-taxa-titulo"
     >
       <h2 id="analise-taxa-titulo" className="text-lg font-bold">
         Demonstrativo da taxa
       </h2>
       <p className="mt-1 text-sm text-muted">
-        Cotas de condomínio menos contratos fixos e manutenção, mais cotas de acordo. Não é a cobertura da cota
-        contra todas as despesas.
+        Cotas de condomínio menos contratos fixos, impostos e manutenção, mais cotas de acordo. Não é a cobertura
+        da cota contra todas as despesas.
       </p>
 
       <dl className="mt-5 space-y-3">
@@ -56,12 +59,12 @@ export function AnaliseTaxaDemo({
       <p className="mt-6 text-sm">
         <button
           type="button"
-          className="font-semibold text-forest underline-offset-2 hover:underline"
+          className="no-print font-semibold text-forest underline-offset-2 hover:underline"
           onClick={onIrNovaTaxa}
         >
           Precisa da taxa do próximo período? → Nova taxa condominial
         </button>
       </p>
-    </article>
+    </CardExportavel>
   );
 }

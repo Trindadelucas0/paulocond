@@ -1,5 +1,6 @@
 "use client";
 
+import { CardExportavel } from "@/components/paginas/CardExportavel";
 import type { CoberturaCotaPayload } from "@/lib/cobertura-cota";
 import { formatBRL } from "@/lib/format";
 
@@ -28,8 +29,10 @@ export function CoberturaCota({
   const restoPositivo = dados.sobrouCents >= 0;
 
   return (
-    <article
-      className="js-block min-w-0 rounded-3xl border border-card-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5"
+    <CardExportavel
+      as="article"
+      className="js-block"
+      titulo="A cota cobriu as despesas?"
       aria-labelledby="cobertura-cota-titulo"
     >
       <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
@@ -95,6 +98,6 @@ export function CoberturaCota({
           </strong>
         </p>
       </div>
-    </article>
+    </CardExportavel>
   );
 }
