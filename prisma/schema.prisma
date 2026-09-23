@@ -18,6 +18,10 @@ model Condominio {
   dicionario     DicionarioCategoria[]
   totaisOficiais TotalOficial[]
   usuarios       Usuario[]
+  manutencoes    Manutencao[]
+  modelosChecklist ModeloChecklist[]
+  checklistsDiarios ChecklistDiario[]
+  importacoesOperacao ImportacaoOperacao[]
 }
 
 model TotalOficial {
@@ -120,6 +124,15 @@ model Usuario {
   ativo        Boolean    @default(true)
   criadoEm     DateTime   @default(now())
   sessoes      Sessao[]
+  manutencoesResponsavel Manutencao[] @relation("ManutencaoResponsavel")
+  manutencoesConcluiu    Manutencao[] @relation("ManutencaoConcluiu")
+  manutencoesCriou       Manutencao[] @relation("ManutencaoCriou")
+  modelosCriou           ModeloChecklist[] @relation("ModeloCriou")
+  atribuicoesModelo      AtribuicaoModeloChecklist[]
+  checklistsResponsavel  ChecklistDiario[] @relation("ChecklistResponsavel")
+  checklistsConcluiu     ChecklistDiario[] @relation("ChecklistConcluiu")
+  itensQuestionou        ItemChecklistDiario[] @relation("ItemQuestionou")
+  evidenciasEnviou       EvidenciaChecklist[]
 
   @@unique([condominioId, email])
   @@index([condominioId])
@@ -134,4 +147,157 @@ model Sessao {
   criadoEm  DateTime @default(now())
 
   @@index([usuarioId])
+}
+
+model Manutencao {
+  id                String     @id @default(cuid())
+  condominioId      String
+  condominio        Condominio @relation(fields: [condominioId], references: [id])
+  tipo              String
+  titulo            String
+  descricao         String
+  local             String?
+  prioridade        String     @default("NORMAL")
+  dataPrevista      DateTime?
+  responsavelId     String?
+  responsavel       Usuario?   @relation("ManutencaoResponsavel", fields: [responsavelId], references: [id])
+  responsavelNome   String?
+  status            String     @default("pendente")
+  iniciadoEm        DateTime?
+  concluidoEm       DateTime?
+  concluidoPorId    String?
+  concluidoPor      Usuario?   @relation("ManutencaoConcluiu", fields: [concluidoPorId], references: [id])
+  notasConclusao    String?
+  custoCents        Int?
+  criadoPorId       String?
+  criadoPor         Usuario?   @relation("ManutencaoCriou", fields: [criadoPorId], references: [id])
+  chaveIdempotencia String?
+  criadoEm          DateTime   @default(now())
+  atualizadoEm      DateTime   @updatedAt
+
+  @@index([condominioId, status])
+  @@index([condominioId, criadoEm])
+}
+
+model ModeloChecklist {
+  id                 String                        @id @default(cuid())
+  condominioId       String
+  condominio         Condominio                    @relation(fields: [condominioId], references: [id])
+  nome               String
+  descricao          String?
+  departamento       String
+  diasSemana         Int[]
+  ativo              Boolean                       @default(true)
+  exigeFoto          Boolean                       @default(true)
+  exigeJustificativa Boolean                       @default(true)
+  criadoPorId        String?
+  criadoPor          Usuario?                      @relation("ModeloCriou", fields: [criadoPorId], references: [id])
+  criadoEm           DateTime                      @default(now())
+  atualizadoEm       DateTime                      @updatedAt
+  itens              ItemModeloChecklist[]
+  atribuicoes        AtribuicaoModeloChecklist[]
+  checklists         ChecklistDiario[]
+
+  @@index([condominioId, ativo])
+}
+
+model ItemModeloChecklist {
+  id           String          @id @default(cuid())
+  condominioId String
+  modeloId     String
+  modelo       ModeloChecklist @relation(fields: [modeloId], references: [id], onDelete: Cascade)
+  nome         String
+  ordem        Int             @default(0)
+  exigeFoto    Boolean         @default(false)
+  criadoEm     DateTime        @default(now())
+
+  @@index([modeloId])
+  @@index([condominioId])
+}
+
+model AtribuicaoModeloChecklist {
+  id           String          @id @default(cuid())
+  condominioId String
+  modeloId     String
+  modelo       ModeloChecklist @relation(fields: [modeloId], references: [id], onDelete: Cascade)
+  usuarioId    String
+  usuario      Usuario         @relation(fields: [usuarioId], references: [id])
+  criadoEm     DateTime        @default(now())
+
+  @@unique([modeloId, usuarioId])
+  @@index([condominioId])
+}
+
+model ChecklistDiario {
+  id             String                @id @default(cuid())
+  condominioId   String
+  condominio     Condominio            @relation(fields: [condominioId], references: [id])
+  modeloId       String
+  modelo         ModeloChecklist       @relation(fields: [modeloId], references: [id])
+  data           DateTime              @db.Date
+  responsavelId  String?
+  responsavel    Usuario?              @relation("ChecklistResponsavel", fields: [responsavelId], references: [id])
+  status         String                @default("PENDING")
+  iniciadoEm     DateTime?
+  concluidoEm    DateTime?
+  concluidoPorId String?
+  concluidoPor   Usuario?              @relation("ChecklistConcluiu", fields: [concluidoPorId], references: [id])
+  criadoEm       DateTime              @default(now())
+  itens          ItemChecklistDiario[]
+  evidencias     EvidenciaChecklist[]
+
+  @@index([condominioId, data])
+  @@index([modeloId])
+}
+
+model ItemChecklistDiario {
+  id               String           @id @default(cuid())
+  condominioId     String
+  checklistId      String
+  checklist        ChecklistDiario  @relation(fields: [checklistId], references: [id], onDelete: Cascade)
+  nome             String
+  ordem            Int              @default(0)
+  exigeFoto        Boolean          @default(false)
+  status           String           @default("PENDING")
+  comentario       String?
+  feitoEm          DateTime?
+  questionamento   String?
+  questionadoEm    DateTime?
+  questionadoPorId String?
+  questionadoPor   Usuario?         @relation("ItemQuestionou", fields: [questionadoPorId], references: [id])
+  criadoEm         DateTime         @default(now())
+
+  @@index([checklistId])
+  @@index([condominioId])
+}
+
+model EvidenciaChecklist {
+  id            String           @id @default(cuid())
+  condominioId  String
+  checklistId   String
+  checklist     ChecklistDiario  @relation(fields: [checklistId], references: [id], onDelete: Cascade)
+  itemId        String?
+  caminho       String
+  nomeOriginal  String?
+  tipo          String?
+  tamanho       Int?
+  enviadoPorId  String?
+  enviadoPor    Usuario?         @relation(fields: [enviadoPorId], references: [id])
+  criadoEm      DateTime         @default(now())
+
+  @@index([checklistId])
+  @@index([condominioId])
+}
+
+model ImportacaoOperacao {
+  id           String     @id @default(cuid())
+  condominioId String
+  condominio   Condominio @relation(fields: [condominioId], references: [id])
+  tabela       String
+  idOrigem     String
+  idDestino    String
+  criadoEm     DateTime   @default(now())
+
+  @@unique([condominioId, tabela, idOrigem])
+  @@index([condominioId])
 }

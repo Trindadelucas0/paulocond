@@ -1,6 +1,6 @@
 {
   "name": "dashboard-canto-do-sabia",
-      "version": "0.9.1",
+  "version": "0.10.2",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack --port 3789",
@@ -11,8 +11,9 @@
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate deploy",
     "importar": "tsx scripts/importar-demonstrativo.ts",
+    "importar:operacao": "tsx scripts/importar-operacao.ts",
     "seed:admin": "tsx scripts/seed-admin.ts",
-    "test": "tsx --test tests/conciliacao.test.ts tests/cobertura-cota.test.ts tests/consumo.test.ts tests/inadimplencia.test.ts tests/analise-taxa.test.ts tests/nova-taxa-ideal.test.ts tests/fracao-ideal.test.ts tests/auth.test.ts",
+    "test": "tsx --test tests/conciliacao.test.ts tests/cobertura-cota.test.ts tests/consumo.test.ts tests/inadimplencia.test.ts tests/analise-taxa.test.ts tests/nova-taxa-ideal.test.ts tests/fracao-ideal.test.ts tests/auth.test.ts tests/operacao.test.ts",
     "setup": "prisma generate && prisma migrate deploy && tsx scripts/importar-demonstrativo.ts && tsx scripts/seed-admin.ts"
   },
   "dependencies": {

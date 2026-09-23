@@ -25,6 +25,14 @@ export const MENU_GRUPOS = [
     ],
   },
   {
+    rotulo: "Operação",
+    itens: [
+      { id: "op-manutencoes", label: "Manutenções", href: "/operacao/manutencoes" },
+      { id: "op-modelos", label: "Modelos Checklist", href: "/operacao/checklist-modelos" },
+      { id: "op-checklists", label: "Acompanhar Checklists", href: "/operacao/checklists" },
+    ],
+  },
+  {
     rotulo: "Assembleia",
     itens: [
       { id: "relatorio", label: "Relatório da Assembleia", href: "/relatorio" },

@@ -2,8 +2,8 @@
 
 | Item | Valor |
 |------|--------|
-| Versão do sistema | 0.9.1 — Login e usuários |
-| Última atualização | 17/09/2026 (produção na VPS 179.199.149.12; PM2 exito-paulocond) |
+| Versão do sistema | 0.10.2 — Excel e PDF das manutenções |
+| Última atualização | 23/09/2026 (download da lista em Excel e PDF, com o filtro da tela) |
 | Fonte oficial | Este arquivo |
 
 ## 1. Como usar este documento
@@ -28,6 +28,9 @@ Frontend não acessa banco nem Excel. Regras e totais saem da API.
 
 | Versão | Data | O que mudou |
 |--------|------|-------------|
+| 0.10.2 — Excel e PDF das manutenções | 23/09/2026 | Botões Excel e PDF em Manutenções. Baixam o filtro atual (tipo, status, responsável, busca), não só a página. Colunas do Excel: título, descrição, tipo, status, prioridade, responsável, local, data, custo. O PDF traz título, tipo, status, responsável e data. ADMIN e LEITURA baixam. |
+| 0.10.1 — Responsável da manutenção | 23/09/2026 | Tela Manutenções mostra o nome atribuído na origem (`responsavelNome`) e um resumo: total, pendentes, em andamento, preventivas, corretivas e quantidade por pessoa. Clique no card filtra a lista. |
+| 0.10.0 — Operação | 23/09/2026 | Menu Operação: `/operacao/manutencoes`, `/operacao/checklist-modelos`, `/operacao/checklists`. ADMIN grava e executa; LEITURA só lê. A tela financeira `/manutencao` não muda. Carga única: `npm run importar:operacao`. Fotos de checklist em `storage/evidencias`, fora de `public/`. |
 | 0.9.1 — Login e usuários | 17/09/2026 | LEITURA não vê `/configuracoes` nem `GET /api/modulo?modulo=configuracoes`; não troca senha em `/conta` nem `PATCH /api/conta/senha`. ADMIN redefine senha em Usuários. `SemPermissao.tsx`. Cookie `Secure` só se `AUTH_COOKIE_SECURE=true` (HTTPS na VPS pública; LAN HTTP no Êxito fica `false`). |
 | 0.9.0 — Login e usuários | 17/09/2026 | Login `/login`; papéis ADMIN e LEITURA; `/usuarios` só admin; cookie HttpOnly; APIs financeiras exigem sessão; Prisma em PostgreSQL (`sabia`) com RLS; seed `npm run seed:admin` |
 | 0.8.1 — Folha por unidade | 17/09/2026 | Relatório por unidade: print em fluxo (portal no `body`, tabela com `thead`, sem `visibility`/`position: absolute`); PDF não sobrepõe páginas; GSAP zera transform em `print`; `RelatorioUnidadeFolha.tsx`, `app/globals.css` |
@@ -62,16 +65,19 @@ Excel 2025/2026 (dados/originais)
   /login → / Visão Geral
   /receitas … /relatorio
   /configuracoes /usuarios /conta (ADMIN)
+  /operacao/manutencoes
+  /operacao/checklist-modelos
+  /operacao/checklists
 ```
 
-Itens da sidebar navegam. **Configurações**, **Usuários** e **Minha senha** só para ADMIN. Sem “Em breve”. Sem cadastro público.
+Itens da sidebar navegam. **Configurações**, **Usuários** e **Minha senha** só para ADMIN. O grupo **Operação** aparece para ADMIN e LEITURA; gravar e executar é só ADMIN. Sem “Em breve”. Sem cadastro público. A tela `/manutencao` continua sendo o ranking financeiro da planilha.
 
 ## 4. Papéis e acesso
 
 | Papel | Quem | O que pode |
 |-------|------|------------|
-| ADMIN | Primeiro via `npm run seed:admin`; depois o próprio admin cria outros | Dashboard + `/configuracoes` + `/usuarios` + `/conta` + APIs de usuários e senha própria |
-| LEITURA | Criado pelo admin | Dashboard financeiro; 403 em Configurações, Minha senha e gestão de usuários |
+| ADMIN | Primeiro via `npm run seed:admin`; depois o próprio admin cria outros | Dashboard + `/configuracoes` + `/usuarios` + `/conta` + APIs de usuários e senha própria + gravar/executar Operação |
+| LEITURA | Criado pelo admin | Dashboard financeiro e leitura de Operação; 403 em Configurações, Minha senha, gestão de usuários e em POST/PATCH/DELETE de Operação |
 
 Sessão: cookie `sabia_sessao` HttpOnly, SameSite=Lax. Tenant: `condominioId` da sessão deve coincidir com `CONDOMINIO_CODIGO` do deploy (132). Sem sessão, páginas vão para `/login`; APIs respondem 401. Papéis síndico/conselho/assembleia: não implementados (só ADMIN e LEITURA).
 
@@ -89,7 +95,10 @@ Sessão: cookie `sabia_sessao` HttpOnly, SameSite=Lax. Tenant: `condominioId` da
 | `/taxas-extras` | Academia arrecadado vs utilizado | `app/taxas-extras/page.tsx` |
 | `/contratos` | Ranking + Empresa Terceirizada | `app/contratos/page.tsx` |
 | `/utilidades` | Água, gás, energia, solar, telefone | `app/utilidades/page.tsx` |
-| `/manutencao` | Ranking e evolução | `app/manutencao/page.tsx` |
+| `/manutencao` | Ranking financeiro da planilha (não é ordem de serviço) | `app/(app)/manutencao/page.tsx`, `lib/modulos.ts` |
+| `/operacao/manutencoes` | Ordens de manutenção: listar, criar, editar, iniciar, dar baixa, cancelar, excluir | `app/(app)/operacao/manutencoes/page.tsx`, `components/operacao/PaginaManutencoes.tsx`, `lib/operacao/servico.ts` |
+| `/operacao/checklist-modelos` | Modelos de checklist (departamento, dias, itens, responsáveis) | `app/(app)/operacao/checklist-modelos/page.tsx`, `components/operacao/PaginaModelos.tsx` |
+| `/operacao/checklists` | Acompanhar e executar o checklist do dia | `app/(app)/operacao/checklists/page.tsx`, `components/operacao/PaginaChecklists.tsx` |
 | `/patrimonio` | Bens patrimoniais | `app/patrimonio/page.tsx` |
 | `/comparativo` | Só Jan–Jul vs Jan–Jul | `app/comparativo/page.tsx` |
 | `/analise-mensal` | Receita/despesa/resultado/saldo por mês | `app/analise-mensal/page.tsx` |
@@ -112,11 +121,23 @@ Sessão: cookie `sabia_sessao` HttpOnly, SameSite=Lax. Tenant: `condominioId` da
 | `PATCH /api/usuarios/[id]` | Ativo, papel, senha (ADMIN) | `app/api/usuarios/[id]/route.ts` |
 | `PATCH /api/conta/senha` | Própria senha (ADMIN) | `app/api/conta/senha/route.ts` |
 | Middleware | Cookie nas rotas privadas; `Secure` só com `AUTH_COOKIE_SECURE=true` | `middleware.ts`, `lib/auth/cookie.ts` |
+| `GET/POST /api/operacao/manutencoes` | Lista (50 por página) e cria ordem. POST só ADMIN | `app/api/operacao/manutencoes/route.ts` |
+| `GET /api/operacao/manutencoes/exportar` | `formato=xlsx` ou `formato=pdf`. Mesmos filtros da lista. Sessão obrigatória; até 5000 linhas | `app/api/operacao/manutencoes/exportar/route.ts` |
+| `GET/PATCH/DELETE /api/operacao/manutencoes/[id]` | Ficha; `acao` iniciar, dar_baixa, cancelar ou editar. Escrita só ADMIN | `app/api/operacao/manutencoes/[id]/route.ts` |
+| `GET /api/operacao/usuarios` | Usuários ativos do condomínio (responsável) | `app/api/operacao/usuarios/route.ts` |
+| `GET/POST /api/operacao/checklist-modelos` | Lista e cria modelo. POST só ADMIN | `app/api/operacao/checklist-modelos/route.ts` |
+| `PATCH /api/operacao/checklist-modelos/[id]` | Edita ou `acao` alternar (ativo). Só ADMIN | `app/api/operacao/checklist-modelos/[id]/route.ts` |
+| `GET /api/operacao/checklists?data=&departamento=` | Lista o dia e gera os checklists que faltam | `app/api/operacao/checklists/route.ts` |
+| `GET/PATCH /api/operacao/checklists/[id]` | Detalhe; `acao` iniciar, finalizar ou questionar. Escrita só ADMIN | `app/api/operacao/checklists/[id]/route.ts` |
+| `PATCH /api/operacao/checklists/[id]/itens/[itemId]` | Feito, não feito, observação. Só ADMIN | `app/api/operacao/checklists/[id]/itens/[itemId]/route.ts` |
+| `POST /api/operacao/checklists/[id]/evidencias` | Foto jpg/png/webp até 10 MB. Só ADMIN | `app/api/operacao/checklists/[id]/evidencias/route.ts`, `lib/operacao/arquivos.ts` |
+| `GET /api/operacao/evidencias/[id]` | Arquivo autenticado; não é URL pública | `app/api/operacao/evidencias/[id]/route.ts` |
 | `npm run importar` | Lê Excel, valida totais, grava PostgreSQL | `scripts/importar-demonstrativo.ts` |
+| `npm run importar:operacao -- arquivo.json` | Carga única das manutenções exportadas; não cria usuário | `scripts/importar-operacao.ts` |
 | `npm run seed:admin` | Cria o primeiro ADMIN (e-mail/senha só no `.env`) | `scripts/seed-admin.ts` |
 | `npm test` | Conciliação + auth (senha, último admin, origem) | `tests/*.test.ts` incl. `tests/auth.test.ts` |
 | `npx tsx scripts/conciliar-debitos.ts` | Cruza extrato fiscal `debitos_detalhe` (somente leitura) | `scripts/conciliar-debitos.ts`, `dados/conciliacao-debitos.json` |
-| Schema | Tabelas de negócio + Usuario + Sessao | `prisma/schema.prisma` |
+| Schema | Tabelas financeiras + Usuario + Sessao + Operação | `prisma/schema.prisma`, `prisma/migrations/20260923170000_operacao/` |
 
 Recortes aceitos: `oficial-2026` (padrão), `oficial-2025`, `equivalente-jan-jul`.
 
@@ -242,6 +263,24 @@ Oculto na visão Nova taxa: cobertura, inadimplência, gráfico de cotas, compar
 |-------------|-------|---------|-------------|---------------|-------------|-------------------|---------------|------------------|----------------------|
 | Form | Senha atual / nova | Troca | Sim | ADMIN | PATCH `/api/conta/senha` | Sidebar “Minha senha” (só ADMIN) | Invalida outras sessões | Nova ≥ 10; LEITURA 403 | `app/(app)/conta/page.tsx`, `requireAdmin` |
 
+### 6.8 Operação (manutenções e checklists)
+
+O grupo **Operação** da sidebar não substitui **Análise → Manutenção** (`/manutencao`), que continua o ranking da planilha. Não há papéis síndico nem zelador: ADMIN faz o que no sistema de origem era síndico e operacional; LEITURA só consulta.
+
+| Tela | Ações do ADMIN | LEITURA |
+|------|----------------|---------|
+| Manutenções | Nova, Filtrar, Limpar, Ver, Editar, Excluir, Iniciar (pendente), Dar baixa (em andamento, com notas), Cancelar (pendente ou em andamento), Salvar, Voltar | Ver e filtrar. Sem botões de escrita |
+| Modelos Checklist | Novo, Editar, Ativar/Desativar, Salvar, Voltar, Adicionar item, Remover item (não remove o último), dias, departamento, exige foto, exige justificativa, responsáveis | Só a lista |
+| Acompanhar Checklists | Data, Departamento, Filtrar, Hoje, Iniciar, Feito, Não feito, Salvar observação, Enviar foto, Finalizar, Questionar | Lista e detalhe, sem escrita |
+
+Estados da manutenção: `pendente` → `em_andamento` ou `cancelada`; `em_andamento` → `concluida` ou `cancelada`. Concluída e cancelada não editam, não excluem e não mudam de status. Dar baixa só a partir de em andamento. Lista pagina de 50, da data prevista mais recente para a mais antiga.
+
+No topo da lista, o resumo do condomínio inteiro (não só da página): total, pendentes, em andamento, preventivas, corretivas e um botão por pessoa atribuída. Clicar filtra. **Excel** e **PDF** baixam esse filtro, com todas as páginas, até 5000 linhas. Texto que começa com `=`, `+`, `-` ou `@` entra no Excel como texto, para não virar fórmula. O nome vem de `responsavelNome` quando a pessoa ainda não tem conta neste dashboard. A carga de 23/09/2026 preencheu francisco (214), OPERACIONAL (37) e Francisco das Chagas Silva (1). Nova ordem com responsável escolhido em Usuários grava o nome da conta.
+
+Checklist: departamentos `ZELADORIA` e `LIMPEZA`. Dias 0=domingo … 6=sábado. Ao listar uma data, o servidor cria os checklists do dia para modelos ativos daquele dia (um por responsável; se não houver responsável, um sem responsável). Não há agendador. Iniciar só de `PENDING`. Finalizar só de `IN_PROGRESS`. Item `NOT_DONE` exige justificativa se o modelo exige. Item `DONE` exige foto se o item ou o modelo exige. Questionar só item `NOT_DONE`. Foto: jpg, png ou webp, até 10 MB, pasta `storage/evidencias/{condominioId}/`, servida só por `GET /api/operacao/evidencias/[id]`.
+
+O histórico exportado tinha 252 manutenções e zero modelos, checklists e fotos. A lista de modelos começa vazia até o admin criar um. A carga não cria usuários: responsável só aparece se o e-mail já existir em Usuários.
+
 ## 7. Regras de negócio
 
 1. Totais oficiais do período = coluna B da planilha, nunca a soma das colunas mensais.
@@ -255,7 +294,7 @@ Oculto na visão Nova taxa: cobertura, inadimplência, gráfico de cotas, compar
 9. Status de despesa neste ciclo: **Despesa registrada**. Não existe “Pago”.
 10. **Fundo de reserva:** card **Saldo do fundo** = valor informado **R$ 191.599,35** (`SALDO_FUNDO_RESERVA_CENTS` em `lib/money.ts`), igual em todos os recortes. Arrecadação e despesa = lançamentos do recorte. Nunca rotulado como saldo bancário. **Taxa extra Academia:** diferença gerencial = arrecadação − despesa lançada no recorte. Nunca rotulado como saldo bancário.
 11. Toda tabela de negócio tem `condominioId`. Queries da API filtram por ele.
-12. Importação só via CLI. Sem upload na UI. Login obrigatório nas páginas e nas APIs (exceto `/login` e `POST /api/auth/login`).
+12. Importação financeira só via CLI. Login obrigatório nas páginas e nas APIs (exceto `/login` e `POST /api/auth/login`). Foto de checklist é o único upload da UI e exige ADMIN.
 13. `GET /api/modulo` só aceita `modulo`, `recorte` e `ordem` da allowlist. Não concatena SQL.
 14. Ranking configurável: período = pills de recorte; ordem = valor ou nome.
 15. Extrato `debitos_detalhe` (débitos fiscais multiempresa de escritório contábil) **não** é fonte do dashboard. Código 132 no extrato pode ser empresa cliente (ex.: ART FORT), não o condomínio Canto do Sabiá. Conciliação: `npx tsx scripts/conciliar-debitos.ts`.
@@ -269,6 +308,7 @@ Oculto na visão Nova taxa: cobertura, inadimplência, gráfico de cotas, compar
 23. **Nova taxa condominial** (mesma rota): **Taxa ideal mensal** = média de Contratos fixos **sem** `Pró Labore do Síndico` + média do pró-labore + média de Manutenção + markup de **4,56%** (`INADIMPLENCIA_MEDIA_PERCENTUAL_BP` = 456) sobre a soma das três médias. **Impostos não entram** nesse total. **Igualitário** = taxa ÷ **124**. **Por fração** = taxa da base (atual ou ano simulado) × fração em `dados/fracoes-ideais.json` (136 unidades; aptos + vagas; soma ≈ 1). **Ano simulado:** um % (−50 a +100) multiplica só Contratos fixos (sem pró-labore) e a média de Impostos; síndico e manutenção iguais; markup 4,56% sobre a nova base (já com Impostos). Com % = 0 a taxa simulada ainda inclui Impostos e pode ser maior que a ideal atual. Média = meses **com valor**; **Set/2026** (PARCIAL) fora. Sem upload. Folha: códigos reais e valores distintos; **Imprimir** pagina a tabela (sem sobreposição; `thead` Unidade/Valor no topo de cada folha; sem PDF no servidor). O slide **Nova taxa condominial prevista** do Relatório da Assembleia usa os mesmos totais e uma tabela mês a mês (`montarNovaTaxaMensal`); a coluna Média copia a taxa ideal (não a média das células). `montarNovaTaxaIdeal` / `simularAnoTaxa` / `montarNovaTaxaMensal` em `lib/nova-taxa-ideal.ts`; `lib/fracao-ideal.ts`.
 24. **PDF por card:** o botão no canto do card chama `window.print()` com classe `print-card-isolado` no `body` e `data-card-print-ativo` só naquele card. O arquivo é um card (cabeçalho: condomínio, tela, recorte, data). Não há PDF no servidor nem jsPDF. O botão não entra no PDF (`no-print`). Não pode coincidir com `print-folha-unidade`. Relatório da Assembleia não usa este botão (Imprimir de todos os slides). KPI da home: o valor abre origem; o PDF não abre origem. `lib/exportar-card.ts`.
 25. **Usuários:** papéis `ADMIN` e `LEITURA`. Sem cadastro público. Primeiro admin só com `SEED_ADMIN_EMAIL` e `SEED_ADMIN_PASSWORD` (mínimo 10 caracteres) via `npm run seed:admin`. Não desativar nem rebaixar o último ADMIN ativo. Lookup de usuário sempre `id` + `condominioId`. Senha com `scrypt`; cookie assinado com `AUTH_SECRET`. `lib/auth/`. LEITURA não vê Configurações (`podeVerConfig`) nem troca senha (`podeTrocarSenha` / `PATCH /api/conta/senha`). Admin redefine senha de LEITURA em Usuários.
+26. **Operação:** tipos `PREVENTIVA` e `CORRETIVA`; prioridades `BAIXA`, `NORMAL`, `ALTA`, `URGENTE`. Transições em `lib/operacao/regras.ts`. Custo em centavos inteiros. Chave de idempotência única por condomínio + criador quando os dois existem. Checklist único por condomínio + modelo + data + responsável (índices parciais; responsável nulo é outro índice). `npm run importar:operacao` grava só manutenções do JSON, casa usuário por e-mail já cadastrado e grava o nome de origem em `responsavelNome` mesmo sem conta. Não copia senha e não cria conta de teste. Rodar de novo atualiza o nome e não duplica a ordem. Exportação Excel/PDF usa a sessão do condomínio e no máximo 5000 linhas. `/manutencao` financeiro permanece.
 
 Totais que o importador exige:
 
@@ -289,7 +329,8 @@ Totais que o importador exige:
 8. Comparativo 2025 × 2026 e o bloco equivalente da home usam só Jan–Jul. Se a pill estiver em Out/25–Set/26, a tela Comparativo avisa e mesmo assim mostra Jan–Jul. Role até **Contas de consumo** para ver água, gás e energia solar; o gás traz **média por 124 unidades** e, na mesma tela, conferência com o rateio cobrado. Em **Utilidades**, o comparativo Jan–Jul repete água, gás (com média ÷ 124) e solar.
 9. Fundo de reserva: **Saldo do fundo** = R$ 191.599,35 (valor informado, igual em todos os recortes); arrecadação e despesa mudam com o recorte. **Taxa condominial**: as pills de recorte continuam no topo. Logo abaixo do título, escolha **Análise** (padrão) ou **Nova taxa condominial**. Em Análise, o **demonstrativo** mostra Resultado 3 (cotas − contratos − impostos − manutenção + acordo); em seguida vêm cobertura da cota (cota vs todas as despesas) e inadimplência, depois o gráfico de cotas e o comparativo Jan–Jul. A visão Nova taxa mostra a taxa ideal (sem Impostos) e o igualitário ÷ 124; abaixo, **Ano simulado** (ajuste % sobre contratos e impostos) e a lista **por fração** (136 unidades; busque o código, ex. 101). **Relatório por unidade** abre o painel; **Imprimir** (Salvar como PDF) lista as 136 unidades em páginas seguidas, na base escolhida (taxa atual ou ano simulado). Taxas extras mostram **diferença gerencial**, não conta bancária. Em Fluxo e no relatório, o **saldo inicial** é R$ 0,00 (não usa o Saldo anterior da planilha).
 10. Relatório da Assembleia: setas ou teclado para os slides; Tela cheia; Imprimir (diálogo do navegador). Depois de Cotas, o slide **Nova taxa condominial prevista** mostra o novo custo, a média por unidade (÷ 124) e a tabela mês a mês (igual ao Detalhamento). Os números oficiais são os mesmos da visão Nova taxa; Impostos não entram nesse total.
-11. Configurações (só admin) explica fonte, qualidade e login. Menu **Usuários** cadastra leitura/admin. **Minha senha** (só admin) e **Sair** ficam no rodapé do menu. Conta **Leitura** não vê Configurações nem troca senha: o admin usa **Redefinir senha** em Usuários. Para reimportar: `npm run importar` no terminal.
+11. Configurações (só admin) explica fonte, qualidade e login. Menu **Usuários** cadastra leitura/admin. **Minha senha** (só admin) e **Sair** ficam no rodapé do menu. Conta **Leitura** não vê Configurações nem troca senha: o admin usa **Redefinir senha** em Usuários. Para reimportar a planilha: `npm run importar` no terminal.
+12. Menu **Operação**: **Manutenções** abre as ordens de serviço (não o ranking da planilha em Análise → Manutenção). No topo, os números do condomínio e quem recebeu cada grupo de ordens; clique filtra. Cada card mostra tipo, status, responsável e data. **Excel** e **PDF** baixam o filtro que está na tela. **Modelos Checklist** cria o modelo do dia (zeladoria ou limpeza, dias da semana, itens, foto e justificativa). **Acompanhar Checklists** escolhe a data e o departamento; o dia é gerado na hora. Conta **Leitura** abre as três telas e não vê Nova, Editar, Iniciar, Dar baixa, Finalizar nem Enviar foto. Carga do histórico, uma vez: `npm run importar:operacao -- caminho/operacao-dados.json`. O arquivo exportado não tinha modelos nem checklists; essas duas telas começam vazias. Responsável da ordem só aparece se o e-mail já estiver em Usuários.
 
 Não há cadastro público. O primeiro usuário é o seed do `.env` local (não documentar a senha aqui).
 
@@ -344,6 +385,16 @@ O layout cabe em celular, tablet e computador: menu em gaveta abaixo de `lg`, co
 - [ ] Em ~1280px+: conteúdo não estica além de 1280px; sidebar 240px visível
 - [ ] `/detalhamento`: colunas por competência do recorte + Total; categorias expansíveis; itens na mesma linha; rolagem horizontal no celular
 - [ ] Títulos e valores de KPI menores que na 0.2.0 (não ocupam a tela inteira)
+- [ ] Sidebar tem o grupo Operação (Manutenções, Modelos Checklist, Acompanhar Checklists) para ADMIN e LEITURA
+- [ ] `/manutencao` continua o ranking da planilha
+- [ ] ADMIN cria manutenção, inicia, dá baixa e cancela; concluída e cancelada não editam nem excluem
+- [ ] LEITURA abre `/operacao/manutencoes` e recebe 403 em `POST /api/operacao/manutencoes`
+- [ ] Excel e PDF baixam o filtro da tela, com o nome do responsável; sem login a exportação responde 401
+- [ ] Modelo ativo do dia gera checklist ao abrir Acompanhar; segundo acesso no mesmo dia não duplica
+- [ ] Finalizar bloqueia item pendente, não feito sem justificativa (quando o modelo exige) e feito sem foto (quando exige)
+- [ ] Foto de evidência não fica em `public/`; `GET /api/operacao/evidencias/[id]` sem sessão responde 401
+- [ ] `npm run importar:operacao` na segunda vez imprime já importadas e não duplica
+- [ ] `npm test` inclui `tests/operacao.test.ts`
 
 ## 10. Segurança (só o que existe)
 
@@ -358,9 +409,9 @@ O layout cabe em celular, tablet e computador: menu em gaveta abaixo de `lg`, co
 - Erros da API não devolvem stack nem secrets.
 - XSS: React escapa texto; sem `dangerouslySetInnerHTML`.
 - RLS Postgres nas tabelas (policy `app.condominio_id`). O user local `postgres` é superuser e **bypassa** RLS; o filtro Prisma continua obrigatório. Produção deve usar role sem superuser.
-- Sem upload público; Excel só no disco local via CLI.
+- Excel só no disco local via CLI. Foto de checklist: jpg, png ou webp, até 10 MB, nome aleatório em `storage/evidencias/{condominioId}/` (fora de `public/`, no `.gitignore`). Leitura só com sessão, no condomínio da evidência.
 
-Não implementado: 2FA, OAuth, e-mail de reset, cadastro público, webhooks, uploads, RBAC por tela financeira.
+Não implementado: 2FA, OAuth, e-mail de reset, cadastro público, webhooks, RBAC além de ADMIN e LEITURA.
 
 ## 11. Deploy / ambiente (sem secrets)
 

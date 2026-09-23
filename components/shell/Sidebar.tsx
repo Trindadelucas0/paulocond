@@ -24,6 +24,9 @@ import {
   Receipt,
   Scale,
   Users,
+  ClipboardList,
+  ListChecks,
+  ClipboardCheck,
 } from "lucide-react";
 
 const ICONS: Record<string, typeof LayoutDashboard> = {
@@ -45,6 +48,9 @@ const ICONS: Record<string, typeof LayoutDashboard> = {
   relatorio: Shield,
   config: Settings,
   usuarios: Users,
+  "op-manutencoes": ClipboardList,
+  "op-modelos": ListChecks,
+  "op-checklists": ClipboardCheck,
 };
 
 type Props = {
